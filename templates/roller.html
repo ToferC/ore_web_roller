@@ -1,0 +1,75 @@
+{{define "content"}}
+
+      <div class="container">
+        <h1>ORE Die Roller</h1>
+        <div class="row">
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <p>Build your die pool below and then click "Roll Dice".</p>
+        <form action="" method="POST">
+          <div class="input-group">
+            <input type="text" class="form-control" aria-describedby="name-addon" name="name" value="{{.Actor}}">
+            <span class="input-group-addon" id="name-addon">Name</span>
+          </div>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-describedby="nd-addon" name="nd" value="{{ .Normal}}">
+          <span class="input-group-addon" id="nd-addon">Normal Dice</span>
+        </div>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-describedby="hd-addon" name="hd" value="{{ .Hard}}">
+          <span class="input-group-addon" id="hd-addon">Hard Dice</span>
+        </div>
+        <div class="input-group">
+          <input type="text" class="form-control" aria-describedby="wd-addon" name="wd" value="{{ .Wiggle}}">
+          <span class="input-group-addon" id="wd-addon">Wiggle Dice</span>
+        </div>
+          <hr>
+          <div class="input-group">
+            <input type="text" class="form-control" aria-describedby="gf-addon" name="gofirst" value="{{ .GoFirst}}">
+            <span class="input-group-addon" id="gf-addon">Go First</span>
+          </div>
+          <div class="input-group">
+            <input type="text" class="form-control" aria-describedby="sp-addon" name="spray" value="{{ .Spray}}">
+            <span class="input-group-addon" id="sp-addon">Spray</span>
+          </div>
+          <div class="input-group">
+            <input type="text" class="form-control" aria-describedby="ac-addon" name="actions" value="{{.Actions}}">
+            <span class="input-group-addon" id="ac-addon">Actions</span>
+          </div>
+          <hr>
+          <div class="input-group">
+            <input type="text" class="form-control" aria-describedby="nr-addon" name="numrolls" value="{{ .NumRolls}}">
+            <span class="input-group-addon" id="nr-addon">Rolls</span>
+          </div>
+        <input type="submit" value="Roll Dice">
+      </form>
+    </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Results</h3>
+        <h4>{{ .Actor }}</h4>
+        <p>Actions: {{.Actions}},
+        {{ range .Rolls }}
+            Results: {{ range .Results }}
+            {{ . }}
+          {{ end }}
+        </p>
+          <h5>Matches</h5>
+          {{ range .Matches }}
+            <p>Width {{.Initiative}} - <strong>{{ .Height }}x{{ .Width }}</strong></p>
+          {{ end}}
+          {{ if .Wiggles }}
+          <h5><strong>+{{ .Wiggles }} Wiggle Dice</strong></h5>
+          {{else}}{{ end }}
+          <p>Loose Dice: {{ range .Loose }}
+            {{.}}
+            {{ end }}</p>
+          <hr>
+        {{ end }}
+
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Character</h3>
+
+      </div>
+    </div>
+      </div>
+{{end}}
