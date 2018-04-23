@@ -1,1 +1,1 @@
-web: ore_die_roller
+web: ore_combat
