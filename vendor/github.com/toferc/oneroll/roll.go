@@ -35,9 +35,9 @@ type DiePool struct {
 // Match shows the height and width of a specific match
 type Match struct {
 	Actor      *Character
-	height     int
-	width      int
-	initiative int
+	Height     int
+	Width      int
+	Initiative int
 }
 
 // ByWidthHeight sorts matches in descending order of width then height
@@ -47,14 +47,14 @@ func (a ByWidthHeight) Len() int      { return len(a) }
 func (a ByWidthHeight) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a ByWidthHeight) Less(i, j int) bool {
 
-	if a[i].initiative > a[j].initiative {
+	if a[i].Initiative > a[j].Initiative {
 		return true
 	}
-	if a[i].initiative < a[j].initiative {
+	if a[i].Initiative < a[j].Initiative {
 		return false
 	}
 
-	return a[i].height > a[j].height
+	return a[i].Height > a[j].Height
 }
 
 // Resolve ORE dice roll and prints results
@@ -62,7 +62,7 @@ func (r *Roll) Resolve(input string) (*Roll, error) {
 
 	r.Input = input
 
-	nd, hd, wd, gf, sp, ac, err := r.parseString(input)
+	nd, hd, wd, gf, sp, ac, _, err := r.ParseString(input)
 
 	r.NumActions = ac
 
@@ -125,8 +125,8 @@ func (r *Roll) Resolve(input string) (*Roll, error) {
 
 }
 
-// parses string like 5d+1hd+1wd or returns error
-func (r *Roll) parseString(input string) (int, int, int, int, int, int, error) {
+// ParseString parses string like 5d+1hd+1wd or returns error
+func (r *Roll) ParseString(input string) (int, int, int, int, int, int, int, error) {
 
 	re := regexp.MustCompile("[0-9]+")
 
@@ -134,11 +134,11 @@ func (r *Roll) parseString(input string) (int, int, int, int, int, int, error) {
 
 	errString := ""
 
-	sElements = strings.SplitN(input, "+", 6)
+	sElements = strings.SplitN(input, "+", 7)
 
 	var nd, hd, wd, gf, sp int
 
-	ac := 1
+	ac, nr := 1, 1
 
 	for _, s := range sElements {
 		switch {
@@ -166,16 +166,25 @@ func (r *Roll) parseString(input string) (int, int, int, int, int, int, error) {
 			numString := re.FindString(s)
 			ac, _ = strconv.Atoi(numString)
 
+		case strings.Contains(s, "nr"):
+			numString := re.FindString(s)
+			nr, _ = strconv.Atoi(numString)
+
 		default:
 			errString = "Error: Not a regular die notation"
 		}
 	}
 
-	if errString != "" {
-		return 0, 0, 0, 0, 0, 0, errors.New(errString)
+	// Ensure at least one roll is made
+	if nr < 1 {
+		nr = 1
 	}
 
-	return nd, hd, wd, gf, sp, ac, nil
+	if errString != "" {
+		return 0, 0, 0, 0, 0, 0, 0, errors.New(errString)
+	}
+
+	return nd, hd, wd, gf, sp, ac, nr, nil
 }
 
 // Determine matches including width, height and initiative for a roll
@@ -198,9 +207,9 @@ func (r *Roll) parseDieRoll() *Roll {
 		case v > 1:
 			r.Matches = append(r.Matches, Match{
 				Actor:      r.Actor,
-				height:     k,
-				width:      v,
-				initiative: v + goFirst,
+				Height:     k,
+				Width:      v,
+				Initiative: v + goFirst,
 			})
 		}
 	}
@@ -293,8 +302,8 @@ func (r Roll) String() string {
 
 	for _, m := range results {
 		text += fmt.Sprintf("Match: %dx%d, Initiative: %dx%d\n",
-			m.height, m.width,
-			m.height, m.initiative,
+			m.Height, m.Width,
+			m.Height, m.Initiative,
 		)
 	}
 	if r.Wiggles > 0 {
@@ -314,18 +323,12 @@ func main() {
 
 	diePool := flag.String("d", "4d", "a die string separated by + like 4d+2hd+1wd")
 	numRolls := flag.Int("n", 1, "an int that represents the number of rolls to make")
-	guiOn := flag.Bool("w", true, "Set whether to use the GUI or not (CLI).")
 
 	flag.Parse()
 
-	if *guiOn == true {
-		GUI()
-	} else {
-
-		for x := 0; x < *numRolls; x++ {
-			roll := Roll{}
-			roll.Resolve(*diePool)
-			fmt.Println(roll)
-		}
+	for x := 0; x < *numRolls; x++ {
+		roll := Roll{}
+		roll.Resolve(*diePool)
+		fmt.Println(roll)
 	}
 }

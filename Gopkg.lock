@@ -3,15 +3,9 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/andlabs/ui"
-  packages = ["."]
-  revision = "6c3bda44d3039e3721c06516be3ab9ce9cbd48cc"
-
-[[projects]]
-  branch = "master"
   name = "github.com/toferc/oneroll"
   packages = ["."]
-  revision = "ddfcc080fc6bd90a2e69c488f26d1c9b16eebfba"
+  revision = "4cdcfe8688d650d245a1909c60483ec60f37a156"
 
 [solve-meta]
   analyzer-name = "dep"

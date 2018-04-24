@@ -3,6 +3,8 @@ package oneroll
 import (
 	"fmt"
 	"math/rand"
+	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -36,38 +38,18 @@ func TrimSliceBrackets(s []int) string {
 	return rs
 }
 
-// VerifyLessThan10 checks and reduces die pools to less than 10d
-func VerifyLessThan10(nd, hd, wd int) (int, int, int) {
+// ParseNumRolls checks how many die rolls are required
+func ParseNumRolls(s string) (int, error) {
 
-	if nd+hd+wd > 10 {
+	re := regexp.MustCompile("[0-9]+")
 
-		fmt.Println("Error: Can't roll more than 10 dice. Reducing to less than 10.")
-		fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
+	var num int
+	var numString string
 
-		// Remove normal dice first
-		for nd > 0 && nd+hd+wd > 10 {
-			fmt.Printf("reduced Normal dice from %d to %d. \n", nd, nd-1)
-			nd--
-			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
-		}
-
-		// Reduce hard dice next
-		for hd > 0 && nd+hd+wd > 10 {
-			fmt.Printf("reduced Hard dice from %d to %d. \n", hd, hd-1)
-			hd--
-			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
-		}
-
-		// Reduce wiggle dice last
-		for wd > 0 && nd+hd+wd > 10 {
-			fmt.Printf("reduced Wiggle dice from %d to %d. \n", wd, wd-1)
-			wd--
-			fmt.Printf(fmt.Sprintf("Current Dice: %dd+%dhd+%dwd.\n", nd, hd, wd))
-		}
-
-		return nd, hd, wd
-
+	numString = re.FindString(s)
+	num, err := strconv.Atoi(numString)
+	if err != nil {
+		num = 1
 	}
-
-	return nd, hd, wd
+	return num, err
 }

@@ -56,8 +56,8 @@ func OpposedRoll(rolls ...*Roll) {
 		fmt.Printf("***ACTION %d: Actor: %s, Match: %dx%d, Initiative: %dx%d\n",
 			i+1,
 			m.Actor.Name,
-			m.height, m.width,
-			m.height, m.initiative,
+			m.Height, m.Width,
+			m.Height, m.Initiative,
 		)
 	}
 }
