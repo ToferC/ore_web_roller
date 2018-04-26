@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/toferc/oneroll"
 )
@@ -51,8 +52,14 @@ func main() {
 
 	oneroll.OpposedRoll(&r, &r2)
 
-	fmt.Println("Starting Webserver at port 8080")
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8080"
+	}
+
+	fmt.Println("Starting Webserver at port " + port)
 	http.HandleFunc("/roll/", RollHandler)
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":"+port, nil))
 
 }
