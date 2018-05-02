@@ -46,7 +46,7 @@
             <span class="input-group-addon" id="sp-addon">Spray</span>
           </div>
           <div class="input-group">
-            <input type="text" class="form-control" aria-describedby="ac-addon" name="actions" value="{{index .Actions 0}}">
+            <input type="text" class="form-control" aria-describedby="ac-addon" name="actions" value="{{ index .Actions 0}}">
             <span class="input-group-addon" id="ac-addon">Actions</span>
           </div>
           <hr>
@@ -108,7 +108,7 @@
             Results: {{ range .Results }}
             {{ . }}
             {{ end }}</p>
-            Action: {{ .Action }}
+            Action: {{ .Action }} x{{ .NumActions }}
             {{ if .Wiggles }}
             <h5><strong>+{{ .Wiggles }} Wiggle Dice</strong></h5>
             {{else}}{{ end }}

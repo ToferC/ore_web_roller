@@ -146,7 +146,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 
 		//fullString := req.URL.Path[len("/opposed/"):]
 
-		fullString := req.URL.Path[len("/roll/"):]
+		fullString := req.URL.Path[len("/opposed/"):]
 
 		q, err := url.ParseQuery(fullString)
 		if err != nil {
