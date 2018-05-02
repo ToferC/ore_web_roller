@@ -1,43 +1,42 @@
 {{define "content"}}
 
       <div class="container">
-        <h1>ORE Die Roller</h1>
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
             <p>Build your die pool below and then click "Roll Dice".</p>
         <form action="" method="POST">
           <div class="input-group">
-            <input type="text" class="form-control" aria-describedby="name-addon" name="name" value="{{.Actor}}">
+            <input type="text" class="form-control" aria-describedby="name-addon" name="name" value ="{{index .Actor 0}}">
             <span class="input-group-addon" id="name-addon">Name</span>
           </div>
         <div class="input-group">
-          <input type="text" class="form-control" aria-describedby="nd-addon" name="nd" value="{{ .Normal}}">
+          <input type="text" class="form-control" aria-describedby="nd-addon" name="nd" value="{{ index .Normal 0}}">
           <span class="input-group-addon" id="nd-addon">Normal Dice</span>
         </div>
         <div class="input-group">
-          <input type="text" class="form-control" aria-describedby="hd-addon" name="hd" value="{{ .Hard}}">
+          <input type="text" class="form-control" aria-describedby="hd-addon" name="hd" value="{{ index .Hard 0}}">
           <span class="input-group-addon" id="hd-addon">Hard Dice</span>
         </div>
         <div class="input-group">
-          <input type="text" class="form-control" aria-describedby="wd-addon" name="wd" value="{{ .Wiggle}}">
+          <input type="text" class="form-control" aria-describedby="wd-addon" name="wd" value="{{ index .Wiggle 0}}">
           <span class="input-group-addon" id="wd-addon">Wiggle Dice</span>
         </div>
           <hr>
           <div class="input-group">
-            <input type="text" class="form-control" aria-describedby="gf-addon" name="gofirst" value="{{ .GoFirst}}">
+            <input type="text" class="form-control" aria-describedby="gf-addon" name="gofirst" value="{{ index .GoFirst 0}}">
             <span class="input-group-addon" id="gf-addon">Go First</span>
           </div>
           <div class="input-group">
-            <input type="text" class="form-control" aria-describedby="sp-addon" name="spray" value="{{ .Spray}}">
+            <input type="text" class="form-control" aria-describedby="sp-addon" name="spray" value="{{ index .Spray 0}}">
             <span class="input-group-addon" id="sp-addon">Spray</span>
           </div>
           <div class="input-group">
-            <input type="text" class="form-control" aria-describedby="ac-addon" name="actions" value="{{.Actions}}">
+            <input type="text" class="form-control" aria-describedby="ac-addon" name="actions" value="{{ index .Actions 0}}">
             <span class="input-group-addon" id="ac-addon">Actions</span>
           </div>
           <hr>
           <div class="input-group">
-            <input type="text" class="form-control" aria-describedby="nr-addon" name="numrolls" value="{{ .NumRolls}}">
+            <input type="text" class="form-control" aria-describedby="nr-addon" name="numrolls" value="{{ index .NumRolls 0}}">
             <span class="input-group-addon" id="nr-addon">Rolls</span>
           </div>
         <input type="submit" value="Roll Dice">
@@ -45,8 +44,8 @@
     </div>
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Results</h3>
-        <h4>{{ .Actor }}</h4>
-        <p>Actions: {{.Actions}},
+        <h4>{{  index .Actor 0 }}</h4>
+        <p>Actions: {{ index .Actions 0}},
         {{ range .Rolls }}
             Results: {{ range .Results }}
             {{ . }}

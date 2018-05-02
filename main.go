@@ -60,6 +60,8 @@ func main() {
 
 	fmt.Println("Starting Webserver at port " + port)
 	http.HandleFunc("/roll/", RollHandler)
+	http.HandleFunc("/opposed/", OpposeHandler)
+
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 
 }
