@@ -1,0 +1,36 @@
+{{define "content"}}
+
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <p>Build your die pool below and then click "Roll Dice".</p>
+            <h3>{{ .Name }}</h3>
+            <ul>
+            <p>Body: {{ .Body.Dice.Normal }}d+{{.Body.Dice.Hard}}hd+{{.Body.Dice.Wiggle}}wd</p>
+            <p>Coordination: {{ .Coordination.Dice.Normal }}d+{{.Coordination.Dice.Hard}}hd+{{.Coordination.Dice.Wiggle}}wd</p>
+            <p>Sense: {{ .Sense.Dice.Normal }}d+{{.Sense.Dice.Hard}}hd+{{.Sense.Dice.Wiggle}}wd</p>
+            <p>Mind: {{ .Mind.Dice.Normal }}d+{{.Mind.Dice.Hard}}hd+{{.Mind.Dice.Wiggle}}wd</p>
+            <p>Command: {{ .Command.Dice.Normal }}d+{{.Command.Dice.Hard}}hd+{{.Command.Dice.Wiggle}}wd</p>
+            <p>Charm: {{ .Charm.Dice.Normal }}d+{{.Charm.Dice.Hard}}hd+{{.Charm.Dice.Wiggle}}wd</p>
+            <p>Base Will: {{ .BaseWill }}</p>
+            <p>Willpower: {{ .Willpower }}</p>
+            </ul>
+          </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Skills</h3>
+        {{ range .Skills }}
+          <ul>{{ .Name }} ({{ .LinkStat.Name }}): {{ .Dice.Normal}}d+{{.Dice.Hard}}hd+{{.Dice.Wiggle}}wd</ul>
+        {{ end }}
+
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Hit Locations</h3>
+          {{ range .HitLocations }}
+          <ul>
+            ({{ .HitLoc }}) {{ .Name }}: {{ .Boxes }} wounds; HAR: {{ .HAR }}; LAR: {{ .LAR }}
+          </ul>
+          {{ end }}
+      </div>
+    </div>
+      </div>
+{{end}}

@@ -163,13 +163,13 @@ func NewCharacter(name string) *Character {
 	c.Coordination = &Statistic{
 		Name: "Coordination",
 		Dice: &DiePool{
-			Normal: 0,
+			Normal: 2,
 		},
 	}
 	c.Sense = &Statistic{
 		Name: "Sense",
 		Dice: &DiePool{
-			Normal: 0,
+			Normal: 2,
 		},
 	}
 	c.Mind = &Statistic{

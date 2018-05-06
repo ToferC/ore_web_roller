@@ -11,7 +11,7 @@ import (
 	"github.com/toferc/oneroll"
 )
 
-// WebView is a ontainer for Web_gui data
+// WebView is a container for Web_gui data
 type WebView struct {
 	Rolls       []oneroll.Roll
 	Matches     []oneroll.Match
@@ -143,8 +143,6 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 	var nd2, hd2, wd2, gf2, sp2, ac2, action2 string
 
 	if req.Method == "GET" {
-
-		//fullString := req.URL.Path[len("/opposed/"):]
 
 		fullString := req.URL.Path[len("/opposed/"):]
 
