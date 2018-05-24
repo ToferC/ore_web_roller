@@ -50,7 +50,9 @@ func main() {
 	fmt.Println("Rolling!")
 	fmt.Println(r2)
 
-	oneroll.OpposedRoll(&r, &r2)
+	or := oneroll.OpposedRoll(&r, &r2)
+
+	oneroll.PrintOpposed(or)
 
 	port := os.Getenv("PORT")
 

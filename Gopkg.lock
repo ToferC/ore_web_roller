@@ -2,14 +2,33 @@
 
 
 [[projects]]
+  name = "github.com/go-pg/pg"
+  packages = [
+    ".",
+    "internal",
+    "internal/parser",
+    "internal/pool",
+    "orm",
+    "types"
+  ]
+  revision = "b8f331da499dc65a05857ec8271629ee3e5d3ba7"
+  version = "v6.13.3"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/jinzhu/inflection"
+  packages = ["."]
+  revision = "04140366298a54a039076d798123ffa108fff46c"
+
+[[projects]]
   branch = "master"
   name = "github.com/toferc/oneroll"
   packages = ["."]
-  revision = "4cdcfe8688d650d245a1909c60483ec60f37a156"
+  revision = "688d51f618d7b239d9d5f8415aa1be1db1f78f34"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "67cfa23ca530c1c4176160bd7a7ba79bb0a6fccca8461864d3ae4bd94bad82ee"
+  inputs-digest = "4fbb255e20f0a9cb0d4bb11e894acaac2c2e1b55389f3d9cd6d4d2d9de3f7a99"
   solver-name = "gps-cdcl"
   solver-version = 1

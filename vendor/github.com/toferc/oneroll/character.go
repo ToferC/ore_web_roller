@@ -6,6 +6,7 @@ import (
 
 // Character represents a full character in the ORE game
 type Character struct {
+	Id           int64
 	Name         string
 	Body         *Statistic
 	Coordination *Statistic
@@ -163,13 +164,13 @@ func NewCharacter(name string) *Character {
 	c.Coordination = &Statistic{
 		Name: "Coordination",
 		Dice: &DiePool{
-			Normal: 0,
+			Normal: 2,
 		},
 	}
 	c.Sense = &Statistic{
 		Name: "Sense",
 		Dice: &DiePool{
-			Normal: 0,
+			Normal: 2,
 		},
 	}
 	c.Mind = &Statistic{
