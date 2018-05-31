@@ -6,7 +6,7 @@ import (
 
 // Character represents a full character in the ORE game
 type Character struct {
-	Id           int64
+	ID           int64
 	Name         string
 	Body         *Statistic
 	Coordination *Statistic
@@ -317,6 +317,7 @@ func (c *Character) Display() {
 		fmt.Println(loc)
 	}
 	for _, skill := range c.Skills {
-		fmt.Println(skill.Name, FormSkillDieString(skill, 1))
+		fmt.Println(skill.Name, skill.Dice.Normal)
+		//fmt.Println(skill.Name, FormSkillDieString(skill, 1))
 	}
 }

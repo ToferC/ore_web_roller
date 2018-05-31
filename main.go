@@ -6,53 +6,24 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/toferc/oneroll"
+	"github.com/go-pg/pg"
 )
+
+func init() {
+	os.Setenv("DBUser", "chris")
+	os.Setenv("DBPass", "12345")
+	os.Setenv("DBName", "ore_engine")
+}
 
 func main() {
 
-	c := oneroll.NewCharacter("Baron")
-	c.Display()
+	db := pg.Connect(&pg.Options{
+		User:     os.Getenv("DBUser"),
+		Password: os.Getenv("DBPass"),
+		Database: os.Getenv("DBName"),
+	})
 
-	d := oneroll.NewCharacter("Duke")
-	d.Display()
-
-	fmt.Println("Let the Arm Wrestingling Commence!")
-
-	actingSkill := c.Skills["Athletics"]
-
-	actingSkill.Dice.Spray = 1
-
-	s := oneroll.FormSkillDieString(actingSkill, 2)
-
-	fmt.Printf("Rolling Athletics (Body+Athletics) for %s", c.Name)
-	r := oneroll.Roll{
-		Actor:  c,
-		Action: "act",
-	}
-
-	r.Resolve(s)
-
-	fmt.Println("Rolling!")
-	fmt.Println(r)
-
-	opposingSkill := d.Skills["Athletics"]
-	s2 := oneroll.FormSkillDieString(opposingSkill, 1)
-
-	fmt.Printf("Rolling Athletics (Body+Athletics) for %s\n", d.Name)
-	r2 := oneroll.Roll{
-		Actor:  d,
-		Action: "oppose",
-	}
-
-	r2.Resolve(s2)
-
-	fmt.Println("Rolling!")
-	fmt.Println(r2)
-
-	or := oneroll.OpposedRoll(&r, &r2)
-
-	oneroll.PrintOpposed(or)
+	defer db.Close()
 
 	port := os.Getenv("PORT")
 

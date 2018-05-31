@@ -50,6 +50,7 @@ func OpposedRoll(rolls ...*Roll) []Match {
 	return results
 }
 
+// PrintOpposed sorts actions by width and displays
 func PrintOpposed(results []Match) {
 	fmt.Println("***Resolution***")
 

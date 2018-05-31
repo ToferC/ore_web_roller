@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/fatih/structs"
+  packages = ["."]
+  revision = "a720dfa8df582c51dee1b36feabb906bde1588bd"
+  version = "v1.0"
+
+[[projects]]
   name = "github.com/go-pg/pg"
   packages = [
     ".",
@@ -11,8 +17,8 @@
     "orm",
     "types"
   ]
-  revision = "b8f331da499dc65a05857ec8271629ee3e5d3ba7"
-  version = "v6.13.3"
+  revision = "8c7fa0eed0d9e9d07fca2cc9e08e3171da0521d5"
+  version = "v6.13.5"
 
 [[projects]]
   branch = "master"
@@ -24,11 +30,11 @@
   branch = "master"
   name = "github.com/toferc/oneroll"
   packages = ["."]
-  revision = "688d51f618d7b239d9d5f8415aa1be1db1f78f34"
+  revision = "18095541e91d6a39fee2119a50b5d5054dac1cfa"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4fbb255e20f0a9cb0d4bb11e894acaac2c2e1b55389f3d9cd6d4d2d9de3f7a99"
+  inputs-digest = "1ad10840b52ef9182bf5de06831eb146ffd05bf398cbec680c902cff7282517e"
   solver-name = "gps-cdcl"
   solver-version = 1
