@@ -16,7 +16,7 @@ func init() {
 }
 
 // Terminal runs the basic functions from a terminal input
-func Terminal() {
+func main() {
 
 	db := pg.Connect(&pg.Options{
 		User:     os.Getenv("DBUser"),
@@ -34,7 +34,8 @@ func Terminal() {
 		`
   1: Query the Database
   2: Create a Character
-  3: Delete a Character
+  3: Update a Character
+  4: Delete a Character
 
   Selection: `)
 
@@ -44,6 +45,8 @@ func Terminal() {
 	case "2":
 		CreateCharacter(db)
 	case "3":
+		Update(db)
+	case "4":
 		Delete(db)
 	default:
 		fmt.Println("Invalid input. Exiting.")

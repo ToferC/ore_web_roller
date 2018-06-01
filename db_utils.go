@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/go-pg/pg"
 	"github.com/go-pg/pg/orm"
@@ -15,6 +16,14 @@ func SaveCharacter(db *pg.DB, c *oneroll.Character) error {
 		OnConflict("(id) DO UPDATE").
 		Set("name = ?name").
 		Insert(c)
+	if err != nil {
+		panic(err)
+	}
+	return err
+}
+
+func UpdateCharacter(db *pg.DB, c *oneroll.Character) error {
+	err := db.Update(c)
 	if err != nil {
 		panic(err)
 	}
@@ -44,7 +53,7 @@ func createSchema(db *pg.DB) error {
 }
 
 // ListCharacters queries Character names and add to slice
-func ListCharacters(db *pg.DB) error {
+func ListCharacters(db *pg.DB) ([]string, error) {
 	var chars []string
 
 	err := db.Model((*oneroll.Character)(nil)).
@@ -53,14 +62,57 @@ func ListCharacters(db *pg.DB) error {
 		Select(&chars)
 
 	if err != nil {
-		return err
+		return []string{}, err
 	}
 
 	// Print names and PK
 	for i, n := range chars {
 		fmt.Println(i, n)
 	}
-	return nil
+	return chars, nil
+}
+
+// GetCharacter lists all characters in DB and asks the user to select one
+func GetCharacter(db *pg.DB) (*oneroll.Character, error) {
+
+	var name string
+	var err error
+
+	// Select character loop
+	for true {
+		// List all charcters in DB
+		list, err := ListCharacters(db)
+		if err != nil {
+			panic(err)
+		}
+
+		// Get user input on which character to load
+		name = UserQuery("Enter your character's name to load or hit Enter to quit: ")
+
+		if len(name) == 0 {
+			fmt.Println("Exiting.")
+			os.Exit(3)
+		}
+
+		validCharacter := true
+
+		for _, n := range list {
+			if name == n {
+				validCharacter = true
+				break
+			}
+			validCharacter = false
+		}
+
+		if validCharacter == false {
+			fmt.Println("Not a valid character. Try again.")
+		} else {
+			break
+		}
+	}
+	c := LoadCharacter(db, name)
+	c.Display()
+	return c, err
 }
 
 // LoadCharacter loads a single character from the DB by name

@@ -1,11 +1,7 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
-	"os"
 	"strconv"
-	"strings"
 
 	"github.com/fatih/structs"
 	"github.com/go-pg/pg"
@@ -15,11 +11,7 @@ import (
 // CreateCharacter takes terminal user input and saves to DB
 func CreateCharacter(db *pg.DB) *oneroll.Character {
 
-	question := bufio.NewReader(os.Stdin)
-	fmt.Print("What is your name? ")
-	r, _ := question.ReadString('\n')
-
-	name := strings.Trim(r, " \n")
+	name := UserQuery("What is the character's name? ")
 
 	c := oneroll.NewCharacter(name)
 
@@ -31,11 +23,7 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 	statistics := []*oneroll.Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
 
 	for _, s := range statistics {
-		q := bufio.NewReader(os.Stdin)
-		fmt.Print("Input value for ", s.Name, ": ")
-		r, _ = q.ReadString('\n')
-
-		answer := strings.Trim(r, " \n")
+		answer := UserQuery("Input value for " + s.Name + ": ")
 		num, _ := strconv.Atoi(answer)
 
 		s.Dice.Normal = num
@@ -45,11 +33,7 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 	c.Willpower = c.BaseWill
 
 	for k := range c.Skills {
-		question = bufio.NewReader(os.Stdin)
-		fmt.Print("Input value for ", k, ": ")
-		r, _ = question.ReadString('\n')
-
-		answer := strings.Trim(r, " \n")
+		answer := UserQuery("Input value for " + k + ": ")
 		num, _ := strconv.Atoi(answer)
 
 		c.Skills[k].Dice.Normal = num

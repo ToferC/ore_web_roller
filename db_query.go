@@ -1,10 +1,7 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"strings"
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/oneroll"
@@ -13,35 +10,58 @@ import (
 // Query and return a Character from DB
 func Query(db *pg.DB) {
 
-	// List all charcters in DB
-	err := ListCharacters(db)
+	c, err := GetCharacter(db)
+
 	if err != nil {
 		panic(err)
 	}
 
-	// Get user input on which character to load
-	question := bufio.NewReader(os.Stdin)
-	fmt.Print("Enter your character's name to load: ")
-	q, _ := question.ReadString('\n')
+	for true {
+		fmt.Println("\nCharacter Skills:\n")
 
-	name := strings.Trim(q, " \n")
+		for k, v := range c.Skills {
+			fmt.Println(k, v.Dice.Normal)
+		}
 
-	c := LoadCharacter(db, name)
-	c.Display()
+		skillroll := UserQuery("\nChoose a skill to roll or hit Enter to quit: ")
 
-	s := oneroll.FormSkillDieString(c.Skills["Athletics"], 1)
+		if len(skillroll) == 0 {
+			fmt.Println("Exiting.")
+			break
+		}
 
-	fmt.Printf("Rolling Athletics (Body+Athletics) for %s\n", c.Name)
-	r := oneroll.Roll{
-		Actor:  c,
-		Action: "act",
+		validSkill := true
+
+		for k := range c.Skills {
+			if skillroll == k {
+				validSkill = true
+				break
+			}
+			validSkill = false
+		}
+
+		if !validSkill {
+			fmt.Println("Not a skill. Try again.")
+		} else {
+
+			s := c.Skills[skillroll]
+
+			ds := oneroll.FormSkillDieString(s, 1)
+
+			fmt.Printf("Rolling %s (w/ %s) for %s\n",
+				s.Name,
+				s.LinkStat.Name,
+				c.Name)
+
+			r := oneroll.Roll{
+				Actor:  c,
+				Action: "act",
+			}
+
+			r.Resolve(ds)
+
+			fmt.Println("Rolling!")
+			fmt.Println(r)
+		}
 	}
-
-	r.Resolve(s)
-
-	fmt.Println("Rolling!")
-	fmt.Println(r)
-
-	fmt.Println(c)
-
 }
