@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/fatih/structs"
@@ -13,7 +14,7 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 
 	name := UserQuery("What is the character's name? ")
 
-	c := oneroll.NewCharacter(name)
+	c := oneroll.NewWTCharacter(name)
 
 	m := structs.Map(c)
 	m["Name"] = name
@@ -39,7 +40,7 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 		c.Skills[k].Dice.Normal = num
 	}
 
-	c.Display()
+	fmt.Println(c)
 
 	// Save character
 	err := SaveCharacter(db, c)

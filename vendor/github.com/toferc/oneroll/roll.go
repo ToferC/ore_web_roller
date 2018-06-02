@@ -302,8 +302,8 @@ func (r Roll) String() string {
 
 	for _, m := range results {
 		text += fmt.Sprintf("Match: %dx%d, Initiative: %dx%d\n",
-			m.Height, m.Width,
-			m.Height, m.Initiative,
+			m.Width, m.Height,
+			m.Initiative, m.Height,
 		)
 	}
 	if r.Wiggles > 0 {

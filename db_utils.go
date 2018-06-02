@@ -111,7 +111,7 @@ func GetCharacter(db *pg.DB) (*oneroll.Character, error) {
 		}
 	}
 	c := LoadCharacter(db, name)
-	c.Display()
+	fmt.Println(c)
 	return c, err
 }
 

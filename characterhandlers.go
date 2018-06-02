@@ -19,12 +19,12 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			name = "Player"
 		}
 
-		c := oneroll.NewCharacter(name)
+		c := oneroll.NewWTCharacter(name)
 
 		c.BaseWill = c.Command.Dice.Normal + c.Charm.Dice.Normal
 		c.Willpower = c.BaseWill
 
-		render(w, "templates/character.html", c)
+		Render(w, "templates/character.html", c)
 
 	} else {
 

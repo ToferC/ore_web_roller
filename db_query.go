@@ -19,8 +19,10 @@ func Query(db *pg.DB) {
 	for true {
 		fmt.Println("\nCharacter Skills:\n")
 
-		for k, v := range c.Skills {
-			fmt.Println(k, v.Dice.Normal)
+		for _, v := range c.Skills {
+			if oneroll.SkillRated(v) {
+				fmt.Println(v)
+			}
 		}
 
 		skillroll := UserQuery("\nChoose a skill to roll or hit Enter to quit: ")
