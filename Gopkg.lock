@@ -30,7 +30,7 @@
   branch = "master"
   name = "github.com/toferc/oneroll"
   packages = ["."]
-  revision = "aacdb6a4c6d5e0c0f6dbf364c7b092f86df99488"
+  revision = "ab71f58930a12f97cd6b2fdfb4de2e61e6f6b5db"
 
 [solve-meta]
   analyzer-name = "dep"

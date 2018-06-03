@@ -23,6 +23,7 @@ func Update(db *pg.DB) {
     1: Update Statistics
     2: Update Skills
     3: Add a Skill
+    4: Delete a Skill
 
     Or hit Enter to exit: `)
 
@@ -37,7 +38,9 @@ func Update(db *pg.DB) {
 		case "2":
 			updateSkills(db, c)
 		case "3":
-			addSkill(db, c)
+			AddSkill(db, c)
+		case "4":
+			deleteSkills(db, c)
 		default:
 			fmt.Println("Not a valid option. Please choose again")
 		}
@@ -50,10 +53,11 @@ func updateStatistics(db *pg.DB, c *oneroll.Character) {
 
 	statistics := []*oneroll.Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
 
+UpdateStats:
 	for true {
 
 		for i, stat := range statistics {
-			fmt.Printf("%d - %s\n", i+1, stat)
+			fmt.Printf("%d %s\n", i+1, stat)
 		}
 
 		fmt.Printf("\nChoose the number for the statistic to update. (1-%d): ", len(statistics))
@@ -61,9 +65,9 @@ func updateStatistics(db *pg.DB, c *oneroll.Character) {
 
 		answer := UserQuery("Your selection: ")
 
-		if len(answer) == 0 {
+		if answer == "" {
 			fmt.Println("Exiting.")
-			os.Exit(3)
+			break UpdateStats
 		}
 
 		num, _ := strconv.Atoi(answer)
@@ -164,17 +168,16 @@ func updateSkills(db *pg.DB, c *oneroll.Character) {
 
 	fmt.Println("Updating Skills")
 
+UpdateSkillsLoop:
 	for true {
 
-		for _, skill := range c.Skills {
-			fmt.Printf("%s\n", skill)
-		}
+		fmt.Println(oneroll.ShowSkills(c))
 
 		answer := UserQuery("\nType the name of the skill to update or hit Enter to exit: ")
 
-		if len(answer) == 0 {
+		if answer == "" {
 			fmt.Println("Exiting.")
-			os.Exit(3)
+			break UpdateSkillsLoop
 		}
 
 		validSkill := false
@@ -280,9 +283,12 @@ func updateSkill(db *pg.DB, s *oneroll.Skill, c *oneroll.Character) error {
 	return err
 }
 
-func addSkill(db *pg.DB, c *oneroll.Character) {
+func AddSkill(db *pg.DB, c *oneroll.Character) {
 
+AddSkillLoop:
 	for true {
+
+		fmt.Println(oneroll.ShowSkills(c))
 
 		fmt.Println("Adding a new skill")
 
@@ -299,16 +305,17 @@ func addSkill(db *pg.DB, c *oneroll.Character) {
 
 		// Get user input for new skill
 
-		n := UserQuery("Enter the name of the new skill or hit Enter to exit: ")
+		answer := UserQuery("Enter the name of the new skill or hit Enter to exit: ")
 
-		if len(n) == 0 {
-			os.Exit(3)
+		if answer == "" {
+			break AddSkillLoop
 		}
 
-		s.Name = n
+		s.Name = answer
 
 		statistics := []*oneroll.Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
 
+	ChooseStatLoop:
 		for true {
 
 			fmt.Println("Statistics:")
@@ -322,9 +329,9 @@ func addSkill(db *pg.DB, c *oneroll.Character) {
 
 			answer := UserQuery("\nYour selection: ")
 
-			if len(answer) == 0 {
+			if answer == "" {
 				fmt.Println("Exiting.")
-				os.Exit(3)
+				break ChooseStatLoop
 			}
 
 			num, _ := strconv.Atoi(answer)
@@ -349,8 +356,52 @@ func addSkill(db *pg.DB, c *oneroll.Character) {
 			s.Specialization = spec
 		}
 
-		c.Skills[n] = &s
+		c.Skills[answer] = &s
 
 		updateSkill(db, &s, c)
+	}
+}
+
+func deleteSkills(db *pg.DB, c *oneroll.Character) {
+
+	fmt.Println("Deleting Skills")
+
+DeleteSkillLoop:
+	for true {
+
+		fmt.Println(oneroll.ShowSkills(c))
+
+		answer := UserQuery("\nType the name of the skill to delete or hit Enter to exit: ")
+
+		if answer == "" {
+			fmt.Println("Exiting.")
+			break DeleteSkillLoop
+		}
+
+		validSkill := false
+
+		for k := range c.Skills {
+			if answer == k {
+				validSkill = true
+				break
+			}
+			validSkill = false
+		}
+
+		if !validSkill {
+			fmt.Println("Not a skill. Try again.")
+
+		} else {
+
+			delete(c.Skills, answer)
+
+			// Save character
+			err := UpdateCharacter(db, c)
+			if err != nil {
+				panic(err)
+			}
+
+		}
+		fmt.Println("Deleted.")
 	}
 }

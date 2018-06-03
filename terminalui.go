@@ -26,12 +26,14 @@ func main() {
 
 	defer db.Close()
 
-	fmt.Println("Welcome to the ORE Terminal")
-	fmt.Println("From here, you can query, create or delete ORE characters.")
-	fmt.Println("Please select your action.")
+MainLoop:
+	for true {
+		fmt.Println("Welcome to the ORE Terminal")
+		fmt.Println("From here, you can query, create, update or delete ORE characters.")
+		fmt.Println("Please select your action.")
 
-	input := UserQuery(
-		`
+		input := UserQuery(
+			`
   1: Query the Database
   2: Create a Character
   3: Update a Character
@@ -39,17 +41,19 @@ func main() {
 
   Selection: `)
 
-	switch input {
-	case "1":
-		Query(db)
-	case "2":
-		CreateCharacter(db)
-	case "3":
-		Update(db)
-	case "4":
-		Delete(db)
-	default:
-		fmt.Println("Invalid input. Exiting.")
+		switch input {
+		case "1":
+			Query(db)
+		case "2":
+			CreateCharacter(db)
+		case "3":
+			Update(db)
+		case "4":
+			Delete(db)
+		default:
+			fmt.Println("Invalid input. Exiting.")
+			break MainLoop
+		}
 	}
 }
 

@@ -1,8 +1,10 @@
 package oneroll
 
 import (
+	"bufio"
 	"fmt"
 	"math/rand"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -60,4 +62,39 @@ func SkillRated(s *Skill) bool {
 		return true
 	}
 	return false
+}
+
+// ShowSkills shows skills grouped under stats
+// all bool determines if all skills are shown or just the ones with dice in them.
+func ShowSkills(c *Character, all bool) string {
+	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
+
+	var text string
+
+	for _, stat := range statistics {
+		text += fmt.Sprintf("%s\n", stat)
+		for _, skill := range c.Skills {
+			if skill.LinkStat.Name == stat.Name {
+				if all {
+					text += fmt.Sprintf("-- %s\n", skill)
+				} else {
+					if SkillRated(skill) {
+						text += fmt.Sprintf("-- %s\n", skill)
+					}
+				}
+			}
+		}
+	}
+	return text
+}
+
+// UserQuery creates and question and returns the User's input as a string
+func UserQuery(q string) string {
+	question := bufio.NewReader(os.Stdin)
+	fmt.Print(q)
+	r, _ := question.ReadString('\n')
+
+	input := strings.Trim(r, " \n")
+
+	return input
 }

@@ -31,8 +31,7 @@ func (s Skill) String() string {
 		text += fmt.Sprintf("[%s] ", s.Specialization)
 	}
 
-	text += fmt.Sprintf("(%s): %dd",
-		s.LinkStat.Name,
+	text += fmt.Sprintf(": %dd",
 		s.Dice.Normal,
 	)
 

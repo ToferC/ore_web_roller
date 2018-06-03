@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/go-pg/pg"
 	"github.com/go-pg/pg/orm"
@@ -79,6 +78,7 @@ func GetCharacter(db *pg.DB) (*oneroll.Character, error) {
 	var err error
 
 	// Select character loop
+SelectCharacterLoop:
 	for true {
 		// List all charcters in DB
 		list, err := ListCharacters(db)
@@ -89,9 +89,9 @@ func GetCharacter(db *pg.DB) (*oneroll.Character, error) {
 		// Get user input on which character to load
 		name = UserQuery("Enter your character's name to load or hit Enter to quit: ")
 
-		if len(name) == 0 {
+		if name == "" {
 			fmt.Println("Exiting.")
-			os.Exit(3)
+			break SelectCharacterLoop
 		}
 
 		validCharacter := true

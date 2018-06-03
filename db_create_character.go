@@ -21,10 +21,12 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 
 	// Add statistics
 
+	fmt.Println("\nAdding stats and skills. We'll start with normal dice and you can update to add special abilities later.")
+
 	statistics := []*oneroll.Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
 
 	for _, s := range statistics {
-		answer := UserQuery("Input value for " + s.Name + ": ")
+		answer := UserQuery("Input normal die value for " + s.Name + ": ")
 		num, _ := strconv.Atoi(answer)
 
 		s.Dice.Normal = num
@@ -33,8 +35,9 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 	c.BaseWill = c.Command.Dice.Normal + c.Charm.Dice.Normal
 	c.Willpower = c.BaseWill
 
-	for k := range c.Skills {
-		answer := UserQuery("Input value for " + k + ": ")
+	for k, v := range c.Skills {
+		str := fmt.Sprintf("Input value for %s (%s): ", k, v.LinkStat.Name)
+		answer := UserQuery(str)
 		num, _ := strconv.Atoi(answer)
 
 		c.Skills[k].Dice.Normal = num

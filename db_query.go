@@ -16,20 +16,47 @@ func Query(db *pg.DB) {
 		panic(err)
 	}
 
+QueryActionLoop:
+	for true {
+		fmt.Println("Would you like to update Statistics or Skills?")
+
+		answer := UserQuery(`
+		1: Make a Skill Roll
+		2: Mark Damage
+		3: Coming Soon...
+		4: Coming Soon...
+
+		Or hit Enter to exit: `)
+
+		if len(answer) == 0 {
+			fmt.Println("Exiting")
+			break QueryActionLoop
+		}
+
+		switch answer {
+		case "1":
+			rollSkill(c)
+		case "2":
+			//markDamage(db, c)
+		default:
+			fmt.Println("Not a valid option. Please choose again")
+		}
+	}
+}
+
+func rollSkill(c *oneroll.Character) {
+
+ChooseSkillLoop:
 	for true {
 		fmt.Println("\nCharacter Skills:\n")
 
-		for _, v := range c.Skills {
-			if oneroll.SkillRated(v) {
-				fmt.Println(v)
-			}
-		}
+		fmt.Println(oneroll.ShowSkills(c))
 
 		skillroll := UserQuery("\nChoose a skill to roll or hit Enter to quit: ")
 
-		if len(skillroll) == 0 {
+		if skillroll == "" {
 			fmt.Println("Exiting.")
-			break
+			break ChooseSkillLoop
 		}
 
 		validSkill := true
