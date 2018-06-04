@@ -53,3 +53,29 @@ func (s Skill) String() string {
 
 	return text
 }
+
+// ShowSkills shows skills grouped under stats
+// all bool determines if all skills are shown or just the ones with dice in them.
+func ShowSkills(c *Character, allSkills bool) string {
+	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
+
+	var text string
+
+	for _, stat := range statistics {
+		text += fmt.Sprintf("%s\n", stat)
+		for _, skill := range c.Skills {
+			if skill.LinkStat.Name == stat.Name {
+				if allSkills {
+					// We want all skills
+					text += fmt.Sprintf("-- %s\n", skill)
+				} else {
+					// We only want rated skills
+					if SkillRated(skill) {
+						text += fmt.Sprintf("-- %s\n", skill)
+					}
+				}
+			}
+		}
+	}
+	return text
+}

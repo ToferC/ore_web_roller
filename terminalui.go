@@ -32,12 +32,13 @@ MainLoop:
 		fmt.Println("From here, you can query, create, update or delete ORE characters.")
 		fmt.Println("Please select your action.")
 
-		input := UserQuery(
-			`
+		input := UserQuery(`
   1: Query the Database
   2: Create a Character
   3: Update a Character
   4: Delete a Character
+
+  5: Start a Conflict (Coming Soon)
 
   Selection: `)
 

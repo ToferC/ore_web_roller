@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 
 	"github.com/go-pg/pg"
@@ -16,6 +15,7 @@ func Update(db *pg.DB) {
 		panic(err)
 	}
 
+UpdateLoop:
 	for true {
 		fmt.Println("Would you like to update Statistics or Skills?")
 
@@ -29,7 +29,7 @@ func Update(db *pg.DB) {
 
 		if len(answer) == 0 {
 			fmt.Println("Exiting")
-			os.Exit(3)
+			break UpdateLoop
 		}
 
 		switch answer {
@@ -171,7 +171,7 @@ func updateSkills(db *pg.DB, c *oneroll.Character) {
 UpdateSkillsLoop:
 	for true {
 
-		fmt.Println(oneroll.ShowSkills(c))
+		fmt.Println(oneroll.ShowSkills(c, true))
 
 		answer := UserQuery("\nType the name of the skill to update or hit Enter to exit: ")
 
@@ -288,7 +288,7 @@ func AddSkill(db *pg.DB, c *oneroll.Character) {
 AddSkillLoop:
 	for true {
 
-		fmt.Println(oneroll.ShowSkills(c))
+		fmt.Println(oneroll.ShowSkills(c, true))
 
 		fmt.Println("Adding a new skill")
 
@@ -369,7 +369,7 @@ func deleteSkills(db *pg.DB, c *oneroll.Character) {
 DeleteSkillLoop:
 	for true {
 
-		fmt.Println(oneroll.ShowSkills(c))
+		fmt.Println(oneroll.ShowSkills(c, false))
 
 		answer := UserQuery("\nType the name of the skill to delete or hit Enter to exit: ")
 
@@ -393,7 +393,14 @@ DeleteSkillLoop:
 
 		} else {
 
-			delete(c.Skills, answer)
+			response := UserQuery("Are you sure you want to delete " + answer + " ? (Y/N)")
+
+			if response == "Y" || response == "y" {
+				delete(c.Skills, answer)
+				fmt.Println("Deleted.")
+			} else {
+				fmt.Println("Delete aborted.")
+			}
 
 			// Save character
 			err := UpdateCharacter(db, c)

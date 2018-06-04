@@ -50,7 +50,7 @@ ChooseSkillLoop:
 	for true {
 		fmt.Println("\nCharacter Skills:\n")
 
-		fmt.Println(oneroll.ShowSkills(c))
+		fmt.Println(oneroll.ShowSkills(c, true))
 
 		skillroll := UserQuery("\nChoose a skill to roll or hit Enter to quit: ")
 
