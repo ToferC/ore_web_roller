@@ -10,6 +10,9 @@ import (
 
 // SaveCharacter saves a Character to the DB
 func SaveCharacter(db *pg.DB, c *oneroll.Character) error {
+
+	c.CalculateCharacterCost()
+
 	// Save character in Database
 	_, err := db.Model(c).
 		OnConflict("(id) DO UPDATE").
@@ -22,6 +25,9 @@ func SaveCharacter(db *pg.DB, c *oneroll.Character) error {
 }
 
 func UpdateCharacter(db *pg.DB, c *oneroll.Character) error {
+
+	c.CalculateCharacterCost()
+
 	err := db.Update(c)
 	if err != nil {
 		panic(err)

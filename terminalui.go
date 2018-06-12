@@ -26,11 +26,13 @@ func main() {
 
 	defer db.Close()
 
+	InitDB(db)
+
 MainLoop:
 	for true {
-		fmt.Println("Welcome to the ORE Terminal")
-		fmt.Println("From here, you can query, create, update or delete ORE characters.")
-		fmt.Println("Please select your action.")
+		fmt.Println("\nWelcome to the ORE Terminal")
+		fmt.Println("\nFrom here, you can query, create, update or delete ORE characters.")
+		fmt.Println("\nPlease select your action.")
 
 		input := UserQuery(`
   1: Query the Database

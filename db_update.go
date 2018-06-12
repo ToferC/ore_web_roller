@@ -15,17 +15,21 @@ func Update(db *pg.DB) {
 		panic(err)
 	}
 
+	c.CalculateCharacterCost()
+
 UpdateLoop:
 	for true {
-		fmt.Println("Would you like to update Statistics or Skills?")
+		fmt.Println("Choose an action:")
 
 		answer := UserQuery(`
     1: Update Statistics
     2: Update Skills
     3: Add a Skill
     4: Delete a Skill
+		5: Add an Archtype
+		6: Add a Power
 
-    Or hit Enter to exit: `)
+		Or hit Enter to exit: `)
 
 		if len(answer) == 0 {
 			fmt.Println("Exiting")
@@ -41,6 +45,10 @@ UpdateLoop:
 			AddSkill(db, c)
 		case "4":
 			deleteSkills(db, c)
+		case "5":
+			AddArchtype(db, c)
+		case "6":
+			AddPower(db, c)
 		default:
 			fmt.Println("Not a valid option. Please choose again")
 		}

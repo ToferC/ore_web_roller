@@ -16,6 +16,9 @@ func Query(db *pg.DB) {
 		panic(err)
 	}
 
+	// Ensure costs and validators are up to date
+	c.CalculateCharacterCost()
+
 QueryActionLoop:
 	for true {
 		fmt.Println("Would you like to update Statistics or Skills?")
@@ -75,7 +78,7 @@ ChooseSkillLoop:
 
 			s := c.Skills[skillroll]
 
-			ds := oneroll.FormSkillDieString(s, 1)
+			ds := s.FormatDiePool(1)
 
 			fmt.Printf("Rolling %s (w/ %s) for %s\n",
 				s.Name,
@@ -84,7 +87,7 @@ ChooseSkillLoop:
 
 			r := oneroll.Roll{
 				Actor:  c,
-				Action: "act",
+				Action: "Act " + s.Name,
 			}
 
 			r.Resolve(ds)

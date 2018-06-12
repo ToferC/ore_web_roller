@@ -277,6 +277,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		q.Add("gf2", gf2)
 		q.Add("sp2", sp2)
 
+		// Encode URL.Query
 		qs := q.Encode()
 
 		http.Redirect(w, req, "/opposed/"+qs, http.StatusSeeOther)

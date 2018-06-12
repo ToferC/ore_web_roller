@@ -25,26 +25,48 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 
 	statistics := []*oneroll.Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
 
-	fmt.Println("Enter normal die values for:")
+	fmt.Println("Enter normal die values (max 5) for:")
 
 	for _, s := range statistics {
-		answer := UserQuery("\n" + s.Name + ": ")
-		num, _ := strconv.Atoi(answer)
 
-		s.Dice.Normal = num
+	StatsLoop:
+		for true {
+			answer := UserQuery("\n" + s.Name + ": ")
+			num, err := strconv.Atoi(answer)
+
+			if err != nil || num < 1 || num > 5 {
+				fmt.Println("Invalid value")
+			} else {
+				s.Dice.Normal = num
+				break StatsLoop
+			}
+		}
+
 		for k, v := range c.Skills {
 			if v.LinkStat.Name == s.Name {
-				str := fmt.Sprintf("-- %s: ", k)
-				answer := UserQuery(str)
-				num, _ := strconv.Atoi(answer)
 
-				c.Skills[k].Dice.Normal = num
+			SkillsLoop:
+				for true {
+
+					str := fmt.Sprintf("-- %s: ", k)
+					answer := UserQuery(str)
+					num, err := strconv.Atoi(answer)
+
+					if err != nil || num < 0 || num > 5 {
+						fmt.Println("Invalid value")
+					} else {
+						c.Skills[k].Dice.Normal = num
+						break SkillsLoop
+					}
+				}
 			}
 		}
 	}
 
 	c.BaseWill = c.Command.Dice.Normal + c.Charm.Dice.Normal
 	c.Willpower = c.BaseWill
+
+	c.CalculateCharacterCost()
 
 	fmt.Println(c)
 

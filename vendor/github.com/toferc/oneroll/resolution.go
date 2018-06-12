@@ -5,24 +5,10 @@ import (
 	"sort"
 )
 
-// FormSkillDieString takes a stat and skill and creates a die pool string
-func FormSkillDieString(skill *Skill, actions int) string {
-
-	normal := skill.LinkStat.Dice.Normal + skill.Dice.Normal
-	hard := skill.LinkStat.Dice.Hard + skill.Dice.Hard
-	wiggle := skill.LinkStat.Dice.Wiggle + skill.Dice.Wiggle
-	goFirst := Max(skill.LinkStat.Dice.GoFirst, skill.Dice.GoFirst)
-	spray := Max(skill.LinkStat.Dice.Spray, skill.Dice.Spray)
-
-	text := fmt.Sprintf("%dac+%dd+%dhd+%dwd+%dgf+%dsp",
-		actions,
-		normal,
-		hard,
-		wiggle,
-		goFirst,
-		spray)
-
-	return text
+// DieStringFormatter is an interface to generate a die string
+// from a Stat, Power or Skill
+type formatter interface {
+	formatDiePool()
 }
 
 // OpposedRoll determines the results of an opposed roll between two or more actors
