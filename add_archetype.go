@@ -133,7 +133,7 @@ ChooseIntrinsicsLoop:
 		}
 	} // End ChoosePermissionsLoop
 
-	a.CalculateArchetypeCost()
+	oneroll.UpdateCost(&a)
 	c.Archetype = &a
 
 	// Save character

@@ -15,21 +15,22 @@ func Update(db *pg.DB) {
 		panic(err)
 	}
 
-	c.CalculateCharacterCost()
+	oneroll.UpdateCost(c)
 
 UpdateLoop:
 	for true {
 		fmt.Println("Choose an action:")
 
-		answer := UserQuery(`
-    1: Update Statistics
-    2: Update Skills
-    3: Add a Skill
-    4: Delete a Skill
-		5: Add an Archtype
-		6: Add a Power
+		answer := UserQuery(`1: Update Statistics
+			2: Update Skills
+			3: Add a Skill
+			4: Delete a Skill
+			5: Add an Archtype
+			6: Add a Power
+			7: Add Hyper-Stat
+			8: Add Hyper-Skill
 
-		Or hit Enter to exit: `)
+Or hit Enter to exit: `)
 
 		if len(answer) == 0 {
 			fmt.Println("Exiting")
@@ -49,6 +50,10 @@ UpdateLoop:
 			AddArchtype(db, c)
 		case "6":
 			AddPower(db, c)
+		case "7":
+			AddHyperStat(db, c)
+		case "8":
+			AddHyperSkill(db, c)
 		default:
 			fmt.Println("Not a valid option. Please choose again")
 		}
@@ -256,28 +261,6 @@ func updateSkill(db *pg.DB, s *oneroll.Skill, c *oneroll.Character) error {
 		fmt.Println("Invalid value")
 	} else {
 		s.Dice.Wiggle = wiggle
-	}
-
-	fmt.Printf("%s has %d spray dice.\n", s.Name, s.Dice.Spray)
-
-	sp := UserQuery("Please enter the new value: ")
-	spray, _ := strconv.Atoi(sp)
-
-	if err != nil {
-		fmt.Println("Invalid value")
-	} else {
-		s.Dice.Spray = spray
-	}
-
-	fmt.Printf("%s has %d ranks in go first.\n", s.Name, s.Dice.GoFirst)
-
-	gf := UserQuery("Please enter the new value: ")
-	gofirst, _ := strconv.Atoi(gf)
-
-	if err != nil {
-		fmt.Println("Invalid value")
-	} else {
-		s.Dice.GoFirst = gofirst
 	}
 
 	fmt.Println(c)

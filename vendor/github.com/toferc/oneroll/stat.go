@@ -52,7 +52,7 @@ func (s *Statistic) getDiePool() *DiePool {
 // FormatDiePool returns a die string
 func (s *Statistic) FormatDiePool(actions int) string {
 
-	td := s.getDiePool()
+	td := ReturnDice(s)
 
 	normal := td.Normal
 	hard := td.Hard
@@ -73,7 +73,7 @@ func (s *Statistic) FormatDiePool(actions int) string {
 
 func (s Statistic) String() string {
 
-	td := s.getDiePool()
+	td := ReturnDice(&s)
 
 	text := fmt.Sprintf("%s: %s",
 		s.Name,
@@ -107,9 +107,9 @@ func (hs HyperStat) String() string {
 	return text
 }
 
-// CalculateStatCost determines the cost of a Power Quality
+// CalculateCost determines the cost of a Power Quality
 // Called from Character.CalculateCharacterCost()
-func (s *Statistic) CalculateStatCost() {
+func (s *Statistic) CalculateCost() {
 	b := 5
 
 	// Temp solution
@@ -124,8 +124,8 @@ func (s *Statistic) CalculateStatCost() {
 	s.Cost = total
 }
 
-// CalculateHyperStatCost generates and udpates the cost for HypeSKills
-func (hs *HyperStat) CalculateHyperStatCost() {
+// CalculateCost generates and udpates the cost for HypeSKills
+func (hs *HyperStat) CalculateCost() {
 
 	b := 4
 
@@ -139,9 +139,9 @@ func (hs *HyperStat) CalculateHyperStatCost() {
 		}
 
 		for _, m := range q.Modifiers {
-			m.CalculateModifierCost(0)
+			m.CalculateCost(0)
 		}
-		q.CalculateQualityCost(0)
+		q.CalculateCost(0)
 		b += q.CostPerDie
 	}
 

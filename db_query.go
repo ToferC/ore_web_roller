@@ -17,7 +17,7 @@ func Query(db *pg.DB) {
 	}
 
 	// Ensure costs and validators are up to date
-	c.CalculateCharacterCost()
+	oneroll.UpdateCost(c)
 
 QueryActionLoop:
 	for true {
@@ -51,7 +51,7 @@ func rollSkill(c *oneroll.Character) {
 
 ChooseSkillLoop:
 	for true {
-		fmt.Println("\nCharacter Skills:\n")
+		fmt.Println("\nCharacter Skills:")
 
 		fmt.Println(oneroll.ShowSkills(c, true))
 

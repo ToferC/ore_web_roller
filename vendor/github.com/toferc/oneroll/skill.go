@@ -5,6 +5,7 @@ import "fmt"
 // Skill represents specific training
 type Skill struct {
 	Name           string
+	Quality        *Quality
 	LinkStat       *Statistic
 	Dice           *DiePool
 	ReqSpec        bool
@@ -25,27 +26,7 @@ type HyperSkill struct {
 
 func (s Skill) String() string {
 
-	td := new(DiePool)
-
-	if s.HyperSkill != nil {
-		td.Normal = s.Dice.Normal + s.HyperSkill.Dice.Normal
-		td.Hard = s.Dice.Hard + s.HyperSkill.Dice.Hard
-		td.Wiggle = s.Dice.Wiggle + s.HyperSkill.Dice.Wiggle
-
-		for _, q := range s.HyperSkill.Qualities {
-			for _, m := range q.Modifiers {
-				if m.Name == "Spray" {
-					td.Spray = m.Level
-				}
-
-				if m.Name == "Go First" {
-					td.GoFirst = m.Level
-				}
-			}
-		}
-	} else {
-		td = s.Dice
-	}
+	td := ReturnDice(&s)
 
 	text := fmt.Sprintf("%s ",
 		s.Name)
@@ -115,8 +96,8 @@ func (s *Skill) getDiePool() *DiePool {
 // FormatDiePool returns a die string
 func (s *Skill) FormatDiePool(actions int) string {
 
-	skill := s.getDiePool()
-	stat := s.LinkStat.getDiePool()
+	skill := ReturnDice(s)
+	stat := ReturnDice(s.LinkStat)
 
 	normal := stat.Normal + skill.Normal
 	hard := stat.Hard + skill.Hard
@@ -161,9 +142,9 @@ func ShowSkills(c *Character, allSkills bool) string {
 	return text
 }
 
-// CalculateSkillCost determines the cost of a Skill
+// CalculateCost determines the cost of a Skill
 // Called from Character.CalculateCharacterCost()
-func (s *Skill) CalculateSkillCost() {
+func (s *Skill) CalculateCost() {
 	b := 2
 
 	b += s.Dice.GoFirst
@@ -176,8 +157,8 @@ func (s *Skill) CalculateSkillCost() {
 	s.Cost = total
 }
 
-// CalculateHyperSkillCost generates and udpates the cost for HypeSKills
-func (hs *HyperSkill) CalculateHyperSkillCost() {
+// CalculateCost generates and udpates the cost for HypeSKills
+func (hs *HyperSkill) CalculateCost() {
 
 	b := 1
 
@@ -191,9 +172,9 @@ func (hs *HyperSkill) CalculateHyperSkillCost() {
 		}
 
 		for _, m := range q.Modifiers {
-			m.CalculateModifierCost(0)
+			m.CalculateCost(0)
 		}
-		q.CalculateQualityCost(0)
+		q.CalculateCost(0)
 		b += q.CostPerDie
 	}
 

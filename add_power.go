@@ -54,7 +54,7 @@ AddPowerLoop:
 
 		p.Effect = answer
 
-		p.CalculatePowerCost()
+		oneroll.UpdateCost(&p)
 
 		// Save
 		c.Powers[p.Name] = &p

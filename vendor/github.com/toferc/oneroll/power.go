@@ -41,8 +41,8 @@ func (p Power) String() string {
 	return text
 }
 
-// CalculatePowerCost totals the cost of Qualites for a Power
-func (p *Power) CalculatePowerCost() {
+// CalculateCost totals the cost of Qualites for a Power
+func (p *Power) CalculateCost() {
 
 	b := 0
 
@@ -61,9 +61,9 @@ func (p *Power) CalculatePowerCost() {
 		}
 
 		for _, m := range q.Modifiers {
-			m.CalculateModifierCost(0)
+			m.CalculateCost(0)
 		}
-		q.CalculateQualityCost(2)
+		q.CalculateCost(2)
 		b += q.CostPerDie
 	}
 

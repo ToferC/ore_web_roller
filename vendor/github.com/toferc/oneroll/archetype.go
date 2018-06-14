@@ -44,8 +44,8 @@ func (a Archetype) String() string {
 	return text
 }
 
-// CalculateArchetypeCost adds costs from sources, permissions and intrinsics
-func (a *Archetype) CalculateArchetypeCost() {
+// CalculateCost adds costs from sources, permissions and intrinsics
+func (a *Archetype) CalculateCost() {
 	var c int
 
 	for _, s := range a.Sources {

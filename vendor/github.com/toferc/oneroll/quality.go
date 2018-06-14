@@ -98,9 +98,9 @@ func NewQuality(t string) *Quality {
 	return q
 }
 
-// CalculateQualityCost determines the cost of a Power Quality
+// CalculateCost determines the cost of a Power Quality
 // Called from Power.PowerCost()
-func (q *Quality) CalculateQualityCost(b int) {
+func (q *Quality) CalculateCost(b int) {
 
 	b += q.Level - 1
 

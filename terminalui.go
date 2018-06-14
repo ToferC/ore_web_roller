@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/go-pg/pg"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
 func init() {

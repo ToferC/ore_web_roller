@@ -66,7 +66,7 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 	c.BaseWill = c.Command.Dice.Normal + c.Charm.Dice.Normal
 	c.Willpower = c.BaseWill
 
-	c.CalculateCharacterCost()
+	oneroll.UpdateCost(c)
 
 	fmt.Println(c)
 

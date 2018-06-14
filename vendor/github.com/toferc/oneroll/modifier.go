@@ -48,9 +48,9 @@ func NewModifier(s string) *Modifier {
 	return m
 }
 
-// CalculateModifierCost updates the cost per level for Modifiers w/ levels
+// CalculateCost updates the cost per level for Modifiers w/ levels
 // Called from Power.PowerCost()
-func (m *Modifier) CalculateModifierCost(b int) {
+func (m *Modifier) CalculateCost(b int) {
 
 	if m.RequiresLevel {
 		b = m.CostPerLevel * m.Level

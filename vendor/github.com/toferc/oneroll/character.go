@@ -50,7 +50,7 @@ func (c *Character) String() string {
 		text += fmt.Sprintf("%s\n", loc)
 	}
 
-	if len(c.Archetype.Sources) > 0 && len(c.Powers) > 0 {
+	if len(c.Archetype.Sources) > 0 {
 		text += fmt.Sprintf("\nPowers:\n")
 
 		for _, s := range statistics {
@@ -73,35 +73,35 @@ func (c *Character) String() string {
 	return text
 }
 
-// CalculateCharacterCost updates the character and sums
+// CalculateCost updates the character and sums
 // total costs of all character elements. Call this on each character update
-func (c *Character) CalculateCharacterCost() {
+func (c *Character) CalculateCost() {
 
 	var cost int
 
 	if len(c.Archetype.Sources) > 0 {
-		c.Archetype.CalculateArchetypeCost()
+		UpdateCost(c.Archetype)
 		cost += c.Archetype.Cost
 	}
 
 	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
 
 	for _, stat := range statistics {
-		stat.CalculateStatCost()
+		UpdateCost(stat)
 		cost += stat.Cost
 
 		if stat.HyperStat != nil {
-			stat.HyperStat.CalculateHyperStatCost()
+			UpdateCost(stat.HyperStat)
 			cost += stat.HyperStat.Cost
 		}
 	}
 
 	for _, skill := range c.Skills {
-		skill.CalculateSkillCost()
+		UpdateCost(skill)
 		cost += skill.Cost
 
 		if skill.HyperSkill != nil {
-			skill.HyperSkill.CalculateHyperSkillCost()
+			UpdateCost(skill.HyperSkill)
 			cost += skill.HyperSkill.Cost
 		}
 	}
@@ -109,7 +109,7 @@ func (c *Character) CalculateCharacterCost() {
 	for _, power := range c.Powers {
 		// Determine power capacities
 		power.DeterminePowerCapacities()
-		power.CalculatePowerCost()
+		UpdateCost(power)
 		cost += power.Cost
 	}
 

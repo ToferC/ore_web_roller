@@ -11,6 +11,26 @@ import (
 	"time"
 )
 
+// Dice is an interface for Statistic & Skills to combine DiePool
+type Dice interface {
+	getDiePool() *DiePool
+}
+
+// Ability is an interface for general ORE object operations
+type Ability interface {
+	CalculateCost()
+}
+
+// ReturnDice implements the Ability to combine DiePool
+func ReturnDice(d Dice) *DiePool {
+	return d.getDiePool()
+}
+
+// UpdateCost implements Ability interface to generate costs
+func UpdateCost(a Ability) {
+	a.CalculateCost()
+}
+
 // Max returns the larger of two ints
 func Max(x, y int) int {
 	if x > y {
@@ -58,7 +78,7 @@ func ParseNumRolls(s string) (int, error) {
 
 // SkillRated returns true if a skill has any points in it
 func SkillRated(s *Skill) bool {
-	if s.Dice.Normal+s.Dice.Hard+s.Dice.Wiggle+s.Dice.Spray+s.Dice.GoFirst > 0 {
+	if s.Dice.Normal+s.Dice.Hard+s.Dice.Wiggle > 0 {
 		return true
 	}
 	return false
