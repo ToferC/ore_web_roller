@@ -1,10 +1,21 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/toferc/oneroll"
+	"github.com/toferc/ore_web/database"
 )
+
+func IndexHandler(w http.ResponseWriter, req *http.Request) {
+
+	characters, err := database.ListCharacters(db)
+	if err != nil {
+		panic(err)
+	}
+
+	Render(w, "templates/index.html", characters)
+}
 
 // CharacterHandler renders a character in a Web page
 func CharacterHandler(w http.ResponseWriter, req *http.Request) {
@@ -19,10 +30,10 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			name = "Player"
 		}
 
-		c := oneroll.NewWTCharacter(name)
-
-		c.BaseWill = c.Command.Dice.Normal + c.Charm.Dice.Normal
-		c.Willpower = c.BaseWill
+		c, err := database.LoadCharacter(db, name)
+		if err != nil {
+			fmt.Println(err)
+		}
 
 		Render(w, "templates/character.html", c)
 

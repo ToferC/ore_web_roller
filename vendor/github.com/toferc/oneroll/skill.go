@@ -55,7 +55,7 @@ func (hs HyperSkill) String() string {
 		hs.Cost)
 
 	for _, q := range hs.Qualities {
-		text += fmt.Sprintf("\n%s\n", q)
+		text += fmt.Sprintf("\n%s", q)
 	}
 
 	if hs.Effect != "" {

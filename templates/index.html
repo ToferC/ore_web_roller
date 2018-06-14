@@ -1,0 +1,22 @@
+{{define "content"}}
+
+      <div class="container">
+        <div class="row">
+
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Characters</h3>
+          {{ range . }}
+          <ul>
+            <a href="/character/{{ .Name }}">{{ .Name }}</a>
+          </ul>
+          {{ end }}
+      </div>
+    </div>
+
+    <div>
+      <a href="/new">Create New Character</a>
+    </div>
+    
+  </div>
+
+{{end}}
