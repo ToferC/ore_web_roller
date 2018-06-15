@@ -54,6 +54,10 @@ AddPowerLoop:
 
 		fmt.Printf("Your Power:\n%s", p)
 
+		for _, q := range p.Qualities {
+			fmt.Println(q)
+		}
+
 		// Get user input for power Effect
 		answer = UserQuery("\nDescribe your power's effect: ")
 

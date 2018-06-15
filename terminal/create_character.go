@@ -26,7 +26,8 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 
 	fmt.Println("Enter normal die values (max 5) for:")
 
-	for _, s := range c.Statistics {
+	for _, stat := range c.StatMap {
+		s := c.Statistics[stat]
 
 	StatsLoop:
 		for true {
