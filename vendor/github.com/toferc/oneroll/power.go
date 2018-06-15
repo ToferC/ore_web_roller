@@ -30,14 +30,6 @@ func (p Power) String() string {
 		p.CostPerDie,
 		p.Cost)
 
-	for _, q := range p.Qualities {
-		text += fmt.Sprintln(q)
-	}
-
-	if p.Effect != "" {
-		text += fmt.Sprintf("Effect: %s", p.Effect)
-	}
-
 	return text
 }
 

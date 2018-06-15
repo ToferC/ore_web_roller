@@ -6,10 +6,11 @@ import (
 
 // Statistic represents common attributes possessed by every character
 type Statistic struct {
-	Name      string
-	Dice      *DiePool
-	HyperStat *HyperStat
-	Cost      int
+	Name        string
+	Dice        *DiePool
+	HyperStat   *HyperStat
+	EffectsWill bool
+	Cost        int
 }
 
 // HyperStat is a modified version of a regular Statistic

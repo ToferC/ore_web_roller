@@ -17,7 +17,7 @@ type Quality struct {
 }
 
 func (q Quality) String() string {
-	text := fmt.Sprintf("%s", q.Type)
+	text := fmt.Sprintf("%s ", q.Type)
 
 	// Add formatting for additional levels of Quality
 	if q.Level > 1 {

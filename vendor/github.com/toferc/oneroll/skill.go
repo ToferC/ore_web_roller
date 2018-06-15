@@ -1,6 +1,9 @@
 package oneroll
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+)
 
 // Skill represents specific training
 type Skill struct {
@@ -119,25 +122,40 @@ func (s *Skill) FormatDiePool(actions int) string {
 // ShowSkills shows skills grouped under stats
 // all bool determines if all skills are shown or just the ones with dice in them.
 func ShowSkills(c *Character, allSkills bool) string {
-	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
 
 	var text string
 
-	for _, stat := range statistics {
+	for _, s := range c.StatMap {
+		stat := c.Statistics[s]
 		text += fmt.Sprintf("%s\n", stat)
+
+		// Create Skill Mapping for stat
+		skillMap := []string{}
+
+		// Start with all skills
 		for _, skill := range c.Skills {
+
+			// Narrow down to only Skills with the right LinkStat
 			if skill.LinkStat.Name == stat.Name {
+
+				// Select all or only rated skills
 				if allSkills {
 					// We want all skills
-					text += fmt.Sprintf("-- %s\n", skill)
+					skillMap = append(skillMap, skill.Name)
 				} else {
 					// We only want rated skills
 					if SkillRated(skill) {
-						text += fmt.Sprintf("-- %s\n", skill)
+						skillMap = append(skillMap, skill.Name)
 					}
 				}
 			}
 		}
+		// Sort the map of Skills in Alphabetical order
+		sort.Strings(skillMap)
+		for _, skill := range skillMap {
+			text += fmt.Sprintf("-- %s\n", c.Skills[skill])
+		}
+
 	}
 	return text
 }

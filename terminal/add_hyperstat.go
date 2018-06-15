@@ -13,37 +13,13 @@ func AddHyperStat(db *pg.DB, c *oneroll.Character) {
 
 	fmt.Println("Select Stat to Add Hyper-Stat to:")
 
-	statistics := []*oneroll.Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
+	stat := ChooseStatistic(c)
 
-UpdateStats:
-	for true {
-
-		for i, stat := range statistics {
-			fmt.Printf("%d %s\n", i+1, stat)
-		}
-
-		fmt.Printf("\nChoose the number for the statistic to update. (1-%d): ", len(statistics))
-		fmt.Println("Or hit Enter to exit")
-
-		answer := UserQuery("Your selection: ")
-
-		if answer == "" {
-			fmt.Println("Exiting.")
-			break UpdateStats
-		}
-
-		num, _ := strconv.Atoi(answer)
-
-		if num > 6 || num < 1 {
-			fmt.Println("Not a valid statistic. Try again.")
-		} else {
-			err := HyperStatInput(db, statistics[num-1], c)
-			if err != nil {
-				panic(err)
-			}
-			fmt.Println("Hyper-Stat created. Choose another stat or hit Enter to exit.")
-		}
+	err := HyperStatInput(db, stat, c)
+	if err != nil {
+		panic(err)
 	}
+	fmt.Println("Hyper-Stat created. Choose another stat or hit Enter to exit.")
 }
 
 func HyperStatInput(db *pg.DB, s *oneroll.Statistic, c *oneroll.Character) error {
@@ -123,8 +99,7 @@ AddHyperStatLoop:
 			panic(err)
 		}
 
-		// Calculate power capacities
-		//hs.DeterminePowerCapacities()
+		fmt.Println(hs)
 
 		// Get user input for power Effect
 		answer := UserQuery("\nDescribe your power's effect: ")

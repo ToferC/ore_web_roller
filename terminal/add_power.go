@@ -50,14 +50,15 @@ AddPowerLoop:
 		// Calculate power capacities
 		p.DeterminePowerCapacities()
 
+		oneroll.UpdateCost(&p)
+
+		fmt.Printf("Your Power:\n%s", p)
+
 		// Get user input for power Effect
 		answer = UserQuery("\nDescribe your power's effect: ")
 
 		p.Effect = answer
 
-		oneroll.UpdateCost(&p)
-
-		// Save
 		c.Powers[p.Name] = &p
 
 		fmt.Println(p)
@@ -208,7 +209,7 @@ ChooseCapacitiesLoop:
 
 		validCapacity := false
 
-		for k, _ := range capacities {
+		for k := range capacities {
 			if answer == k {
 				validCapacity = true
 				break
@@ -280,7 +281,7 @@ ExtrasOrFlawsLoop:
 
 	ChooseModifiersLoop:
 		for true {
-			fmt.Printf("\nType the names of the Extras or Flaws you'd like to add one at a time. Hit Enter to finish adding.")
+			fmt.Printf("\nType the names of the Extras or Flaws you'd like to add one at a time. Hit Enter to finish adding.\n")
 
 			fmt.Print("Current Extras & Flaws: ")
 			for _, mod := range q.Modifiers {

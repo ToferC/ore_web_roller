@@ -22,7 +22,8 @@ UpdateLoop:
 	for true {
 		fmt.Println("Choose an action:")
 
-		answer := UserQuery(`1: Update Statistics
+		answer := UserQuery(`
+			1: Update Statistics
 			2: Update Skills
 			3: Add a Skill
 			4: Delete a Skill
@@ -40,7 +41,7 @@ Or hit Enter to exit: `)
 
 		switch answer {
 		case "1":
-			updateStatistics(db, c)
+			updateStat(db, c)
 		case "2":
 			updateSkills(db, c)
 		case "3":
@@ -61,21 +62,19 @@ Or hit Enter to exit: `)
 	}
 }
 
-func updateStatistics(db *pg.DB, c *oneroll.Character) {
+func ChooseStatistic(c *oneroll.Character) *oneroll.Statistic {
 
-	fmt.Println("Updating Statistics")
-
-	statistics := []*oneroll.Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
+	s := &oneroll.Statistic{}
 
 UpdateStats:
 	for true {
 
-		for i, stat := range statistics {
-			fmt.Printf("%d %s\n", i+1, stat)
+		fmt.Println("Your Stats")
+		for _, s := range c.StatMap {
+			fmt.Printf("-- %s\n", c.Statistics[s])
 		}
 
-		fmt.Printf("\nChoose the number for the statistic to update. (1-%d): ", len(statistics))
-		fmt.Println("Or hit Enter to exit")
+		fmt.Printf("\nChoose the statistic to update or hit Enter to exit")
 
 		answer := UserQuery("Your selection: ")
 
@@ -84,21 +83,32 @@ UpdateStats:
 			break UpdateStats
 		}
 
-		num, _ := strconv.Atoi(answer)
+		validStat := false
 
-		if num > 6 || num < 1 {
-			fmt.Println("Not a valid statistic. Try again.")
-		} else {
-			err := updateStat(db, statistics[num-1], c)
-			if err != nil {
-				panic(err)
+		for k := range c.Statistics {
+			if answer == k {
+				validStat = true
+				break
 			}
-			fmt.Println("Updated. Choose another stat or hit Enter to exit.")
+			validStat = false
+		}
+
+		if !validStat {
+			fmt.Println("Not a Stat. Try again.")
+
+		} else {
+			s = c.Statistics[answer]
+			break UpdateStats
 		}
 	}
+	return s
 }
 
-func updateStat(db *pg.DB, s *oneroll.Statistic, c *oneroll.Character) error {
+func updateStat(db *pg.DB, c *oneroll.Character) error {
+
+	fmt.Println("Updating Statistics")
+
+	s := ChooseStatistic(c)
 
 	fmt.Println(s)
 
@@ -134,28 +144,6 @@ func updateStat(db *pg.DB, s *oneroll.Statistic, c *oneroll.Character) error {
 		s.Dice.Wiggle = wiggle
 	}
 
-	fmt.Printf("%s has %d spray dice.\n", s.Name, s.Dice.Spray)
-
-	sp := UserQuery("Please enter the new value: ")
-	spray, _ := strconv.Atoi(sp)
-
-	if err != nil {
-		fmt.Println("Invalid value")
-	} else {
-		s.Dice.Spray = spray
-	}
-
-	fmt.Printf("%s has %d ranks in go first.\n", s.Name, s.Dice.GoFirst)
-
-	gf := UserQuery("Please enter the new value: ")
-	gofirst, _ := strconv.Atoi(gf)
-
-	if err != nil {
-		fmt.Println("Invalid value")
-	} else {
-		s.Dice.GoFirst = gofirst
-	}
-
 	fmt.Println(c)
 
 	// Update Linked Skills
@@ -164,10 +152,6 @@ func updateStat(db *pg.DB, s *oneroll.Statistic, c *oneroll.Character) error {
 			skill.LinkStat = s
 		}
 	}
-
-	// Update Willpower
-	c.BaseWill = c.Command.Dice.Normal + c.Charm.Dice.Normal
-	c.Willpower = c.BaseWill
 
 	// Save character
 	err = database.UpdateCharacter(db, c)
@@ -305,37 +289,9 @@ AddSkillLoop:
 
 		s.Name = answer
 
-		statistics := []*oneroll.Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
-
-	ChooseStatLoop:
-		for true {
-
-			fmt.Println("Statistics:")
-
-			for i, stat := range statistics {
-				fmt.Printf("%d - %s\n", i+1, stat)
-			}
-
-			fmt.Printf("\nChoose the number for the statistic to update (1-%d) ", len(statistics))
-			fmt.Println("or hit Enter to exit")
-
-			answer := UserQuery("\nYour selection: ")
-
-			if answer == "" {
-				fmt.Println("Exiting.")
-				break ChooseStatLoop
-			}
-
-			num, _ := strconv.Atoi(answer)
-
-			if num > 6 || num < 1 {
-				fmt.Println("Not a valid statistic. Try again.")
-			} else {
-				s.LinkStat = statistics[num-1]
-				fmt.Println("Updated.")
-				break
-			}
-		}
+		stat := ChooseStatistic(c)
+		s.LinkStat = stat
+		fmt.Println("Updated.")
 
 		sp := UserQuery("Does the skill have a specialization? (Y/N):")
 

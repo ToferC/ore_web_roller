@@ -24,11 +24,9 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 
 	fmt.Println("\nAdding stats and skills.")
 
-	statistics := []*oneroll.Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
-
 	fmt.Println("Enter normal die values (max 5) for:")
 
-	for _, s := range statistics {
+	for _, s := range c.Statistics {
 
 	StatsLoop:
 		for true {
@@ -63,9 +61,6 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 			}
 		}
 	}
-
-	c.BaseWill = c.Command.Dice.Normal + c.Charm.Dice.Normal
-	c.Willpower = c.BaseWill
 
 	oneroll.UpdateCost(c)
 

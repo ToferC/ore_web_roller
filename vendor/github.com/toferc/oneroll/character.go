@@ -8,12 +8,8 @@ import (
 type Character struct {
 	ID           int64
 	Name         string
-	Body         *Statistic
-	Coordination *Statistic
-	Sense        *Statistic
-	Mind         *Statistic
-	Command      *Statistic
-	Charm        *Statistic
+	Statistics   map[string]*Statistic
+	StatMap      []string
 	BaseWill     int
 	Willpower    int
 	Skills       map[string]*Skill
@@ -23,13 +19,13 @@ type Character struct {
 	Permissions  map[string]*Permission
 	Powers       map[string]*Power
 	HitLocations map[string]*Location
+	LocationMap  []string
 	PointCost    int
+	InPlay       bool
 }
 
 // Display character
 func (c *Character) String() string {
-
-	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
 
 	text := fmt.Sprintf("\n%s (%d pts)\n", c.Name, c.PointCost)
 
@@ -41,19 +37,20 @@ func (c *Character) String() string {
 
 	text += ShowSkills(c, false)
 
-	text += fmt.Sprintf("\nBase Will:%d\n", c.BaseWill)
+	text += fmt.Sprintf("\nBase Will: %d\n", c.BaseWill)
 	text += fmt.Sprintf("Willpower: %d\n", c.Willpower)
 
 	text += fmt.Sprintf("\nHit Locations:\n")
 
-	for _, loc := range c.HitLocations {
-		text += fmt.Sprintf("%s\n", loc)
+	for _, loc := range c.LocationMap {
+		text += fmt.Sprintf("%s\n", c.HitLocations[loc])
 	}
 
 	if len(c.Archetype.Sources) > 0 {
 		text += fmt.Sprintf("\nPowers:\n")
 
-		for _, s := range statistics {
+		for _, stat := range c.StatMap {
+			s := c.Statistics[stat]
 			if s.HyperStat != nil {
 				text += fmt.Sprintf("%s\n\n", s.HyperStat)
 			}
@@ -67,6 +64,14 @@ func (c *Character) String() string {
 
 		for _, p := range c.Powers {
 			text += fmt.Sprintf("%s\n\n", p)
+
+			for _, q := range p.Qualities {
+				text += fmt.Sprintln(q)
+			}
+
+			if p.Effect != "" {
+				text += fmt.Sprintf("Effect: %s", p.Effect)
+			}
 		}
 	}
 
@@ -84,9 +89,7 @@ func (c *Character) CalculateCost() {
 		cost += c.Archetype.Cost
 	}
 
-	statistics := []*Statistic{c.Body, c.Coordination, c.Sense, c.Mind, c.Command, c.Charm}
-
-	for _, stat := range statistics {
+	for _, stat := range c.Statistics {
 		UpdateCost(stat)
 		cost += stat.Cost
 
@@ -113,11 +116,26 @@ func (c *Character) CalculateCost() {
 		cost += power.Cost
 	}
 
-	comTotal := c.Command.Dice.Normal + c.Command.Dice.Hard + c.Command.Dice.Wiggle
-	charmTotal := c.Charm.Dice.Normal + c.Charm.Dice.Hard + c.Charm.Dice.Wiggle
+	// Update BaseWill automaticallly if Character isn't in play
 
-	cost += 3*c.BaseWill - (comTotal + charmTotal)
-	cost += c.Willpower - c.BaseWill
+	calcBaseWill := 0
+
+	for _, stat := range c.Statistics {
+		if stat.EffectsWill {
+			calcBaseWill += SumDice(stat.Dice)
+			if stat.HyperStat != nil {
+				calcBaseWill += SumDice(stat.HyperStat.Dice)
+			}
+		}
+	}
+
+	if !c.InPlay {
+		c.BaseWill = calcBaseWill
+		c.Willpower = calcBaseWill
+	} else {
+		cost += 3*c.BaseWill - calcBaseWill
+		cost += c.Willpower - c.BaseWill
+	}
 
 	c.PointCost = cost
 }

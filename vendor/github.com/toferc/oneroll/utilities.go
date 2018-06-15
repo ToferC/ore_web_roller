@@ -84,6 +84,12 @@ func SkillRated(s *Skill) bool {
 	return false
 }
 
+// SumDice sums a DiePool - used in determining BaseWill
+func SumDice(d *DiePool) int {
+	r := d.Normal + d.Hard + d.Wiggle
+	return r
+}
+
 // UserQuery creates and question and returns the User's input as a string
 func UserQuery(q string) string {
 	question := bufio.NewReader(os.Stdin)
