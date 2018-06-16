@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/go-pg/pg"
-	"github.com/toferc/ore_web/terminal"
+	"github.com/toferc/ore_web_roller/terminal"
 )
 
 // Terminal runs the basic functions from a terminal input

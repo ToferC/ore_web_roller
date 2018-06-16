@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web/database"
+	"github.com/toferc/ore_web_roller/database"
 )
 
 func AddPower(db *pg.DB, c *oneroll.Character) {

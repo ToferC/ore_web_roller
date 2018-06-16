@@ -8,7 +8,7 @@ import (
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web/database"
+	"github.com/toferc/ore_web_roller/database"
 )
 
 // Query and return a Character from DB

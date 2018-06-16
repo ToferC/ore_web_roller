@@ -6,9 +6,10 @@ import (
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web/database"
+	"github.com/toferc/ore_web_roller/database"
 )
 
+// Update is a menu that provides access to Character upate options
 func Update(db *pg.DB) {
 	c, err := GetCharacter(db)
 

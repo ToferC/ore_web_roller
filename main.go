@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/go-pg/pg"
-	"github.com/toferc/ore_web/database"
+	"github.com/toferc/ore_web_roller/database"
 )
 
 var db *pg.DB

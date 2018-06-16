@@ -7,7 +7,7 @@ import (
 	"github.com/fatih/structs"
 	"github.com/go-pg/pg"
 	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web/database"
+	"github.com/toferc/ore_web_roller/database"
 )
 
 // CreateCharacter takes terminal user input and saves to DB

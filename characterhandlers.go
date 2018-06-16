@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web/database"
+	"github.com/toferc/ore_web_roller/database"
 )
 
 func IndexHandler(w http.ResponseWriter, req *http.Request) {
