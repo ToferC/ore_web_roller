@@ -142,3 +142,36 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
 	}
 }
+
+// DeleteCharacterHandler renders a character in a Web page
+func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
+
+	pk := req.URL.Path[len("/delete/"):]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	c, err := database.PKLoadCharacter(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/delete_character.html", c)
+
+	} else {
+
+		database.DeleteCharacter(db, c.ID)
+
+		fmt.Println("Deleted ", c.Name)
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+}

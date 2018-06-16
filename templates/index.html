@@ -7,15 +7,12 @@
         <h3>Characters</h3>
           {{ range . }}
           <ul>
-            <a href="/view/{{ .Name }}">{{ .Name }}</a>
-            <a href="/modify/{{ .Name }}"> Modify</a>
+            <h4><a href="/view/{{ .Name }}">{{ .Name }} ({{ .PointCost }})</a>
+            <a class="btn btn-primary" href="/modify/{{ .Name }}">Modify</a>
+            <a class="btn btn-danger" href="/delete/{{ .ID }}">Delete</a></h4>
           </ul>
           {{ end }}
       </div>
-    </div>
-
-    <div>
-      <a href="/new/">Create New Character</a>
     </div>
 
   </div>

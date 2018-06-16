@@ -22,11 +22,27 @@ func init() {
 
 func main() {
 
-	db = pg.Connect(&pg.Options{
-		User:     os.Getenv("DBUser"),
-		Password: os.Getenv("DBPass"),
-		Database: os.Getenv("DBName"),
-	})
+	if os.Getenv("ENVIRONMENT") == "production" {
+		url, ok := os.LookupEnv("DATABASE_URL")
+
+		if !ok {
+			log.Fatalln("$DATABASE_URL is required")
+		}
+
+		options, err := pg.ParseURL(url)
+
+		if err != nil {
+			log.Fatalf("Connection error: %s", err.Error())
+		}
+
+		db = pg.Connect(options)
+	} else {
+		db = pg.Connect(&pg.Options{
+			User:     os.Getenv("DBUser"),
+			Password: os.Getenv("DBPass"),
+			Database: os.Getenv("DBName"),
+		})
+	}
 
 	defer db.Close()
 
@@ -58,6 +74,7 @@ func main() {
 		http.HandleFunc("/view/", CharacterHandler)
 		http.HandleFunc("/new/", NewCharacterHandler)
 		http.HandleFunc("/modify/", ModifyCharacterHandler)
+		http.HandleFunc("/delete/", DeleteCharacterHandler)
 
 		log.Fatal(http.ListenAndServe(":"+port, nil))
 	}

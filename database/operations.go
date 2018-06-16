@@ -91,6 +91,20 @@ func LoadCharacter(db *pg.DB, name string) (*oneroll.Character, error) {
 	return char, nil
 }
 
+// PKLoadCharacter loads a single character from the DB by pk
+func PKLoadCharacter(db *pg.DB, pk int64) (*oneroll.Character, error) {
+	// Select user by Primary Key
+	char := &oneroll.Character{ID: pk}
+	err := db.Select(char)
+
+	if err != nil {
+		return oneroll.NewWTCharacter("New"), err
+	}
+
+	fmt.Println("Character loaded From DB")
+	return char, nil
+}
+
 // DeleteCharacter deletes a single character from DB by ID
 func DeleteCharacter(db *pg.DB, pk int64) error {
 
