@@ -7,16 +7,17 @@
         <h3>Characters</h3>
           {{ range . }}
           <ul>
-            <a href="/character/{{ .Name }}">{{ .Name }}</a>
+            <a href="/view/{{ .Name }}">{{ .Name }}</a>
+            <a href="/modify/{{ .Name }}"> Modify</a>
           </ul>
           {{ end }}
       </div>
     </div>
 
     <div>
-      <a href="/new">Create New Character</a>
+      <a href="/new/">Create New Character</a>
     </div>
-    
+
   </div>
 
 {{end}}

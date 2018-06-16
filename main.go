@@ -55,7 +55,9 @@ func main() {
 		http.HandleFunc("/", IndexHandler)
 		http.HandleFunc("/roll/", RollHandler)
 		http.HandleFunc("/opposed/", OpposeHandler)
-		http.HandleFunc("/character/", CharacterHandler)
+		http.HandleFunc("/view/", CharacterHandler)
+		http.HandleFunc("/new/", NewCharacterHandler)
+		http.HandleFunc("/modify/", ModifyCharacterHandler)
 
 		log.Fatal(http.ListenAndServe(":"+port, nil))
 	}

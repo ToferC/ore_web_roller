@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/go-pg/pg"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"github.com/toferc/ore_web/terminal"
 )
 
