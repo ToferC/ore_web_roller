@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"strings"
@@ -30,17 +31,33 @@ func SplitLines(s string) []string {
 	return sli
 }
 
+func rollQuality(c *oneroll.Character, s string, ac int) string {
+
+	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&name=%s&nd=%d&nr=%d&sp=%d&wd=%d",
+		ac,
+		0, // Update roll mechanism to use Modifiers
+		c.Skills[s].Dice.Hard+c.Skills[s].LinkStat.Dice.Hard,
+		c.Name,
+		c.Skills[s].Dice.Normal+c.Skills[s].LinkStat.Dice.Normal,
+		0, // Update roll mechanism to use Modifiers
+		0, // Update roll mechanism to use Modifiers
+		c.Skills[s].Dice.Wiggle+c.Skills[s].LinkStat.Dice.Wiggle,
+	)
+	return "/roll/" + rollString
+}
+
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
 	tmpl := make(map[string]*template.Template)
 
-	//tplFuncMap := make(template.FuncMap)
-
-	//tplFuncMap["SplitLines"] = SplitLines
+	// Set up FuncMap
+	funcMap := template.FuncMap{
+		"roll": rollQuality,
+	}
 
 	baseTemplate := "templates/layout.html"
 
-	tmpl[filename] = template.Must(template.ParseFiles(filename, baseTemplate))
+	tmpl[filename] = template.Must(template.New("").Funcs(funcMap).ParseFiles(filename, baseTemplate))
 
 	if err := tmpl[filename].ExecuteTemplate(w, "base", data); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

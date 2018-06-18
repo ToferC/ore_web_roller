@@ -106,6 +106,22 @@ AddHyperStatLoop:
 
 		hs.Effect = answer
 
+		answer = UserQuery("Would you like to add your modifiers to the  " + s.Name + " Stat? (Y/N): ")
+
+		if answer == "Y" || answer == "y" {
+
+			for _, q := range hs.Qualities {
+				for _, m := range q.Modifiers {
+
+					for _, sm := range s.Modifiers {
+						if sm.Name != m.Name && sm.Level != m.Level {
+							s.Modifiers = append(s.Modifiers, m)
+						}
+					}
+				}
+			}
+		}
+
 		oneroll.UpdateCost(hs)
 
 		fmt.Println(hs)

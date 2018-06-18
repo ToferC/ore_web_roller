@@ -52,13 +52,27 @@ func (c *Character) String() string {
 		for _, stat := range c.StatMap {
 			s := c.Statistics[stat]
 			if s.HyperStat != nil {
-				text += fmt.Sprintf("%s\n\n", s.HyperStat)
+				text += fmt.Sprintf("\n%s\n", s.HyperStat)
+				if len(s.Modifiers) > 0 {
+					text += fmt.Sprintf("+ added modifiers to main stat: ")
+					for _, m := range s.Modifiers {
+						text += fmt.Sprintf("%s (%d/die) ", m.Name, m.Cost)
+					}
+				}
+				text += fmt.Sprint("\n")
 			}
 		}
 
 		for _, s := range c.Skills {
 			if s.HyperSkill != nil {
-				text += fmt.Sprintf("%s\n\n", s.HyperSkill)
+				text += fmt.Sprintf("\n%s\n", s.HyperSkill)
+				if len(s.Modifiers) > 0 {
+					text += fmt.Sprintf("+ added modifiers to main stat: ")
+					for _, m := range s.Modifiers {
+						text += fmt.Sprintf("%s (%d/die) ", m.Name, m.Cost)
+					}
+				}
+				text += fmt.Sprint("\n")
 			}
 		}
 
@@ -74,7 +88,6 @@ func (c *Character) String() string {
 			}
 		}
 	}
-
 	return text
 }
 

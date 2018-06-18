@@ -115,6 +115,22 @@ AddHyperSkillLoop:
 			panic(err)
 		}
 
+		answer = UserQuery("Would you like to add your modifiers to the  " + s.Name + " Skill? (Y/N): ")
+
+		if answer == "Y" || answer == "y" {
+
+			for _, q := range hs.Qualities {
+				for _, m := range q.Modifiers {
+
+					for _, sm := range s.Modifiers {
+						if sm.Name != m.Name && sm.Level != m.Level {
+							s.Modifiers = append(s.Modifiers, m)
+						}
+					}
+				}
+			}
+		}
+
 		// Select Power Dice
 		err = ChooseHyperSkillDice(hs)
 		if err != nil {

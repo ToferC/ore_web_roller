@@ -37,7 +37,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println(err)
 		}
 
-		Render(w, "templates/character.html", c)
+		Render(w, "templates/view_character.html", c)
 
 	} else {
 
@@ -90,7 +90,7 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/character/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
 	}
 }
 

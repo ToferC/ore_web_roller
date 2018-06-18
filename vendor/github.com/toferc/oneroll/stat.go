@@ -9,6 +9,7 @@ type Statistic struct {
 	Name        string
 	Dice        *DiePool
 	HyperStat   *HyperStat
+	Modifiers   []*Modifier
 	EffectsWill bool
 	Cost        int
 }
@@ -113,10 +114,15 @@ func (hs HyperStat) String() string {
 func (s *Statistic) CalculateCost() {
 	b := 5
 
-	// Temp solution
-
-	b += s.Dice.GoFirst
-	b += s.Dice.Spray
+	// Add costs for modifiers
+	for _, m := range s.Modifiers {
+		m.CalculateCost(0)
+		if m.RequiresLevel {
+			b += m.CostPerLevel * m.Level
+		} else {
+			b += m.CostPerLevel
+		}
+	}
 
 	total := b * s.Dice.Normal
 	total += b * 2 * s.Dice.Hard
@@ -133,9 +139,9 @@ func (hs *HyperStat) CalculateCost() {
 	for _, q := range hs.Qualities {
 
 		// Add Power Capacity Modifier if needed
-		if len(q.Capacities) > 1 {
+		if len(q.Capacities) > 3 {
 			tm := Modifiers["Power Capacity"]
-			tm.Level = len(q.Capacities) - 1
+			tm.Level = len(q.Capacities) - 3
 			q.Modifiers = append(q.Modifiers, tm)
 		}
 

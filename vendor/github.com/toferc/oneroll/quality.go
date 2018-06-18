@@ -111,6 +111,9 @@ func (q *Quality) CalculateCost(b int) {
 			b += m.CostPerLevel
 		}
 	}
-
+	if b < 1 {
+		// Minimum cost per die in a quality is 1
+		b = 1
+	}
 	q.CostPerDie = b
 }

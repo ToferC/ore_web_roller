@@ -14,6 +14,7 @@ type Skill struct {
 	ReqSpec        bool
 	Specialization string
 	HyperSkill     *HyperSkill
+	Modifiers      []*Modifier
 	Cost           int
 }
 
@@ -165,8 +166,15 @@ func ShowSkills(c *Character, allSkills bool) string {
 func (s *Skill) CalculateCost() {
 	b := 2
 
-	b += s.Dice.GoFirst
-	b += s.Dice.Spray
+	// Add costs for modifiers
+	for _, m := range s.Modifiers {
+		m.CalculateCost(0)
+		if m.RequiresLevel {
+			b += m.CostPerLevel * m.Level
+		} else {
+			b += m.CostPerLevel
+		}
+	}
 
 	total := b * s.Dice.Normal
 	total += b * 2 * s.Dice.Hard
@@ -178,7 +186,7 @@ func (s *Skill) CalculateCost() {
 // CalculateCost generates and udpates the cost for HypeSKills
 func (hs *HyperSkill) CalculateCost() {
 
-	b := 1
+	b := 1 // base of 1, but minimum of 1 Quality with minimum cost of 1
 
 	for _, q := range hs.Qualities {
 

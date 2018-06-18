@@ -116,18 +116,18 @@ func (i Intrinsic) String() string {
 // Sources Set Wild Talents Sources
 var Sources = map[string]*Source{
 
-	"Construct": &Source{Type: "Construct", Cost: 5, Description: ""},
-	"Cyborg":    &Source{Type: "Cyborg", Cost: 5, Description: ""},
-	"Divine":    &Source{Type: "Divine", Cost: 5, Description: ""},
-	"Driven":    &Source{Type: "Driven", Cost: 5, Description: ""},
-	"Extraterrestrial/Extradimensional": &Source{Type: "Extraterrestrial/Extradimensional", Cost: 5, Description: ""},
-	"Genetic":                           &Source{Type: "Genetic", Cost: 5, Description: ""},
-	"Life Force":                        &Source{Type: "Life Force", Cost: 5, Description: ""},
-	"Paranormal":                        &Source{Type: "Paranormal", Cost: 5, Description: ""},
-	"Power Focus":                       &Source{Type: "Power Focus", Cost: -8, Description: ""},
-	"Psi":                               &Source{Type: "Psi", Cost: 5, Description: ""},
-	"Technological":                     &Source{Type: "Technological", Cost: 5, Description: ""},
-	"Unknown":                           &Source{Type: "Unknown", Cost: -5, Description: ""},
+	"Construct":        &Source{Type: "Construct", Cost: 5, Description: ""},
+	"Cyborg":           &Source{Type: "Cyborg", Cost: 5, Description: ""},
+	"Divine":           &Source{Type: "Divine", Cost: 5, Description: ""},
+	"Driven":           &Source{Type: "Driven", Cost: 5, Description: ""},
+	"Extraterrestrial": &Source{Type: "Extraterrestrial", Cost: 5, Description: ""},
+	"Genetic":          &Source{Type: "Genetic", Cost: 5, Description: ""},
+	"Life Force":       &Source{Type: "Life Force", Cost: 5, Description: ""},
+	"Paranormal":       &Source{Type: "Paranormal", Cost: 5, Description: ""},
+	"Power Focus":      &Source{Type: "Power Focus", Cost: -8, Description: ""},
+	"Psi":              &Source{Type: "Psi", Cost: 5, Description: ""},
+	"Technological":    &Source{Type: "Technological", Cost: 5, Description: ""},
+	"Unknown":          &Source{Type: "Unknown", Cost: -5, Description: ""},
 }
 
 // Permissions sets Wild Talents default permissions

@@ -53,6 +53,7 @@ func main() {
 
 	fmt.Println(db)
 
+	// Check for terminal flag
 	t := flag.Bool("t", false, "Activate the local terminal")
 
 	flag.Parse()

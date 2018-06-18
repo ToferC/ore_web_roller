@@ -77,6 +77,8 @@ var Modifiers = map[string]*Modifier{
 		Name:          "Augment",
 		Description:   "",
 		RequiresLevel: false,
+		RequiresInfo:  false,
+		Info:          "",
 		CostPerLevel:  4,
 	},
 	"Booster": &Modifier{
@@ -292,7 +294,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Level:         1,
 		RequiresInfo:  false,
 		Info:          "",
-		CostPerLevel:  -1,
+		CostPerLevel:  -4,
 	},
 	"Delayed Effect": &Modifier{
 		Name:          "Delayed Effect",
