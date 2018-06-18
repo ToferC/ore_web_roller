@@ -2,6 +2,7 @@ package oneroll
 
 import (
 	"fmt"
+	"strings"
 )
 
 // Character represents a full character in the ORE game
@@ -55,10 +56,14 @@ func (c *Character) String() string {
 			if s.HyperStat != nil {
 				text += fmt.Sprintf("\n%s\n", s.HyperStat)
 				if len(s.Modifiers) > 0 {
+					cost := 0
 					text += fmt.Sprintf("+ added modifiers to main stat: ")
 					for _, m := range s.Modifiers {
-						text += fmt.Sprintf("%s (%d/die) ", m.Name, m.Cost)
+						text += fmt.Sprintf("%s (%d/die) (%dpts), ", m.Name, m.Cost, m.Cost*SumDice(s.Dice))
+						cost += m.Cost * SumDice(s.Dice)
 					}
+					text = strings.TrimSuffix(text, ",")
+					text += fmt.Sprintf("(%dpts)", cost)
 				}
 				text += fmt.Sprint("\n")
 			}
@@ -68,10 +73,14 @@ func (c *Character) String() string {
 			if s.HyperSkill != nil {
 				text += fmt.Sprintf("\n%s\n", s.HyperSkill)
 				if len(s.Modifiers) > 0 {
-					text += fmt.Sprintf("+ added modifiers to main stat: ")
+					cost := 0
+					text += fmt.Sprintf("+ added modifiers to main skill: ")
 					for _, m := range s.Modifiers {
-						text += fmt.Sprintf("%s (%d/die) ", m.Name, m.Cost)
+						text += fmt.Sprintf("%s (%d/die) (%dpts), ", m.Name, m.Cost, m.Cost*SumDice(s.Dice))
+						cost += m.Cost * SumDice(s.Dice)
 					}
+					text = strings.TrimSuffix(text, ",")
+					text += fmt.Sprintf("(%dpts)", cost)
 				}
 				text += fmt.Sprint("\n")
 			}

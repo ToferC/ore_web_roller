@@ -113,11 +113,7 @@ AddHyperStatLoop:
 			for _, q := range hs.Qualities {
 				for _, m := range q.Modifiers {
 
-					for _, sm := range s.Modifiers {
-						if sm.Name != m.Name && sm.Level != m.Level {
-							s.Modifiers = append(s.Modifiers, m)
-						}
-					}
+					s.Modifiers = append(s.Modifiers, m)
 				}
 			}
 		}
