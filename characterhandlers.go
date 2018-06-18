@@ -52,27 +52,34 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if req.Method == "GET" {
 
-		name := req.URL.Path[len("/new/"):]
+		c := &oneroll.Character{Setting: "WT"}
 
-		if len(name) == 0 {
-			name = "Player"
+		setting := req.URL.Path[len("/new/"):]
+
+		switch setting {
+		case "SR":
+			c = oneroll.NewSRCharacter("")
+		default:
+			c = oneroll.NewWTCharacter("")
 		}
-
-		c := oneroll.NewWTCharacter(name)
 
 		// Render page
 		Render(w, "templates/characterform.html", c)
 
-	} else {
-
-		c := oneroll.NewWTCharacter("Default")
+	} else { // POST
 
 		err := req.ParseForm()
 		if err != nil {
 			panic(err)
 		}
 
-		c.Name = req.FormValue("Name")
+		c := &oneroll.Character{}
+
+		if req.FormValue("Setting") == "SR" {
+			c = oneroll.NewSRCharacter(req.FormValue("Name"))
+		} else {
+			c = oneroll.NewWTCharacter(req.FormValue("Name"))
+		}
 
 		for _, st := range c.StatMap {
 			c.Statistics[st].Dice.Normal, _ = strconv.Atoi(req.FormValue(st))

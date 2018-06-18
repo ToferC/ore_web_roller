@@ -14,15 +14,17 @@
             <h4>Description</h4>
               <h4>Base Will: {{ .BaseWill }}</h4>
               <h4>Willpower: {{ .Willpower }}</h4>
+              <a class="btn btn-primary" href="/modify/{{ .Name }}">Modify</a>
+              <a class="btn btn-danger" href="/delete/{{ .ID }}">Delete</a></h4>
           </div>
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Skills</h3>
         {{ range $stat := $statistics }}
-        <h4>{{ . }}</h4>
+        <h4>{{ . }} <a href={{ statRoll $character $stat.Name 1 }}>Roll</a></h4>
         {{ range $skill := $skills }}
         {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
         {{ if eq $skill.LinkStat.Name $stat.Name}}
-          <ul>{{ . }} <a type="button" href={{ roll $character $skill.Name 1 }}>Roll</a></ul>
+          <ul>{{ . }} <a href={{ skillRoll $character $skill.Name 1 }}>Roll</a></ul>
           {{ end }}
         {{ end }}
         {{end}}

@@ -31,7 +31,7 @@ func SplitLines(s string) []string {
 	return sli
 }
 
-func rollQuality(c *oneroll.Character, s string, ac int) string {
+func skillRoll(c *oneroll.Character, s string, ac int) string {
 
 	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&name=%s&nd=%d&nr=%d&sp=%d&wd=%d",
 		ac,
@@ -46,13 +46,29 @@ func rollQuality(c *oneroll.Character, s string, ac int) string {
 	return "/roll/" + rollString
 }
 
+func statRoll(c *oneroll.Character, s string, ac int) string {
+
+	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&name=%s&nd=%d&nr=%d&sp=%d&wd=%d",
+		ac,
+		0, // Update roll mechanism to use Modifiers
+		c.Statistics[s].Dice.Hard,
+		c.Name,
+		c.Statistics[s].Dice.Normal,
+		0, // Update roll mechanism to use Modifiers
+		0, // Update roll mechanism to use Modifiers
+		c.Statistics[s].Dice.Wiggle,
+	)
+	return "/roll/" + rollString
+}
+
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
 	tmpl := make(map[string]*template.Template)
 
 	// Set up FuncMap
 	funcMap := template.FuncMap{
-		"roll": rollQuality,
+		"skillRoll": skillRoll,
+		"statRoll":  statRoll,
 	}
 
 	baseTemplate := "templates/layout.html"

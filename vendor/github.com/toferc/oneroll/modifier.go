@@ -64,6 +64,28 @@ func (m *Modifier) CalculateCost(b int) {
 var Modifiers = map[string]*Modifier{
 
 	// Extras
+
+	// Shadowrun modifiers
+	"Drain": &Modifier{
+		Name:          "Drain",
+		Description:   "One Shock damage once threshold passed.",
+		RequiresLevel: false,
+		Level:         1,
+		RequiresInfo:  false,
+		Info:          "",
+		CostPerLevel:  -1,
+	},
+	"Essence Cost": &Modifier{
+		Name:          "Essence Cost",
+		Description:   "",
+		RequiresLevel: true,
+		Level:         1,
+		RequiresInfo:  false,
+		Info:          "",
+		CostPerLevel:  1,
+	},
+
+	// Regular modifiers
 	"Area": &Modifier{
 		Name:          "Area",
 		Description:   "",

@@ -98,7 +98,7 @@ func PKLoadCharacter(db *pg.DB, pk int64) (*oneroll.Character, error) {
 	err := db.Select(char)
 
 	if err != nil {
-		return oneroll.NewWTCharacter("New"), err
+		return &oneroll.Character{Name: "New"}, err
 	}
 
 	fmt.Println("Character loaded From DB")

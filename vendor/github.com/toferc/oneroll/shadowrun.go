@@ -1,13 +1,13 @@
 package oneroll
 
-// NewWTCharacter generates an ORE WT character
-func NewWTCharacter(name string) *Character {
+// NewSRCharacter generates an ORE WT character
+func NewSRCharacter(name string) *Character {
 
 	c := Character{
 		Name: name,
 	}
 
-	c.Setting = "WT"
+	c.Setting = "SR"
 
 	c.Archetype = new(Archetype)
 
@@ -194,22 +194,32 @@ func NewWTCharacter(name string) *Character {
 				Wiggle: 0,
 			},
 		},
-		"Melee Weapon": &Skill{
-			Name: "Melee Weapon",
+		// Coordination Skills
+		"Acrobatics": &Skill{
+			Name: "Acrobatics",
 			Quality: &Quality{
-				Type:  "Attack",
+				Type:  "Useful",
 				Level: 1,
 			},
-			LinkStat: body,
+			LinkStat: coordination,
 			Dice: &DiePool{
 				Normal: 0,
 				Hard:   0,
 				Wiggle: 0,
 			},
-			ReqSpec:        true,
-			Specialization: "Sword",
 		},
-		// Coordination Skills
+		"Close Combat": &Skill{
+			Name: "Close Combat",
+			Quality: &Quality{
+				Type:  "Attack",
+				Level: 1,
+			},
+			LinkStat: coordination,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+			},
+		},
 		"Dodge": &Skill{
 			Name: "Dodge",
 			Quality: &Quality{
@@ -222,8 +232,20 @@ func NewWTCharacter(name string) *Character {
 				Hard:   0,
 			},
 		},
-		"Driving": &Skill{
-			Name: "Driving",
+		"Escape Artist": &Skill{
+			Name: "Escape Artist",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: coordination,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+			},
+		},
+		"Pilot": &Skill{
+			Name: "Pilot",
 			Quality: &Quality{
 				Type:  "Useful",
 				Level: 1,
@@ -236,8 +258,8 @@ func NewWTCharacter(name string) *Character {
 			ReqSpec:        true,
 			Specialization: "Ground",
 		},
-		"Ranged Weapon": &Skill{
-			Name: "Ranged Weapon",
+		"Small Arms": &Skill{
+			Name: "Small Arms",
 			Quality: &Quality{
 				Type:  "Attack",
 				Level: 1,
@@ -247,8 +269,6 @@ func NewWTCharacter(name string) *Character {
 				Normal: 0,
 				Hard:   0,
 			},
-			ReqSpec:        true,
-			Specialization: "Pistol",
 		},
 		"Stealth": &Skill{
 			Name: "Stealth",
@@ -262,7 +282,42 @@ func NewWTCharacter(name string) *Character {
 				Hard:   0,
 			},
 		},
+		"Heavy Weapons": &Skill{
+			Name: "Heavy Weapons",
+			Quality: &Quality{
+				Type:  "Attack",
+				Level: 1,
+			},
+			LinkStat: coordination,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+			},
+		},
+		"Vehicle Weapons": &Skill{
+			Name: "Vehicle Weapons",
+			Quality: &Quality{
+				Type:  "Attack",
+				Level: 1,
+			},
+			LinkStat: coordination,
+			Dice: &DiePool{
+				Normal: 0,
+				Hard:   0,
+			},
+		},
 		// Sense Skills
+		"Artisan": &Skill{
+			Name: "Artisan",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: sense,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
 		"Empathy": &Skill{
 			Name: "Empathy",
 			Quality: &Quality{
@@ -296,7 +351,62 @@ func NewWTCharacter(name string) *Character {
 				Normal: 0,
 			},
 		},
+		"Tracking": &Skill{
+			Name: "Tracking",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: sense,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Disguise": &Skill{
+			Name: "Disguise",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: sense,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
 		// Mind Skills
+		"Computer": &Skill{
+			Name: "Computer",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Armorer": &Skill{
+			Name: "Armorer",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Cybertechnology": &Skill{
+			Name: "Cybertechnology",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
 		"First Aid": &Skill{
 			Name: "First Aid",
 			Quality: &Quality{
@@ -319,7 +429,50 @@ func NewWTCharacter(name string) *Character {
 				Normal: 0,
 			},
 			ReqSpec:        true,
-			Specialization: "Alchemy",
+			Specialization: "Biology",
+		},
+		"Engineering": &Skill{
+			Name: "Engineering",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Demolitions": &Skill{
+			Name: "Demolitions",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Electronic Warfare": &Skill{
+			Name: "Electronic Warfare",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		}, "Hacking": &Skill{
+			Name: "Hacking",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: mind,
+			Dice: &DiePool{
+				Normal: 0,
+			},
 		},
 		"Languages": &Skill{
 			Name: "Languages",
@@ -356,8 +509,8 @@ func NewWTCharacter(name string) *Character {
 				Normal: 0,
 			},
 		},
-		"Research": &Skill{
-			Name: "Research",
+		"Data Search": &Skill{
+			Name: "Data Search",
 			Quality: &Quality{
 				Type:  "Useful",
 				Level: 1,
@@ -378,8 +531,8 @@ func NewWTCharacter(name string) *Character {
 				Normal: 0,
 			},
 		},
-		"Streetwise": &Skill{
-			Name: "Streetwise",
+		"Software": &Skill{
+			Name: "Software",
 			Quality: &Quality{
 				Type:  "Useful",
 				Level: 1,
@@ -389,8 +542,8 @@ func NewWTCharacter(name string) *Character {
 				Normal: 0,
 			},
 		},
-		"Survival": &Skill{
-			Name: "Survival",
+		"Streetwise": &Skill{
+			Name: "Streetwise",
 			Quality: &Quality{
 				Type:  "Useful",
 				Level: 1,
@@ -412,6 +565,28 @@ func NewWTCharacter(name string) *Character {
 			},
 		},
 		// Charm Skills
+		"Con": &Skill{
+			Name: "Con",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: charm,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Ettiquette": &Skill{
+			Name: "Ettiquette",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: charm,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
 		"Lie": &Skill{
 			Name: "Lie",
 			Quality: &Quality{
@@ -483,6 +658,17 @@ func NewWTCharacter(name string) *Character {
 		},
 		"Stability": &Skill{
 			Name: "Stability",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: command,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Survival": &Skill{
+			Name: "Survival",
 			Quality: &Quality{
 				Type:  "Useful",
 				Level: 1,

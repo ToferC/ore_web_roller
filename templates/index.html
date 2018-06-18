@@ -8,8 +8,6 @@
           {{ range . }}
           <ul>
             <h4><a href="/view/{{ .Name }}">{{ .Name }} ({{ .PointCost }})</a>
-            <a class="btn btn-primary" href="/modify/{{ .Name }}">Modify</a>
-            <a class="btn btn-danger" href="/delete/{{ .ID }}">Delete</a></h4>
           </ul>
           {{ end }}
       </div>

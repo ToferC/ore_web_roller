@@ -8,6 +8,7 @@ import (
 type Character struct {
 	ID           int64
 	Name         string
+	Setting      string
 	Statistics   map[string]*Statistic
 	StatMap      []string
 	BaseWill     int
