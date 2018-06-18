@@ -82,7 +82,7 @@ var Modifiers = map[string]*Modifier{
 		Level:         1,
 		RequiresInfo:  false,
 		Info:          "",
-		CostPerLevel:  1,
+		CostPerLevel:  -1,
 	},
 
 	// Regular modifiers
