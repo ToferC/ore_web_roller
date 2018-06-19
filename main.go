@@ -14,8 +14,8 @@ import (
 var db *pg.DB
 
 func init() {
-	os.Setenv("DBUser", "postgres")
-	os.Setenv("DBPass", "devpass")
+	os.Setenv("DBUser", "chris")
+	os.Setenv("DBPass", "12345")
 	os.Setenv("DBName", "ore_engine")
 
 }
@@ -76,6 +76,8 @@ func main() {
 		http.HandleFunc("/new/", NewCharacterHandler)
 		http.HandleFunc("/modify/", ModifyCharacterHandler)
 		http.HandleFunc("/delete/", DeleteCharacterHandler)
+
+		http.HandleFunc("/add_power/", AddPowerHandler)
 
 		log.Fatal(http.ListenAndServe(":"+port, nil))
 	}

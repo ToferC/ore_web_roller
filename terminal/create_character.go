@@ -15,7 +15,7 @@ func CreateCharacter(db *pg.DB) *oneroll.Character {
 
 	name := UserQuery("What is the character's name? ")
 
-	c := oneroll.NewWTCharacter(name)
+	c := oneroll.NewSRCharacter(name)
 
 	m := structs.Map(c)
 	m["Name"] = name

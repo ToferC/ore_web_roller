@@ -112,7 +112,10 @@ func (hs HyperStat) String() string {
 // CalculateCost determines the cost of a Power Quality
 // Called from Character.CalculateCharacterCost()
 func (s *Statistic) CalculateCost() {
+	// Base Cost
 	b := 5
+	// Modifier Cost
+	mc := 0
 
 	// Add costs for modifiers
 	for _, m := range s.Modifiers {
@@ -123,6 +126,13 @@ func (s *Statistic) CalculateCost() {
 			b += m.CostPerLevel
 		}
 	}
+
+	if len(s.Modifiers) > 0 && mc < 1 {
+		// There are mods, but flaws reduce cost below 1
+		mc = 1
+	}
+
+	b += mc
 
 	total := b * s.Dice.Normal
 	total += b * 2 * s.Dice.Hard

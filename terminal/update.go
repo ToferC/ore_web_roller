@@ -31,7 +31,10 @@ UpdateLoop:
 			5: Add an Archtype
 			6: Add a Power
 			7: Add Hyper-Stat
+			9: Delete a Power
 			8: Add Hyper-Skill
+			10: Delete Hyper-Stats
+			11: Delete Hyper-Skills
 
 Or hit Enter to exit: `)
 
@@ -57,6 +60,12 @@ Or hit Enter to exit: `)
 			AddHyperStat(db, c)
 		case "8":
 			AddHyperSkill(db, c)
+		case "9":
+			deletePowers(db, c)
+		case "10":
+			deleteHyperStat(db, c)
+		case "11":
+			deleteHyperSkill(db, c)
 		default:
 			fmt.Println("Not a valid option. Please choose again")
 		}
@@ -346,6 +355,174 @@ DeleteSkillLoop:
 
 			if response == "Y" || response == "y" {
 				delete(c.Skills, answer)
+				fmt.Println("Deleted.")
+			} else {
+				fmt.Println("Delete aborted.")
+			}
+
+			// Save character
+			err := database.UpdateCharacter(db, c)
+			if err != nil {
+				panic(err)
+			}
+
+		}
+		fmt.Println("Deleted.")
+	}
+}
+
+func deletePowers(db *pg.DB, c *oneroll.Character) {
+
+	fmt.Println("Deleting Powers")
+
+DeletePowerLoop:
+	for true {
+
+		for _, p := range c.Powers {
+			fmt.Printf("--%s (%d)\n",
+				p.Name, p.Cost)
+		}
+
+		answer := UserQuery("\nType the name of the power to delete or hit Enter to exit: ")
+
+		if answer == "" {
+			fmt.Println("Exiting.")
+			break DeletePowerLoop
+		}
+
+		validPower := false
+
+		for _, k := range c.Powers {
+			if answer == k.Name {
+				validPower = true
+				break
+			}
+			validPower = false
+		}
+
+		if !validPower {
+			fmt.Println("Not a power. Try again.")
+
+		} else {
+
+			response := UserQuery("Are you sure you want to delete " + answer + " ? (Y/N)")
+
+			if response == "Y" || response == "y" {
+				delete(c.Powers, answer)
+				fmt.Println("Deleted.")
+			} else {
+				fmt.Println("Delete aborted.")
+			}
+
+			// Save character
+			err := database.UpdateCharacter(db, c)
+			if err != nil {
+				panic(err)
+			}
+
+		}
+		fmt.Println("Deleted.")
+	}
+}
+
+func deleteHyperStat(db *pg.DB, c *oneroll.Character) {
+
+	fmt.Println("Deleting Hyper Stat")
+
+DeletePowerLoop:
+	for true {
+		for _, s := range c.Statistics {
+			if s.HyperStat != nil {
+				fmt.Printf("--%s (%d)\n",
+					s.HyperStat.Name, s.HyperStat.Cost)
+			}
+		}
+
+		answer := UserQuery("\nType the name of the base Stat to delete its Hyper-Stat or hit Enter to exit: ")
+
+		if answer == "" {
+			fmt.Println("Exiting.")
+			break DeletePowerLoop
+		}
+
+		validPower := false
+
+		for _, k := range c.Statistics {
+			if k.HyperStat != nil {
+				if answer == k.Name {
+					validPower = true
+					break
+				}
+			}
+			validPower = false
+		}
+
+		if !validPower {
+			fmt.Println(answer + " does not have a Hyper-Stat. Try again.")
+
+		} else {
+
+			response := UserQuery("Are you sure you want to delete " + answer + "Hyper-Stat? (Y/N): ")
+
+			if response == "Y" || response == "y" {
+				c.Statistics[answer].HyperStat = nil
+				fmt.Println("Deleted.")
+			} else {
+				fmt.Println("Delete aborted.")
+			}
+
+			// Save character
+			err := database.UpdateCharacter(db, c)
+			if err != nil {
+				panic(err)
+			}
+
+		}
+		fmt.Println("Deleted.")
+	}
+}
+
+func deleteHyperSkill(db *pg.DB, c *oneroll.Character) {
+
+	fmt.Println("Deleting Hyper-Skill")
+
+DeletePowerLoop:
+	for true {
+		for _, s := range c.Skills {
+			if s.HyperSkill != nil {
+				fmt.Printf("--%s (%d)\n",
+					s.HyperSkill.Name, s.HyperSkill.Cost)
+			}
+		}
+
+		answer := UserQuery("\nType the name of the base Stat to delete its Hyper-Stat or hit Enter to exit: ")
+
+		if answer == "" {
+			fmt.Println("Exiting.")
+			break DeletePowerLoop
+		}
+
+		validPower := false
+
+		for _, k := range c.Skills {
+			if k.HyperSkill != nil {
+				if answer == k.Name {
+					validPower = true
+					break
+				}
+			}
+			validPower = false
+		}
+
+		if !validPower {
+			fmt.Println(answer + " does not have a Hyper-Skill. Try again.")
+
+		} else {
+
+			response := UserQuery("Are you sure you want to delete " + answer + "Hyper-Skill? (Y/N): ")
+
+			if response == "Y" || response == "y" {
+				c.Skills[answer].HyperSkill = nil
 				fmt.Println("Deleted.")
 			} else {
 				fmt.Println("Delete aborted.")

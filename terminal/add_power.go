@@ -301,8 +301,8 @@ ExtrasOrFlawsLoop:
 
 			validModifier := false
 
-			for k := range oneroll.Modifiers {
-				if answer == k {
+			for _, k := range oneroll.Modifiers {
+				if answer == k.Name {
 					validModifier = true
 					break
 				}

@@ -11,6 +11,7 @@ type Power struct {
 	Dud        bool
 	Cost       int
 	CostPerDie int
+	Slug       string
 }
 
 func (p Power) String() string {
@@ -66,6 +67,9 @@ func (p *Power) CalculateCost() {
 	total += b * 4 * p.Dice.Wiggle
 
 	p.Cost = total
+
+	// Update slug while we're at it
+	p.Slug = ToSnakeCase(p.Name)
 }
 
 // DeterminePowerCapacities calculates string values for powers

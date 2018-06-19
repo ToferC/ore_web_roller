@@ -623,6 +623,17 @@ func NewSRCharacter(name string) *Character {
 			},
 		},
 		// Command Skills
+		"Arcane": &Skill{
+			Name: "Arcane",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 1,
+			},
+			LinkStat: command,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
 		"Interrogation": &Skill{
 			Name: "Interrogation",
 			Quality: &Quality{

@@ -65,7 +65,7 @@ func (c *Character) String() string {
 					text = strings.TrimSuffix(text, ",")
 					text += fmt.Sprintf("(%dpts)", cost)
 				}
-				text += fmt.Sprint("\n")
+				text += fmt.Sprint("\n\n")
 			}
 		}
 
@@ -87,14 +87,14 @@ func (c *Character) String() string {
 		}
 
 		for _, p := range c.Powers {
-			text += fmt.Sprintf("%s", p)
+			text += fmt.Sprintf("\n%s", p)
 
 			for _, q := range p.Qualities {
 				text += fmt.Sprintln(q)
 			}
 
 			if p.Effect != "" {
-				text += fmt.Sprintf("Effect: %s", p.Effect)
+				text += fmt.Sprintf("Effect: %s\n", p.Effect)
 			}
 		}
 	}
