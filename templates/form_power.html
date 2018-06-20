@@ -1,8 +1,15 @@
 {{define "content"}}
 
-{{ $power := .Powers.Power }}
+{{ $power := .Character.Powers.Power }}
 {{ $qualities := $power.Qualities }}
 {{ $dice := $power.Dice }}
+
+{{ $character := .Character }}
+{{ $statistics := $character.Statistics }}
+{{ $skills := $character.Skills }}
+
+{{ $modifiers := .Modifiers }}
+{{ $counter := .Counter }}
 
       <div class="container">
         <hr>
@@ -28,80 +35,99 @@
                 <input type="text" class="form-control" aria-describedby="wiggle-addon" name="Wiggle" value ="{{ $dice.Wiggle }}">
               </div>
               <div class="input-group">
-                <span class="input-group-addon" id="effect-addon">Effect</span>
-                <input type="text" class="form-control" aria-describedby="effect-addon" name="Effect" value ="{{ $power.Effect }}">
+                <label for="Effect">Effect</label>
+                <textarea class="form-control" aria-describedby="effect-addon" name="Effect" rows="4" value ="{{ $power.Effect }}"></textarea>
               </div>
               <h4>Cost Per Die: {{ $power.CostPerDie }}</h4>
               <h4>Cost: {{ $power.Cost }}</h4>
               <input class="button" type="submit" value="Save">
           </div>
               <div class="col-sm-3 col-md-3 col-lg-3">
-                {{ if $qualities }}
                 <h3>Qualities</h3>
-                  {{ range $quality := $qualities }}
-                  {{ $quality }}
-                  <a class="btn btn-primary" href="/modify_quality/{{ $quality.Name }}">Modify</a>
+                {{ if $qualities }}
+                  {{ range $qualities }}
+                  {{ . }}
+                  <a class="btn btn-primary" href="/modify_quality/{{ .Name }}">Modify</a>
                   {{ end }}
               {{ end }}
-                <br>
-                <h3>Qualities</h3>
+              <p>Enter your new Power Qualities here. Leave the Description field blank to skip the Quality.</p>
+                <hr>
+                {{ range $counter }}
                 <div class="input-group">
-                  <label for="Q1-Type">Quality Type</label>
-                  <select type="text" class="form-control" id="Q1-Type" name="Q1-Type">
+                  <label for="Q{{.}}-Type">Quality {{.}} Type</label>
+                  <select type="text" class="form-control" id="Q{{.}}-Type" name="Q{{.}}-Type">
+                    <option></option>
                     <option>Attack</option>
                     <option>Defend</option>
                     <option>Useful</option>
                   </select>
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="Q1-Name-addon">Descriptioni</span>
-                  <input type="text" class="form-control" aria-describedby="Q1-Name-addon" name="Q1-Name" value ="">
+                  <span class="input-group-addon" id="Q{{.}}-Name-addon">Description</span>
+                  <input type="text" class="form-control" aria-describedby="Q{{.}}-Name-addon" name="Q{{.}}-Name" value ="">
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="Q1-Level-addon">Level</span>
-                  <input type="number" class="form-control" aria-describedby="Q1-Level-addon" name="Q1-Level" value ="1">
+                  <span class="input-group-addon" id="Q{{.}}-Level-addon">Additional Levels</span>
+                  <input type="number" class="form-control" aria-describedby="Q{{.}}-Level-addon" name="Q{{.}}-Level" value ="0">
                 </div>
-
-                <div class="input-group">
-                  <label for="Q2-Type">Quality Type</label>
-                  <select type="text" class="form-control" id="Q2-Type" name="Q2-Type">
-                    <option>Attack</option>
-                    <option>Defend</option>
-                    <option>Useful</option>
-                  </select>
-                </div>
-                <div class="input-group">
-                  <span class="input-group-addon" id="Q2-Name-addon">Descriptioni</span>
-                  <input type="text" class="form-control" aria-describedby="Q2-Name-addon" name="Q2-Name" value ="">
-                </div>
-                <div class="input-group">
-                  <span class="input-group-addon" id="Q2-Level-addon">Level</span>
-                  <input type="number" class="form-control" aria-describedby="Q2-Level-addon" name="Q2-Level" value ="1">
-                </div>
-
-                <div class="input-group">
-                  <label for="Q3-Type">Quality Type</label>
-                  <select type="text" class="form-control" id="Q3-Type" name="Q3-Type">
-                    <option>Attack</option>
-                    <option>Defend</option>
-                    <option>Useful</option>
-                  </select>
-                </div>
-                <div class="input-group">
-                  <span class="input-group-addon" id="Q3-Name-addon">Descriptioni</span>
-                  <input type="text" class="form-control" aria-describedby="Q3-Name-addon" name="Q3-Name" value ="">
-                </div>
-                <div class="input-group">
-                  <span class="input-group-addon" id="Q3-Level-addon">Level</span>
-                  <input type="number" class="form-control" aria-describedby="Q3-Level-addon" name="Q3-Level" value ="1">
-                </div>
-              </form>
+                <hr>
+                {{ end }}
           </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
-
+        <h3>Capacities</h3>
+        <p>Enter Power Capacities here. You get one free Capacity per Power Quality. Additional Capacities will automatically add the Extra Capacity Extra to your Power.</p>
+        {{ range $q := $counter }}
+          {{ range $c := $counter }}
+          {{ if lt $c 4}}
+          <label for="Q{{$q}}-C{{$c}}-Type">Quality {{$q}} Capacity {{$c}}</label>
+          <select type="text" class="form-control" id="Q{{$q}}-C{{$c}}-Type" name="Q{{$q}}-C{{$c}}-Type">
+            <option></option>
+            <option>Mass</option>
+            <option>Range</option>
+            <option>Speed</option>
+            <option>Self</option>
+          </select>
+          {{ end }}
+          {{ end }}
+          <hr>
+          {{ end }}
       </div>
+
       <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Extras & Flaws</h3>
+        <p>Enter your Extras & Flaws here. Leave the field blank to skip it.</p>
+        <hr>
+
+        {{ range $q := $counter }}
+          {{ range $m := $counter }}
+          <label for="Q{{$q}}-M{{$m}}-Name">Quality {{$q}} Modifier {{$m}}</label>
+          <select type="text" class="form-control" id="Q{{$q}}-M{{$m}}-Name" name="Q{{$q}}-M{{$m}}-Name">
+            <option></option>
+            {{ range $modifiers }}
+              {{ if gt .CostPerLevel 0 }}
+                <option>{{ .Name }}</option>
+              {{ end }}
+              {{ end }}
+            <option>-------------</option>
+            {{ range $modifiers }}
+            {{ if lt .CostPerLevel 0 }}
+              <option>{{ .Name }}</option>
+            {{ end }}
+            {{ end }}
+          </select>
+          <div class="input-group">
+            <span class="input-group-addon" id="Q{{$q}}-M{{ $m}}-Level-addon">Level</span>
+            <input type="number" class="form-control" aria-describedby="Q{{$q}}-M{{ $m}}-Level-addon" name="Q{{$q}}-M{{ $m}}-Level" value ="1">
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon" id="Q{{$q}}-M{{ $m}}-Info-addon">Info</span>
+            <input type="text" class="form-control" aria-describedby="Q{{$q}}-M{{ $m}}-nfo-addon" name="Q{{$q}}-M{{$m }}-Level" value ="">
+          </div>
+          {{ end }}
+          <hr>
+          {{ end }}
+        </form>
 
       </div>
     </div>

@@ -9,6 +9,16 @@ import (
 	"github.com/toferc/ore_web_roller/database"
 )
 
+type WebChar struct {
+	Character   *oneroll.Character
+	Modifiers   map[string]*oneroll.Modifier
+	Sources     map[string]*oneroll.Source
+	Permissions map[string]*oneroll.Permission
+	Intrinsics  map[string]*oneroll.Intrinsic
+	Capacities  map[string]float32
+	Counter     []int
+}
+
 // AddPowerHandler renders a character in a Web page
 func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 
@@ -28,10 +38,22 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 		c.Powers = map[string]*oneroll.Power{}
 	}
 
+	wc := WebChar{
+		Character: c,
+		Modifiers: oneroll.Modifiers,
+		Counter:   []int{1, 2, 3, 4},
+		Capacities: map[string]float32{
+			"Mass":  25.0,
+			"Range": 10.0,
+			"Speed": 2.5,
+			"Self":  0.0,
+		},
+	}
+
 	if req.Method == "GET" {
 
 		// Render page
-		Render(w, "templates/form_power.html", c)
+		Render(w, "templates/form_power.html", wc)
 
 	} else { // POST
 
@@ -46,40 +68,6 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 		hd, _ := strconv.Atoi(req.FormValue("Hard"))
 		wd, _ := strconv.Atoi(req.FormValue("Wiggle"))
 
-		q1name := req.FormValue("Q1-Name")
-
-		q1, q2, q3 := new(*oneroll.Quality)
-
-		if q1name != "" {
-			l1, err := strconv.Atoi(req.FormValue("Q1-Level"))
-			q1 := &oneroll.Quality{
-				Type:  req.FormValue("Q1-Type"),
-				Level: l1,
-				Name:  req.FormValue("Q1-Name"),
-			}
-		}
-
-		q2name := req.FormValue("Q2-Name")
-
-		if q2name != "" {
-			l2, err := strconv.Atoi(req.FormValue("Q2-Level"))
-			q2 := &oneroll.Quality{
-				Type:  req.FormValue("Q2-Type"),
-				Level: l2,
-				Name:  req.FormValue("Q2-Name"),
-			}
-		}
-
-		q3name := req.FormValue("Q3-Name")
-
-		if q3name != "" {
-			l3, err := strconv.Atoi(req.FormValue("Q3-Level"))
-			q3 := &oneroll.Quality{
-				Type:  req.FormValue("Q3-Type"),
-				Level: l3,
-				Name:  req.FormValue("Q3-Name"),
-			}
-		}
 		p := oneroll.Power{
 			Name: pName,
 			Dice: &oneroll.DiePool{
@@ -89,6 +77,57 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 			},
 			Effect:    req.FormValue("Effect"),
 			Qualities: []*oneroll.Quality{},
+		}
+
+		for _, qLoop := range wc.Counter { // Quality Loop
+
+			qType := req.FormValue(fmt.Sprintf("Q%d-Type", qLoop))
+
+			if qType != "" {
+				l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-Level", qLoop)))
+				if err != nil {
+					l = 1
+				}
+				q := &oneroll.Quality{
+					Type:  req.FormValue(fmt.Sprintf("Q%d-Type", qLoop)),
+					Level: l,
+					Name:  req.FormValue(fmt.Sprintf("Q%d-Name", qLoop)),
+				}
+
+				for _, cLoop := range wc.Counter[:3] {
+					cType := req.FormValue(fmt.Sprintf("Q%d-C%d-Type", qLoop, cLoop))
+					if cType != "" {
+						cap := &oneroll.Capacity{
+							Type: cType,
+						}
+						q.Capacities = append(q.Capacities, cap)
+					}
+				}
+
+				m := new(oneroll.Modifier)
+
+				for _, mLoop := range wc.Counter { // Modifier Loop
+					mName := req.FormValue(fmt.Sprintf("Q%d-M%d-Name", qLoop, mLoop))
+					if mName != "" {
+						l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-M%d-Level", qLoop, mLoop)))
+						if err != nil {
+							l = 1
+						}
+
+						m = oneroll.Modifiers[req.FormValue(fmt.Sprintf("Q%d-M%d-Name", qLoop, mLoop))]
+
+						if m.RequiresLevel {
+							m.Level = l
+						}
+
+						if m.RequiresInfo {
+							m.Info = req.FormValue(fmt.Sprintf("Q%d-M%d-Name", qLoop, mLoop))
+						}
+						q.Modifiers = append(q.Modifiers, m)
+					}
+				}
+				p.Qualities = append(p.Qualities, q)
+			}
 		}
 
 		c.Powers[pName] = &p
