@@ -61,14 +61,35 @@ func statRoll(c *oneroll.Character, s string, ac int) string {
 	return "/roll/" + rollString
 }
 
+func qualityRoll(c *oneroll.Character, p *oneroll.Power, q *oneroll.Quality, ac int) string {
+
+	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&name=%s&nd=%d&nr=%d&sp=%d&wd=%d",
+		ac,
+		0, // Update roll mechanism to use Modifiers GF
+		p.Dice.Hard,
+		c.Name,
+		p.Dice.Normal,
+		0, // Update roll mechanism to use Modifiers NR
+		0, // Update roll mechanism to use Modifiers SP
+		p.Dice.Wiggle,
+	)
+	return "/roll/" + rollString
+}
+
+func subtract(a, b int) int {
+	return a - b
+}
+
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
 	tmpl := make(map[string]*template.Template)
 
 	// Set up FuncMap
 	funcMap := template.FuncMap{
-		"skillRoll": skillRoll,
-		"statRoll":  statRoll,
+		"skillRoll":   skillRoll,
+		"statRoll":    statRoll,
+		"qualityRoll": qualityRoll,
+		"subtract":    subtract,
 	}
 
 	baseTemplate := "templates/layout.html"

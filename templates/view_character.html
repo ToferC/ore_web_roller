@@ -14,7 +14,7 @@
             <h4>Description</h4>
               <h4>Base Will: {{ .BaseWill }}</h4>
               <h4>Willpower: {{ .Willpower }}</h4>
-              <a class="btn btn-primary" href="/modify/{{ .Name }}">Modify</a>
+              <a class="btn btn-primary" href="/modify/{{ .ID }}">Modify</a>
               <a class="btn btn-danger" href="/delete/{{ .ID }}">Delete</a></h4>
           </div>
       <div class="col-sm-3 col-md-3 col-lg-3">
@@ -35,21 +35,24 @@
         {{ range .Skills }}
           {{ if .HyperSkill }}
             <p>{{ .HyperSkill }}</p>
+            <hr>
           {{ end }}
         {{ end }}
 
         {{ range .Statistics }}
           {{ if .HyperStat }}
             <p>{{ .HyperStat }}</p>
+            <hr>
           {{ end }}
         {{ end }}
 
-        {{ range .Powers }}
-          <strong>{{ . }}</strong>
-          {{ range .Qualities }}
-            <p>{{ . }} <a type="button" href="/">Roll</a></p>
+        {{ range $power := .Powers }}
+          <strong>{{ . }}</strong> <a type="btn" href="/modify_power/{{ $character.ID}}/{{ $power.Slug}}">Modify</a></p>
+          {{ range $quality := .Qualities }}
+            <p>{{ $quality }} <a href={{ qualityRoll $character $power $quality 1 }}>Roll</a></p>
         {{ end }}
-        <i>Effect: {{ .Effect }}<i>
+        <i>Effect: {{ .Effect }}</i>
+          <hr>
         {{ end }}
         <hr>
         <a class="btn btn-primary" href="/add_power/{{ $character.ID }}">Add Power</a></p>

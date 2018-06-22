@@ -1,0 +1,86 @@
+{{define "content"}}
+
+{{ $character := .Character}}
+{{ $statistics := $character.Statistics }}
+{{ $skills := $character.Skills }}
+{{ $intrinsics := .Intrinsics }}
+{{ $sources := .Sources }}
+{{ $permissions := .Permissions }}
+{{ $counter := .Counter }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <form action="" method="POST">
+
+              <div class="input-group">
+                <span class="input-group-addon" id="name-addon">Name</span>
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $character.Name }}">
+              </div>
+
+              <div class="input-group">
+                <span class="input-group-addon" id="setting-addon">Setting</span>
+                <input type="text" class="form-control" aria-describedby="setting-addon" name="Setting" value ="{{ $character.Setting }}">
+              </div>
+              <hr>
+              <p>{{ $character.Archetype }}</p>
+</div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <br>
+              {{ range $stat := $statistics }}
+
+              <div class="input-group">
+                <span class="input-group-addon" id="{{ $stat.Name }}-addon">{{ $stat.Name }}</span>
+                <input type="number" class="form-control" aria-describedby="{{ $stat.Name }}-addon" name="{{ $stat.Name }}" value ="{{ $stat.Dice.Normal }}">
+              </div>
+              <br>
+              {{ range $skill := $skills }}
+              {{ if eq $skill.LinkStat.Name $stat.Name}}
+              <ul>
+                <div class="input-group">
+                <span class="input-group-addon" id="{{ $skill.Name }}-addon">{{ $skill.Name }}</span>
+                <input type="number" class="form-control" aria-describedby="{{ $skill.Name }}-addon" name="{{ $skill.Name }}" value ="{{ $skill.Dice.Normal }}">
+              </div>
+            </ul>
+              {{ end }}
+              {{end}}
+              {{ end }}
+              <br>
+              <input class="button" type="submit" value="Save">
+              <br>
+            </form>
+          </div>
+
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Powers</h3>
+        {{ range $character.Skills }}
+          {{ if .HyperSkill }}
+            <p>{{ .HyperSkill }}</p>
+          {{ end }}
+        {{ end }}
+
+        {{ range $character.Statistics }}
+          {{ if .HyperStat }}
+            <p>{{ .HyperStat }}</p>
+          {{ end }}
+        {{ end }}
+
+        {{ range $character.Powers }}
+          <strong>{{ . }}</strong>
+          {{ range .Qualities }}
+            <p>{{ . }} <a type="button" href="/">Roll</a></p>
+        {{ end }}
+        <i>Effect: {{ .Effect }}</i>
+        {{ end }}
+      </div>
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Hit Locations</h3>
+          {{ range $character.HitLocations }}
+            <p>{{ . }}</p>
+          {{ end }}
+      </div>
+    </div>
+      </div>
+{{end}}

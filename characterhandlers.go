@@ -50,21 +50,30 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 // NewCharacterHandler renders a character in a Web page
 func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
+	c := &oneroll.Character{Setting: "WT"}
+
+	setting := req.URL.Path[len("/new/"):]
+
+	switch setting {
+	case "SR":
+		c = oneroll.NewSRCharacter("")
+	default:
+		c = oneroll.NewWTCharacter("")
+	}
+
+	wc := WebChar{
+		Character:   c,
+		Modifiers:   oneroll.Modifiers,
+		Counter:     []int{1, 2, 3},
+		Sources:     oneroll.Sources,
+		Permissions: oneroll.Permissions,
+		Intrinsics:  oneroll.Intrinsics,
+	}
+
 	if req.Method == "GET" {
 
-		c := &oneroll.Character{Setting: "WT"}
-
-		setting := req.URL.Path[len("/new/"):]
-
-		switch setting {
-		case "SR":
-			c = oneroll.NewSRCharacter("")
-		default:
-			c = oneroll.NewWTCharacter("")
-		}
-
 		// Render page
-		Render(w, "templates/characterform.html", c)
+		Render(w, "templates/add_character.html", wc)
 
 	} else { // POST
 
@@ -79,6 +88,39 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			c = oneroll.NewSRCharacter(req.FormValue("Name"))
 		} else {
 			c = oneroll.NewWTCharacter(req.FormValue("Name"))
+		}
+
+		c.Archetype = &oneroll.Archetype{
+			Type: req.FormValue("Archetype"),
+		}
+
+		for _, s := range wc.Counter { // Loop
+
+			sType := req.FormValue(fmt.Sprintf("Source-%d", s))
+
+			pType := req.FormValue(fmt.Sprintf("Permission-%d", s))
+
+			iName := req.FormValue(fmt.Sprintf("Intrinsic-%d-Name", s))
+
+			iInfo := req.FormValue(fmt.Sprintf("Intrinsic-%d-Info", s))
+
+			if iName != "" {
+				i := oneroll.Intrinsics[iName]
+				l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Intrinsic-%d-Level", s)))
+				if err != nil {
+					l = 1
+				}
+				i.Level = l
+				i.Info = iInfo
+				c.Archetype.Intrinsics = append(c.Archetype.Intrinsics, i)
+			}
+
+			if sType != "" {
+				c.Archetype.Sources = append(c.Archetype.Sources, oneroll.Sources[sType])
+			}
+			if pType != "" {
+				c.Archetype.Permissions = append(c.Archetype.Permissions, oneroll.Permissions[pType])
+			}
 		}
 
 		for _, st := range c.StatMap {
@@ -104,22 +146,36 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 // ModifyCharacterHandler renders a character in a Web page
 func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
-	name := req.URL.Path[len("/modify/"):]
+	pk := req.URL.Path[len("/modify/"):]
 
-	if len(name) == 0 {
-		http.Redirect(w, req, "/new/NewCharacter", http.StatusSeeOther)
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	c, err := database.LoadCharacter(db, name)
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	c, err := database.PKLoadCharacter(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
+	}
+
+	wc := WebChar{
+		Character:   c,
+		Modifiers:   oneroll.Modifiers,
+		Counter:     []int{1, 2, 3, 4, 5, 6, 7, 8},
+		Sources:     oneroll.Sources,
+		Permissions: oneroll.Permissions,
+		Intrinsics:  oneroll.Intrinsics,
 	}
 
 	if req.Method == "GET" {
 
 		// Render page
 
-		Render(w, "templates/characterform.html", c)
+		Render(w, "templates/modify_character.html", wc)
 
 	} else {
 

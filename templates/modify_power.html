@@ -1,0 +1,127 @@
+{{define "content"}}
+
+{{ $character := .Character }}
+{{ $power := .Power }}
+{{ $qualities := $power.Qualities }}
+{{ $dice := $power.Dice }}
+
+{{ $modifiers := .Modifiers }}
+{{ $counter := .Counter }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <form action="" method="POST">
+              <h3>Power</h3>
+              <div class="input-group">
+                <span class="input-group-addon" id="name-addon">Name</span>
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $power.Name }}">
+              </div>
+
+              <div class="input-group">
+                <span class="input-group-addon" id="normal-addon">Normal Dice</span>
+                <input type="text" class="form-control" aria-describedby="normal-addon" name="Normal" value ="{{ $dice.Normal }}">
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon" id="hard-addon">Hard Dice</span>
+                <input type="text" class="form-control" aria-describedby="hard-addon" name="Hard" value ="{{ $dice.Hard }}">
+              </div>
+              <div class="input-group">
+                <span class="input-group-addon" id="wiggle-addon">Wiggle Dice</span>
+                <input type="text" class="form-control" aria-describedby="wiggle-addon" name="Wiggle" value ="{{ $dice.Wiggle }}">
+              </div>
+              <div class="input-group">
+                <label for="Effect">Effect</label>
+                <textarea class="form-control" aria-describedby="effect-addon" name="Effect" rows="4" value ="{{ $power.Effect }}"></textarea>
+              </div>
+              <h4>Cost Per Die: {{ $power.CostPerDie }}</h4>
+              <h4>Cost: {{ $power.Cost }}</h4>
+              <input class="button" type="submit" value="Save">
+          </div>
+              <div class="col-sm-9 col-md-9 col-lg-9">
+                <h3>Qualities</h3>
+              <p>Edit your Power Qualities here. Leave the Description field blank to skip the Quality.</p>
+                <hr>
+
+
+
+              {{ range $quality := $qualities }} <!-- Quality Loop -->
+              <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="input-group">
+                  <label for="Q{{.}}-Type">Quality Type</label>
+                  <select type="text" class="form-control" id="Q{{.}}-Type" name="Q{{.}}-Type">
+                    <option></option>
+                    <option{{ if eq $quality.Type "Attack"}} selected {{end}}>Attack</option>
+                    <option{{ if eq $quality.Type "Defend"}} selected {{end}}>Defend</option>
+                    <option{{ if eq $quality.Type "Useful"}} selected {{end}}>Useful</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon" id="Q{{.}}-Name-addon">Description</span>
+                  <input type="text" class="form-control" aria-describedby="Q{{.}}-Name-addon" name="Q{{.}}-Name" value ={{ $quality.Name}}>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon" id="Q{{.}}-Level-addon">Additional Levels</span>
+                  <input type="number" class="form-control" aria-describedby="Q{{.}}-Level-addon" name="Q{{.}}-Level" value ={{$quality.Level}}>
+                </div>
+                <hr>
+          </div>
+
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Capacities</h3>
+        <p>Edit Power Capacities here. You get one free Capacity per Power Quality. Additional Capacities will automatically add the Extra Capacity Extra to your Power.</p>
+          {{ range $capacity := $quality.Capacities }} <!-- Capacity Loop -->
+          <label for="Q{{$quality}}-C{{$capacity}}-Type">Quality {{$quality.Name}} Capacity</label>
+          <select type="text" class="form-control" id="Q{{$quality}}-C{{$capacity}}-Type" name="Q{{$quality}}-C{{$capacity}}-Type">
+            <option></option>
+            <option{{ if eq $capacity.Type "Mass"}} selected {{end}}>Mass</option>
+            <option{{ if eq $capacity.Type "Range"}} selected {{end}}>Range</option>
+            <option{{ if eq $capacity.Type "Speed"}} selected {{end}}>Speed</option>
+            <option{{ if eq $capacity.Type "Self"}} selected {{end}}>Self</option>
+          </select>
+
+          <hr>
+          {{ end }}
+      </div>
+
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Extras & Flaws</h3>
+        <p>Edit your Extras & Flaws here.</p>
+        <hr>
+
+        {{ range $m := $quality.Modifiers }}
+          <label for="Q{{$quality}}-M{{$m}}-Name">Quality {{$quality.Type}} Modifier</label>
+          <select type="text" class="form-control" id="Q{{$quality}}-M{{$m}}-Name" name="Q{{$quality}}-M{{$m}}-Name">
+            <option></option>
+            {{ range $modifiers }}
+              {{ if gt .CostPerLevel 0 }}
+                <option {{ if eq $m.Name .Name}} selected {{end}} value={{.Name}}>{{ .Name }} (+{{ .CostPerLevel }})</option>
+              {{ end }}
+              {{ end }}
+            <option>-------------</option>
+            {{ range $modifiers }}
+            {{ if lt .CostPerLevel 0 }}
+              <option {{ if eq $m.Name .Name}} selected {{end}} value={{.Name}}>{{ .Name }} ({{ .CostPerLevel }})</option>
+            {{ end }}
+            {{ end }}
+          </select>
+          <div class="input-group">
+            <span class="input-group-addon" id="Q{{$quality}}-M{{ $m}}-Level-addon">Level</span>
+            <input type="number" class="form-control" aria-describedby="Q{{$quality}}-M{{ $m }}-Level-addon" name="Q{{$quality}}-M{{ $m}}-Level" value ={{$m.Level}}>
+          </div>
+          <div class="input-group">
+            <span class="input-group-addon" id="Q{{$quality}}-M{{ $m}}-Info-addon">Info</span>
+            <input type="text" class="form-control" aria-describedby="Q{{$quality}}-M{{ $m}}-Info-addon" name="Q{{$quality}}-M{{$m }}-Info" value ={{$m.Info}}>
+          </div>
+          {{ end }}
+          {{ end }}
+          <hr>
+        </form>
+
+      </div>
+    </div>
+    </div>
+      </div>
+{{end}}
