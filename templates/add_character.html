@@ -127,7 +127,7 @@
       </div>
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Hit Locations</h3>
-          {{ range .HitLocations }}
+          {{ range $character.HitLocations }}
             <p>{{ . }}</p>
           {{ end }}
       </div>
