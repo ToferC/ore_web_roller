@@ -213,9 +213,9 @@ var Intrinsics = map[string]*Intrinsic{
 		RequiresInfo:  true,
 		Info:          "Substance frequency x threat",
 		RequiresLevel: true,
-		Level:         3,
+		Level:         8,
 		Description:   "Default to Frequent & Kills",
-		Cost:          -6,
+		Cost:          -1,
 	},
 	"Brute/Frail": &Intrinsic{
 		Name:        "Brute/Frail",

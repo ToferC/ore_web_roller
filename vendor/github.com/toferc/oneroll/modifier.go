@@ -64,6 +64,24 @@ func (m *Modifier) CalculateCost(b int) {
 var Modifiers = map[string]*Modifier{
 
 	// Extras
+	"Custom Extra": &Modifier{
+		Name:          "Custom Extra",
+		Description:   "",
+		RequiresLevel: true,
+		Level:         1,
+		RequiresInfo:  true,
+		Info:          "",
+		CostPerLevel:  1,
+	},
+	"Custom Flaw": &Modifier{
+		Name:          "Custom Flaw",
+		Description:   "",
+		RequiresLevel: true,
+		Level:         1,
+		RequiresInfo:  true,
+		Info:          "",
+		CostPerLevel:  -1,
+	},
 
 	// Shadowrun modifiers
 	"Drain": &Modifier{
@@ -229,7 +247,7 @@ var Modifiers = map[string]*Modifier{
 		Name:          "Power Capacity",
 		Description:   "Power Capacity Type",
 		RequiresLevel: true,
-		Level:         1,
+		Level:         2,
 		RequiresInfo:  false,
 		Info:          "Mass, Range, Speed or Touch",
 		CostPerLevel:  1,
@@ -402,7 +420,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 	"If/Then": &Modifier{
 		Name:          "If/Then",
 		Description:   "",
-		RequiresLevel: false,
+		RequiresLevel: true,
 		Level:         1,
 		RequiresInfo:  true,
 		Info:          "",

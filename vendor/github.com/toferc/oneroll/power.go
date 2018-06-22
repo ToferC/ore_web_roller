@@ -23,7 +23,7 @@ func (p Power) String() string {
 	for _, q := range p.Qualities {
 		text += fmt.Sprintf("%s", string(q.Type[0]))
 		if q.Level > 1 {
-			text += fmt.Sprintf("+%d", q.Level-1)
+			text += fmt.Sprintf("+%d", q.Level)
 		}
 	}
 
