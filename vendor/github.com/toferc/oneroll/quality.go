@@ -21,7 +21,7 @@ func (q Quality) String() string {
 
 	// Add formatting for additional levels of Quality
 	if q.Level > 1 {
-		text += fmt.Sprintf(" +%d ", q.Level-1)
+		text += fmt.Sprintf(" +%d ", q.Level)
 	}
 
 	text += fmt.Sprintf("(%s) (%d/die): ",
