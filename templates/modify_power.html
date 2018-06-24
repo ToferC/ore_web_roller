@@ -2,7 +2,7 @@
 
 {{ $character := .Character }}
 {{ $power := .Power }}
-{{ $qualities := $power.Qualities }}
+{{ $qualities := .Power.Qualities }}
 {{ $dice := $power.Dice }}
 
 {{ $modifiers := .Modifiers }}
@@ -33,95 +33,126 @@
               </div>
               <div class="input-group">
                 <label for="Effect">Effect</label>
-                <textarea class="form-control" aria-describedby="effect-addon" name="Effect" rows="4" value ="{{ $power.Effect }}"></textarea>
+                <textarea type="text" class="form-control" aria-describedby="effect-addon" name="Effect" rows="4" value ="{{ $power.Effect }}">{{ $power.Effect }}</textarea>
               </div>
               <h4>Cost Per Die: {{ $power.CostPerDie }}</h4>
               <h4>Cost: {{ $power.Cost }}</h4>
               <input class="button" type="submit" value="Save">
           </div>
-              <div class="col-sm-9 col-md-9 col-lg-9">
-                <h3>Qualities</h3>
-              <p>Edit your Power Qualities here. Leave the Description field blank to skip the Quality.</p>
-                <hr>
 
-
-
-              {{ range $quality := $qualities }} <!-- Quality Loop -->
-              <div class="row">
-                <div class="col-sm-3 col-md-3 col-lg-3">
+          <div class="col-sm-9 col-md-9 col-lg-9">
+                {{ range $i, $q := $qualities }}
+                {{ if lt $i 4}}
+                <div class="row">
+                  <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="input-group">
-                  <label for="Q{{.}}-Type">Quality Type</label>
-                  <select type="text" class="form-control" id="Q{{.}}-Type" name="Q{{.}}-Type">
+                  <label for="Q{{$q}}-Type">Quality {{add $i 1}} Type</label>
+                  <select type="text" class="form-control" id="Q{{add $i 1}}-Type" name="Q{{add $i 1}}-Type">
                     <option></option>
-                    <option{{ if eq $quality.Type "Attack"}} selected {{end}}>Attack</option>
-                    <option{{ if eq $quality.Type "Defend"}} selected {{end}}>Defend</option>
-                    <option{{ if eq $quality.Type "Useful"}} selected {{end}}>Useful</option>
+                    <option {{if eq $q.Type "Attack"}} selected {{ end }}>Attack</option>
+                    <option {{if eq $q.Type "Defend"}} selected {{ end }}>Defend</option>
+                    <option {{if eq $q.Type "Useful"}} selected {{ end }}>Useful</option>
                   </select>
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="Q{{.}}-Name-addon">Description</span>
-                  <input type="text" class="form-control" aria-describedby="Q{{.}}-Name-addon" name="Q{{.}}-Name" value ={{ $quality.Name}}>
+                  <span class="input-group-addon" id="Q{{add $i 1}}-Name-addon">Description</span>
+                  <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-Name-addon" name="Q{{add $i 1}}-Name" value ="{{ $q.Name }}">
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="Q{{.}}-Level-addon">Additional Levels</span>
-                  <input type="number" class="form-control" aria-describedby="Q{{.}}-Level-addon" name="Q{{.}}-Level" value ={{$quality.Level}}>
+                  <span class="input-group-addon" id="Q{{add $i 1}}-Level-addon">Additional Levels</span>
+                  <input type="number" class="form-control" aria-describedby="Q{{add $i 1}}-Level-addon" name="Q{{add $i 1}}-Level" value ="{{ $q.Level }}">
                 </div>
                 <hr>
-          </div>
+                {{ range $c, $v := $q.Capacities }}
+                {{ if lt $c 3}}
+                <label for="Q{{add $i 1}}-C{{add $c 1}}-Type">Capacity {{add $c 1}}</label>
+                <select type="text" class="form-control" id="Q{{add $i 1}}-C{{add $c 1}}-Type" name="Q{{add $i 1}}-C{{add $c 1}}-Type">
+                  <option></option>
+                  <option {{if eq $v.Type "Mass"}} selected {{ end }} >Mass</option>
+                  <option {{if eq $v.Type "Range"}} selected {{ end }} >Range</option>
+                  <option {{if eq $v.Type "Speed"}} selected {{ end }} >Speed</option>
+                  <option {{if eq $v.Type "Self"}} selected {{ end }} >Self</option>
+                </select>
+                {{ end }} <!-- End if -->
+                {{ end }} <!-- End Capacities Inner Loop -->
 
-      <div class="col-sm-3 col-md-3 col-lg-3">
-        <h3>Capacities</h3>
-        <p>Edit Power Capacities here. You get one free Capacity per Power Quality. Additional Capacities will automatically add the Extra Capacity Extra to your Power.</p>
-          {{ range $capacity := $quality.Capacities }} <!-- Capacity Loop -->
-          <label for="Q{{$quality}}-C{{$capacity}}-Type">Quality {{$quality.Name}} Capacity</label>
-          <select type="text" class="form-control" id="Q{{$quality}}-C{{$capacity}}-Type" name="Q{{$quality}}-C{{$capacity}}-Type">
-            <option></option>
-            <option{{ if eq $capacity.Type "Mass"}} selected {{end}}>Mass</option>
-            <option{{ if eq $capacity.Type "Range"}} selected {{end}}>Range</option>
-            <option{{ if eq $capacity.Type "Speed"}} selected {{end}}>Speed</option>
-            <option{{ if eq $capacity.Type "Self"}} selected {{end}}>Self</option>
-          </select>
+              </div> <!-- End Qualities Column -->
 
-          <hr>
-          {{ end }}
-      </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
 
-      <div class="col-sm-3 col-md-3 col-lg-3">
-        <h3>Extras & Flaws</h3>
-        <p>Edit your Extras & Flaws here.</p>
-        <hr>
+                    {{ range $m, $v := $q.Modifiers }} <!-- modifiers loop -->
 
-        {{ range $m := $quality.Modifiers }}
-          <label for="Q{{$quality}}-M{{$m}}-Name">Quality {{$quality.Type}} Modifier</label>
-          <select type="text" class="form-control" id="Q{{$quality}}-M{{$m}}-Name" name="Q{{$quality}}-M{{$m}}-Name">
-            <option></option>
-            {{ range $modifiers }}
-              {{ if gt .CostPerLevel 0 }}
-                <option {{ if eq $m.Name .Name}} selected {{end}} value={{.Name}}>{{ .Name }} (+{{ .CostPerLevel }})</option>
-              {{ end }}
-              {{ end }}
-            <option>-------------</option>
-            {{ range $modifiers }}
-            {{ if lt .CostPerLevel 0 }}
-              <option {{ if eq $m.Name .Name}} selected {{end}} value={{.Name}}>{{ .Name }} ({{ .CostPerLevel }})</option>
-            {{ end }}
-            {{ end }}
-          </select>
-          <div class="input-group">
-            <span class="input-group-addon" id="Q{{$quality}}-M{{ $m}}-Level-addon">Level</span>
-            <input type="number" class="form-control" aria-describedby="Q{{$quality}}-M{{ $m }}-Level-addon" name="Q{{$quality}}-M{{ $m}}-Level" value ={{$m.Level}}>
-          </div>
-          <div class="input-group">
-            <span class="input-group-addon" id="Q{{$quality}}-M{{ $m}}-Info-addon">Info</span>
-            <input type="text" class="form-control" aria-describedby="Q{{$quality}}-M{{ $m}}-Info-addon" name="Q{{$quality}}-M{{$m }}-Info" value ={{$m.Info}}>
-          </div>
-          {{ end }}
-          {{ end }}
-          <hr>
-        </form>
+                    {{ if lt $m 4 }}
 
-      </div>
-    </div>
-    </div>
-      </div>
-{{end}}
+                    <label for="Q{{add $i 1}}-M{{add $m 1}}-Name">Extra {{add $m 1}}</label>
+                    <select type="text" class="form-control" id="Q{{add $i 1}}-M{{add $m 1}}-Name" name="Q{{add $i 1}}-M{{add $m 1}}-Name">
+                      <option></option>
+                      {{ range $modifiers }}
+                        {{ if gt .CostPerLevel 0 }}
+                          <option {{if eq $v.Name .Name }} selected {{ end }} value={{.Name}}>{{ .Name }} (+{{ .CostPerLevel }})</option>
+                        {{ end }}
+                        {{ end }}
+                      <option>-------------</option>
+                      {{ range $modifiers }}
+                      {{ if lt .CostPerLevel 0 }}
+                      <option {{if eq $v.Name .Name }} selected {{ end }} value={{.Name}}>{{ .Name }} ({{ .CostPerLevel }})</option>
+                      {{ end }}
+                      {{ end }}
+                    </select>
+                    <div class="input-group">
+                      <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon">Level</span>
+                      <input type="number" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Level" value ="{{ $v.Level }}">
+                    </div>
+                    <div class="input-group">
+                      <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon">Info</span>
+                      <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Info" value ="{{ $v.Info }}">
+                    </div>
+                    <hr>
+                    {{ end }} <!-- End Modifier lower IF -->
+                    {{ end }} <!-- End Modifier Loop -->
+                </div> <!-- End Modifiers COL 1 -->
+
+                <div class="col-sm-4 col-md-4 col-lg-4">
+
+                    {{ range $m, $v := $q.Modifiers }} <!-- modifiers loop -->
+
+                    {{ if gt $m 3 }}
+
+                    <label for="Q{{add $i 1}}-M{{add $m 1}}-Name">Flaw {{subtract $m 3}}</label>
+                    <select type="text" class="form-control" id="Q{{add $i 1}}-M{{add $m 1}}-Name" name="Q{{add $i 1}}-M{{add $m 1}}-Name">
+                      <option></option>
+                      {{ range $modifiers }}
+                        {{ if lt .CostPerLevel 0 }}
+                          <option {{if eq $v.Name .Name }} selected {{ end }} value={{.Name}}>{{ .Name }} ({{ .CostPerLevel }})</option>
+                        {{ end }}
+                        {{ end }}
+                      <option>-------------</option>
+                      {{ range $modifiers }}
+                      {{ if gt .CostPerLevel 0 }}
+                      <option {{if eq $v.Name .Name }} selected {{ end }} value={{.Name}}>{{ .Name }} (+{{ .CostPerLevel }})</option>
+                      {{ end }}
+                      {{ end }}
+                    </select>
+                    <div class="input-group">
+                      <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon">Level</span>
+                      <input type="number" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Level" value ="{{ $v.Level }}">
+                    </div>
+                    <div class="input-group">
+                      <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon">Info</span>
+                      <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Info" value ="{{ $v.Info }}">
+                    </div>
+                    <hr>
+                    {{ end }} <!-- End Modifier upper IF -->
+                    {{ end }} <!-- End Modifier Loop -->
+                </div> <!-- End Modifiers COL 2 -->
+
+              </div> <!-- END inner ROW -->
+              <hr>
+              {{ end }} <!-- end if -->
+              {{ end }} <!-- End Outer Quality Loop -->
+            </form>
+            </div> <!-- END outer column 9 -->
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

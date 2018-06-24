@@ -168,7 +168,7 @@ SelectQualityLevelLoop:
 		if err != nil || num < 0 {
 			fmt.Println("Invalid value")
 		} else {
-			q.Level = num + 1
+			q.Level = num
 			break SelectQualityLevelLoop
 		}
 	}

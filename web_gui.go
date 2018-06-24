@@ -80,6 +80,10 @@ func subtract(a, b int) int {
 	return a - b
 }
 
+func add(a, b int) int {
+	return a + b
+}
+
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
 	tmpl := make(map[string]*template.Template)
@@ -90,6 +94,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"statRoll":    statRoll,
 		"qualityRoll": qualityRoll,
 		"subtract":    subtract,
+		"add":         add,
 	}
 
 	baseTemplate := "templates/layout.html"

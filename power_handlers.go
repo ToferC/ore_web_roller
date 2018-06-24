@@ -163,7 +163,7 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/add_power/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
 	}
 }
 
@@ -186,7 +186,34 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 
+	// Assign existing Power, Qualities, Capacities & Modifiers
 	p := c.Powers[pow]
+
+	// Assign additional empty Qualities to populate form
+	if len(p.Qualities) < 4 {
+		for i := len(p.Qualities); i < 4; i++ {
+			tempQ := oneroll.NewQuality("")
+			p.Qualities = append(p.Qualities, tempQ)
+		}
+	}
+
+	// Assign additional empty Capacities to populate form
+	for _, q := range p.Qualities {
+		if len(q.Capacities) < 3 {
+			for i := len(q.Capacities); i < 3; i++ {
+				tempC := oneroll.Capacity{
+					Type: "",
+				}
+				q.Capacities = append(q.Capacities, &tempC)
+			}
+		}
+		if len(q.Modifiers) < 8 {
+			for i := len(q.Modifiers); i < 8; i++ {
+				tempM := oneroll.NewModifier("")
+				q.Modifiers = append(q.Modifiers, tempM)
+			}
+		}
+	} // i = 0 - 9 // i = 3 -
 
 	wc := WebChar{
 		Character: c,
@@ -208,6 +235,11 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 
 	} else { // POST
 
+		err := req.ParseForm()
+		if err != nil {
+			panic(err)
+		}
+
 		pName := req.FormValue("Name")
 
 		nd, _ := strconv.Atoi(req.FormValue("Normal"))
@@ -226,23 +258,23 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 			Slug:      oneroll.ToSnakeCase(pName),
 		}
 
-		for _, qLoop := range p.Qualities { // Quality Loop
+		for _, qLoop := range wc.Counter[:4] { // Quality Loop
 
-			qType := req.FormValue(fmt.Sprintf("Q%s-Type", qLoop))
+			qType := req.FormValue(fmt.Sprintf("Q%d-Type", qLoop))
 
 			if qType != "" {
-				l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%s-Level", qLoop)))
+				l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-Level", qLoop)))
 				if err != nil {
 					l = 1
 				}
 				q := &oneroll.Quality{
-					Type:  req.FormValue(fmt.Sprintf("Q%s-Type", qLoop)),
+					Type:  req.FormValue(fmt.Sprintf("Q%d-Type", qLoop)),
 					Level: l,
-					Name:  req.FormValue(fmt.Sprintf("Q%s-Name", qLoop)),
+					Name:  req.FormValue(fmt.Sprintf("Q%d-Name", qLoop)),
 				}
 
-				for _, cLoop := range qLoop.Capacities {
-					cType := req.FormValue(fmt.Sprintf("Q%s-C%s-Type", qLoop, cLoop))
+				for _, cLoop := range wc.Counter[:3] {
+					cType := req.FormValue(fmt.Sprintf("Q%d-C%d-Type", qLoop, cLoop))
 					if cType != "" {
 						cap := &oneroll.Capacity{
 							Type: cType,
@@ -253,10 +285,10 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 
 				m := new(oneroll.Modifier)
 
-				for _, mLoop := range qLoop.Modifiers { // Modifier Loop
-					mName := req.FormValue(fmt.Sprintf("Q%s-M%s-Name", qLoop, mLoop))
+				for _, mLoop := range wc.Counter { // Modifier Loop
+					mName := req.FormValue(fmt.Sprintf("Q%d-M%d-Name", qLoop, mLoop))
 					if mName != "" {
-						l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%s-M%s-Level", qLoop, mLoop)))
+						l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-M%d-Level", qLoop, mLoop)))
 						if err != nil {
 							l = 1
 						}
@@ -268,7 +300,7 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 						}
 
 						if m.RequiresInfo {
-							m.Info = req.FormValue(fmt.Sprintf("Q%s-M%s-Info", qLoop, mLoop))
+							m.Info = req.FormValue(fmt.Sprintf("Q%d-M%d-Info", qLoop, mLoop))
 						}
 						q.Modifiers = append(q.Modifiers, m)
 					}
@@ -278,6 +310,9 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c.Powers[p.Slug] = &p
+		delete(c.Powers, "default")
+
+		fmt.Println(c)
 
 		err = database.UpdateCharacter(db, c)
 		if err != nil {
@@ -287,6 +322,56 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+	}
+}
+
+// DeleteCharacterHandler renders a character in a Web page
+func DeletePowerHandler(w http.ResponseWriter, req *http.Request) {
+
+	s := req.URL.Path[len("/delete_power/"):]
+
+	sSlice := strings.Split(s, "/")
+
+	ch, pow := sSlice[0], sSlice[1]
+
+	id, err := strconv.Atoi(ch)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	c, err := database.PKLoadCharacter(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	// Assign existing Power, Qualities, Capacities & Modifiers
+	p := c.Powers[pow]
+
+	wc := WebChar{
+		Character: c,
+		Power:     p,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/delete_power.html", wc)
+
+	} else {
+
+		delete(c.Powers, pow)
+
+		fmt.Println(c)
+
+		err = database.UpdateCharacter(db, c)
+		if err != nil {
+			panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		fmt.Println(c)
+		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
 	}
 }

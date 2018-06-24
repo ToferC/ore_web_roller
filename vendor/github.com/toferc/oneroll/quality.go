@@ -89,7 +89,7 @@ func NewQuality(t string) *Quality {
 	q.Type = t
 	q.Name = ""
 	q.CostPerDie = 2
-	q.Level = 1
+	q.Level = 0
 	q.Capacities = []*Capacity{}
 	q.Modifiers = []*Modifier{}
 
