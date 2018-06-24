@@ -25,6 +25,20 @@ type WebView struct {
 	ErrorString []error
 }
 
+// WebChar is a framework to send objects & data to a Web view
+type WebChar struct {
+	Character   *oneroll.Character
+	Power       *oneroll.Power
+	Statistic   *oneroll.Statistic
+	Skill       *oneroll.Skill
+	Modifiers   map[string]*oneroll.Modifier
+	Sources     map[string]*oneroll.Source
+	Permissions map[string]*oneroll.Permission
+	Intrinsics  map[string]*oneroll.Intrinsic
+	Capacities  map[string]float32
+	Counter     []int
+}
+
 // SplitLines transfomrs results text string into slice
 func SplitLines(s string) []string {
 	sli := strings.Split(s, "/n")

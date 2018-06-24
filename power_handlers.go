@@ -10,17 +10,6 @@ import (
 	"github.com/toferc/ore_web_roller/database"
 )
 
-type WebChar struct {
-	Character   *oneroll.Character
-	Power       *oneroll.Power
-	Modifiers   map[string]*oneroll.Modifier
-	Sources     map[string]*oneroll.Source
-	Permissions map[string]*oneroll.Permission
-	Intrinsics  map[string]*oneroll.Intrinsic
-	Capacities  map[string]float32
-	Counter     []int
-}
-
 // AddPowerHandler renders a character in a Web page
 func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 
@@ -106,7 +95,7 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 			if qType != "" {
 				l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-Level", qLoop)))
 				if err != nil {
-					l = 1
+					l = 0
 				}
 				q := &oneroll.Quality{
 					Type:  req.FormValue(fmt.Sprintf("Q%d-Type", qLoop)),
@@ -265,7 +254,7 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 			if qType != "" {
 				l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-Level", qLoop)))
 				if err != nil {
-					l = 1
+					l = 0
 				}
 				q := &oneroll.Quality{
 					Type:  req.FormValue(fmt.Sprintf("Q%d-Type", qLoop)),
