@@ -102,7 +102,7 @@ func NewQuality(t string) *Quality {
 // Called from Power.PowerCost()
 func (q *Quality) CalculateCost(b int) {
 
-	b += q.Level - 1
+	b += q.Level
 
 	for _, m := range q.Modifiers {
 		if m.RequiresLevel {
