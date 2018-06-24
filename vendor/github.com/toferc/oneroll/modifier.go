@@ -41,6 +41,8 @@ func NewModifier(s string) *Modifier {
 
 	m.Name = s
 	m.Description = ""
+	m.Level = 1
+	m.Info = ""
 	m.RequiresLevel = false
 	m.RequiresInfo = false
 	m.CostPerLevel = 1
