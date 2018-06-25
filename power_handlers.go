@@ -152,7 +152,7 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -311,7 +311,7 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -361,6 +361,6 @@ func DeletePowerHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }

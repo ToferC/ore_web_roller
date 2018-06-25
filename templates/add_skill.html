@@ -51,8 +51,9 @@
                   <div class="col-sm-4 col-md-4 col-lg-4">
                     <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
                     <h4>Image</h4>
+                    <hr>
 
-                      {{ if $character.Archetype }}
+                    {{ if $character.Archetype }}
                     <h4>Archetype: {{ $character.Archetype.Type }}</h4>
                     <h4>Sources</h4>
                     {{ range $source := $character.Archetype.Sources }}
@@ -69,6 +70,7 @@
                       <ul><h4>{{ $intrinsic }}</h4></ul>
                     {{ end }}
 
+                    <hr>
                     {{ end }}
 
                     <h4>Description</h4>

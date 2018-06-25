@@ -205,7 +205,7 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -383,7 +383,7 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -432,6 +432,6 @@ func DeleteHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }

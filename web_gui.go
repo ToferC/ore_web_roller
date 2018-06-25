@@ -13,7 +13,7 @@ import (
 type WebView struct {
 	Rolls       []oneroll.Roll
 	Matches     []oneroll.Match
-	Actor       []string
+	Actor       []*oneroll.Character
 	Normal      []int
 	Hard        []int
 	Wiggle      []int
@@ -56,11 +56,11 @@ func skillRoll(c *oneroll.Character, sk *oneroll.Skill, st *oneroll.Statistic, a
 	goFirst := oneroll.Max(stat.GoFirst, skill.GoFirst)
 	spray := oneroll.Max(stat.Spray, skill.Spray)
 
-	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&name=%s&nd=%d&nr=%d&sp=%d&wd=%d",
+	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&ID=%d&nd=%d&nr=%d&sp=%d&wd=%d",
 		ac,
 		goFirst,
 		hard,
-		c.Name,
+		c.ID,
 		normal,
 		1, // Update roll mechanism to use Modifiers
 		spray,
@@ -79,11 +79,11 @@ func statRoll(c *oneroll.Character, s *oneroll.Statistic, ac int) string {
 	goFirst := td.GoFirst
 	spray := td.Spray
 
-	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&name=%s&nd=%d&nr=%d&sp=%d&wd=%d",
+	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&ID=%d&nd=%d&nr=%d&sp=%d&wd=%d",
 		ac,
 		goFirst,
 		hard,
-		c.Name,
+		c.ID,
 		normal,
 		1, // Update roll mechanism to use Modifiers
 		spray,
@@ -104,11 +104,11 @@ func qualityRoll(c *oneroll.Character, p *oneroll.Power, q *oneroll.Quality, ac 
 		}
 	}
 
-	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&name=%s&nd=%d&nr=%d&sp=%d&wd=%d",
+	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&ID=%d&nd=%d&nr=%d&sp=%d&wd=%d",
 		ac,
 		q.Dice.GoFirst, // Update roll mechanism to use Modifiers GF
 		p.Dice.Hard,
-		c.Name,
+		c.ID,
 		p.Dice.Normal,
 		0,            // Update roll mechanism to use Modifiers NR
 		q.Dice.Spray, // Update roll mechanism to use Modifiers SP

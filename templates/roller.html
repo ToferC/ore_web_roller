@@ -1,12 +1,17 @@
 {{define "content"}}
 
+{{ $character := index .Actor 0 }}
+{{ $statistics := $character.Statistics }}
+{{ $skills := $character.Skills }}
+{{ $powers := $character.Powers }}
+
       <div class="container">
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
             <p>Build your die pool below and then click "Roll Dice".</p>
         <form action="" method="POST">
           <div class="input-group">
-            <input type="text" class="form-control" aria-describedby="name-addon" name="name" value ="{{index .Actor 0}}">
+            <input type="text" class="form-control" aria-describedby="name-addon" name="name" value ="{{ $character.Name }}">
             <span class="input-group-addon" id="name-addon">Name</span>
           </div>
         <div class="input-group">
@@ -41,11 +46,15 @@
           </div>
         <input type="submit" value="Roll Dice">
       </form>
-        <a class="btn btn-primary" href="/view/{{index .Actor 0}}">Return to Character</a>
+      <br>
+        {{ if (index .Actor 0).ID }}
+        <a class="btn btn-primary" href="/view/{{ $character.ID }}">Return to Character</a>
+        {{ end }}
     </div>
+
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Results</h3>
-        <h4>{{  index .Actor 0 }}</h4>
+        <h4>{{  (index .Actor 0).Name }}</h4>
         <p>Actions: {{ index .Actions 0}},
         {{ range .Rolls }}
             Results: {{ range .Results }}
@@ -66,8 +75,35 @@
         {{ end }}
 
       </div>
+
       <div class="col-sm-3 col-md-3 col-lg-3">
-        <h3>Character</h3>
+        <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
+        {{ range $stat := $statistics }}
+        <p>{{ . }} <a href={{ statRoll $character $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
+        {{ range $skill := $skills }}
+        {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
+        {{ if eq $skill.LinkStat.Name $stat.Name}}
+          <ul>{{ . }} <a href={{ skillRoll $character $skill $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></h4>
+          </ul>
+          {{ end }}
+        {{ end }}
+        {{end}}
+      {{ end }}
+      </div>
+
+      <div class="col-sm-3 col-md-3 col-lg-3">
+        <h3>Powers</h3>
+        {{ range $power := $powers }}
+        <div class="card-body">
+          <strong>{{ $power }}</strong></p>
+          {{ range $quality := $power.Qualities }}
+            <p>{{ $quality }} <a href={{ qualityRoll $character $power $quality 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
+        {{ end }}
+        <i>Effect: {{ $power.Effect }}</i>
+          <hr>
+        </div>
+        {{ end }}
+      </div>
 
       </div>
     </div>

@@ -52,14 +52,19 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Skills</h3>
         {{ range $stat := $statistics }}
-        <h4>{{ . }} <a href={{ statRoll $character $stat 1 }}>Roll</a>
-          <a class="btn btn-secondary" href="/add_skill/{{ $character.ID }}/{{ $stat.Name }}">Add Skill</a>
-          <a class="btn btn-secondary" href="/add_hyperstat/{{ $character.ID }}/{{ $stat.Name }}">Add HyperStat</a></h4>
+        <p>{{ . }}
+          <a href={{ statRoll $character $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+          [<a href="/add_skill/{{ $character.ID }}/{{ $stat.Name }}"><span title="Add Skill" style="color:grey" class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+          {{ if not $stat.HyperStat }}
+          <a href="/add_hyperstat/{{ $character.ID }}/{{ $stat.Name }}"><span title="Add Hyper-Stat" style="color:grey" class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>{{ end }}]</p>
         {{ range $skill := $skills }}
         {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
         {{ if eq $skill.LinkStat.Name $stat.Name}}
-          <ul>{{ . }} <a href={{ skillRoll $character $skill $stat 1 }}>Roll</a>
-            <a class="btn btn-secondary" href="/add_hyperskill/{{ $character.ID }}/{{ $skill.Name }}">Add HyperSkill</a></h4>
+          <ul><p>{{ . }}
+            <a href={{ skillRoll $character $skill $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+            {{ if not $skill.HyperSkill }}
+            [<a href="/add_hyperskill/{{ $character.ID }}/{{ $skill.Name }}"><span title="Add Hyper-Skill" style="color:grey" class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>]
+          {{ end }}</p>
           </ul>
           {{ end }}
         {{ end }}
@@ -70,11 +75,24 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Powers</h3>
 
+        {{ range $power := .Powers }}
+        <div class="card-body">
+          <strong>{{ $power }}</strong>
+          <a href="/modify_power/{{ $character.ID}}/{{ $power.Slug}}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+          <a href="/delete_power/{{ $character.ID}}/{{ $power.Slug }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+          {{ range $quality := $power.Qualities }}
+          <p>{{ $quality }} <a href={{ qualityRoll $character $power $quality 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
+          {{ end }}
+          <i>Effect: {{ $power.Effect }}</i>
+          <hr>
+        </div>
+        {{ end }}
+
         {{ range $stat := $statistics }}
           {{ if $stat.HyperStat }}
           <div class="card-body">
-            <strong>{{ $stat.HyperStat }}</strong> <a type="btn" href="/modify_hyperstat/{{ $character.ID }}/{{ $stat.Name }}">Modify</a>
-          <a type="btn btn-danger" href="/delete_hyperstat/{{ $character.ID}}/{{ $stat.Name }}">Delete</a></p>
+            <strong>{{ $stat.HyperStat }}</strong><a href="/modify_hyperstat/{{ $character.ID }}/{{ $stat.Name }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+          <a href="/delete_hyperstat/{{ $character.ID}}/{{ $stat.Name }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></p>
             {{ range $quality := $stat.HyperStat.Qualities }}
               <p>{{ $quality }}</p>
           {{ end }}
@@ -87,8 +105,8 @@
         {{ range $skill := .Skills }}
         {{ if $skill.HyperSkill }}
         <div class="card-body">
-          <strong>{{ $skill.HyperSkill }}</strong> <a type="btn" href="/modify_hyperskill/{{ $character.ID }}/{{ $skill.Name }}">Modify</a>
-          <a type="btn btn-danger" href="/delete_hyperskill/{{ $character.ID}}/{{ $skill.Name }}">Delete</a></p>
+          <strong>{{ $skill.HyperSkill }}</strong> <a href="/modify_hyperskill/{{ $character.ID }}/{{ $skill.Name }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+          <a href="/delete_hyperskill/{{ $character.ID}}/{{ $skill.Name }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></p>
           {{ range $quality := $skill.HyperSkill.Qualities }}
           <p>{{ $quality }}</p>
           {{ end }}
@@ -98,21 +116,10 @@
         {{ end }}
         {{ end }}
 
-        {{ range $power := .Powers }}
-        <div class="card-body">
-          <strong>{{ $power }}</strong> <a type="btn" href="/modify_power/{{ $character.ID}}/{{ $power.Slug}}">Modify</a>
-        <a type="btn btn-danger" href="/delete_power/{{ $character.ID}}/{{ $power.Slug }}">Delete</a></p>
-          {{ range $quality := $power.Qualities }}
-            <p>{{ $quality }} <a href={{ qualityRoll $character $power $quality 1 }}>Roll</a></p>
-        {{ end }}
-        <i>Effect: {{ $power.Effect }}</i>
-          <hr>
-        </div>
-        {{ end }}
         <hr>
         <a class="btn btn-primary" href="/add_power/{{ $character.ID }}">Add Power</a></p>
-
       </div>
+
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Hit Locations</h3>
           {{ range .HitLocations }}

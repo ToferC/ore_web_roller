@@ -218,7 +218,7 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -396,7 +396,7 @@ func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -445,6 +445,6 @@ func DeleteHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }

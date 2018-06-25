@@ -5,8 +5,10 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	"github.com/toferc/oneroll"
+	"github.com/toferc/ore_web_roller/database"
 )
 
 const baseDieString string = "1ac+4d+0hd+0wd+0gf+0sp+1nr"
@@ -26,7 +28,7 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 			log.Fatal(err)
 		}
 
-		charString := q.Get("name")
+		pk := q.Get("ID")
 
 		var dieString string
 
@@ -44,23 +46,28 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 			dieString = baseDieString
 		}
 
-		if charString == "" {
-			charString = "Player"
+		id, err := strconv.Atoi(pk)
+		if err != nil {
+			http.Redirect(w, req, "/", http.StatusSeeOther)
 		}
 
-		c := oneroll.Character{
-			Name: charString,
+		c, err := database.PKLoadCharacter(db, int64(id))
+		if err != nil {
+			fmt.Println(err)
+			c = &oneroll.Character{
+				Name: "Player 1",
+			}
 		}
 
 		roll := oneroll.Roll{
-			Actor:  &c,
+			Actor:  c,
 			Action: "Act",
 		}
 
 		nd, hd, wd, gf, sp, ac, nr, err := roll.ParseString(dieString)
 
 		wv := WebView{
-			Actor:       []string{charString},
+			Actor:       []*oneroll.Character{c},
 			Rolls:       []oneroll.Roll{},
 			Matches:     []oneroll.Match{},
 			Normal:      []int{nd},
@@ -87,9 +94,7 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 
 	} else {
 
-		c := oneroll.Character{
-			Name: req.FormValue("name"),
-		}
+		pk := req.FormValue("ID")
 
 		nd = req.FormValue("nd")
 		hd = req.FormValue("hd")
@@ -103,7 +108,7 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 
 		q := req.URL.Query()
 
-		q.Add("name", c.Name)
+		q.Add("ID", pk)
 		q.Add("ac", ac)
 		q.Add("nd", nd)
 		q.Add("hd", hd)
@@ -174,10 +179,12 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c := oneroll.Character{
+			ID:   int64(9998),
 			Name: charString,
 		}
 
 		d := oneroll.Character{
+			ID:   int64(9999),
 			Name: charString2,
 		}
 
@@ -196,7 +203,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		nd2, hd2, wd2, gf2, sp2, ac2, nr2, _ := roll.ParseString(dieString2)
 
 		wv := WebView{
-			Actor:       []string{charString, charString2},
+			Actor:       []*oneroll.Character{&c, &d},
 			Rolls:       []oneroll.Roll{},
 			Matches:     []oneroll.Match{},
 			Normal:      []int{nd, nd2},
@@ -261,7 +268,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 
 		q := req.URL.Query()
 
-		q.Add("name", c.Name)
+		q.Add("ID", c.Name)
 		q.Add("ac", ac)
 		q.Add("nd", nd)
 		q.Add("hd", hd)

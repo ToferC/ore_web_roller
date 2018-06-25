@@ -26,13 +26,18 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		// Render page
 
-		name := req.URL.Path[len("/view/"):]
+		pk := req.URL.Path[len("/view/"):]
 
-		if len(name) == 0 {
-			name = "Player"
+		if len(pk) == 0 {
+			http.Redirect(w, req, "/", http.StatusSeeOther)
 		}
 
-		c, err := database.LoadCharacter(db, name)
+		id, err := strconv.Atoi(pk)
+		if err != nil {
+			http.Redirect(w, req, "/", http.StatusSeeOther)
+		}
+
+		c, err := database.PKLoadCharacter(db, int64(id))
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -144,7 +149,7 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -279,7 +284,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
