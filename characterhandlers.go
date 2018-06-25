@@ -129,6 +129,9 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		for _, sk := range c.Skills {
 			sk.Dice.Normal, _ = strconv.Atoi(req.FormValue(sk.Name))
+			if sk.ReqSpec {
+				sk.Specialization = req.FormValue(fmt.Sprintf("%s-Spec", sk.Name))
+			}
 		}
 
 		err = database.SaveCharacter(db, c)
@@ -192,6 +195,9 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		for _, sk := range c.Skills {
 			sk.Dice.Normal, _ = strconv.Atoi(req.FormValue(sk.Name))
+			if sk.ReqSpec {
+				sk.Specialization = req.FormValue(fmt.Sprintf("%s-Spec", sk.Name))
+			}
 		}
 
 		err = database.UpdateCharacter(db, c)
