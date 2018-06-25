@@ -64,10 +64,33 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 	for _, q := range hs.Qualities {
 		if q.Type != "" {
 			cap := oneroll.Capacity{Type: "Self"}
-			cap2 := oneroll.Capacity{Type: ""}
-			cap3 := oneroll.Capacity{Type: ""}
-			cap4 := oneroll.Capacity{Type: ""}
-			q.Capacities = append(q.Capacities, &cap, &cap2, &cap3, &cap4)
+			q.Capacities = append(q.Capacities, &cap)
+		}
+	}
+
+	// Assign additional empty Qualities to populate form
+	if len(hs.Qualities) < 4 {
+		for i := len(hs.Qualities); i < 4; i++ {
+			tempQ := oneroll.NewQuality("")
+			hs.Qualities = append(hs.Qualities, tempQ)
+		}
+	}
+
+	// Assign additional empty Capacities to populate form
+	for _, q := range hs.Qualities {
+		if len(q.Capacities) < 4 {
+			for i := len(q.Capacities); i < 4; i++ {
+				tempC := oneroll.Capacity{
+					Type: "",
+				}
+				q.Capacities = append(q.Capacities, &tempC)
+			}
+		}
+		if len(q.Modifiers) < 8 {
+			for i := len(q.Modifiers); i < 8; i++ {
+				tempM := oneroll.NewModifier("")
+				q.Modifiers = append(q.Modifiers, tempM)
+			}
 		}
 	}
 
