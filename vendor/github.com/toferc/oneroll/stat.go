@@ -27,9 +27,10 @@ type HyperStat struct {
 
 func (s *Statistic) getDiePool() *DiePool {
 
-	td := new(DiePool)
+	td := &DiePool{}
 
 	if s.HyperStat != nil {
+
 		td.Normal = s.Dice.Normal + s.HyperStat.Dice.Normal
 		td.Hard = s.Dice.Hard + s.HyperStat.Dice.Hard
 		td.Wiggle = s.Dice.Wiggle + s.HyperStat.Dice.Wiggle
@@ -45,7 +46,6 @@ func (s *Statistic) getDiePool() *DiePool {
 				}
 			}
 		}
-
 	} else {
 		td = s.Dice
 	}

@@ -8,10 +8,42 @@
         <hr>
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
-            <h3>{{ .Name }} ({{ .PointCost }}pts)</h3>
+            <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
             <h4>Image</h4>
-            <h4>{{ .Archetype }}</h4>
+            <hr>
+
+            {{ if $character.Archetype }}
+            <h4>Archetype: {{ $character.Archetype.Type }} ({{ $character.Archetype.Cost }}pts)</h4>
+            <h4>Sources</h4>
+            {{ range $source := $character.Archetype.Sources }}
+              <ul><p>{{ $source }}</p></ul>
+            {{ end }}
+
+            <h4>Permissions</h4>
+            {{ range $permission := $character.Archetype.Permissions }}
+              <ul><p>{{ $permission }}</p></ul>
+            {{ end }}
+
+            <h4>Intrinsics</h4>
+            {{ range $intrinsic := $character.Archetype.Intrinsics }}
+              <ul><p>{{ $intrinsic.Name }}
+                {{ if $intrinsic.RequiresInfo }}
+                - {{ $intrinsic.Info }}
+                {{ end }}
+                {{ if $intrinsic.RequiresLevel }}
+                   ({{ multiply $intrinsic.Cost $intrinsic.Level }}pts)
+                {{ else }}
+                  ({{ $intrinsic.Cost }}pts)
+                {{ end }}
+            </p></ul>
+            {{ end }}
+
+            <hr>
+            {{ end }}
+
             <h4>Description</h4>
+            {{ $character.Description }}
+
               <h4>Base Will: {{ .BaseWill }}</h4>
               <h4>Willpower: {{ .Willpower }}</h4>
               <a class="btn btn-primary" href="/modify/{{ .ID }}">Modify</a>
@@ -21,7 +53,8 @@
         <h3>Skills</h3>
         {{ range $stat := $statistics }}
         <h4>{{ . }} <a href={{ statRoll $character $stat 1 }}>Roll</a>
-        <a class="btn btn-secondary" href="/add_hyperstat/{{ $character.ID }}/{{ $stat.Name }}">Add HyperStat</a></h4>
+          <a class="btn btn-secondary" href="/add_skill/{{ $character.ID }}/{{ $stat.Name }}">Add Skill</a>
+          <a class="btn btn-secondary" href="/add_hyperstat/{{ $character.ID }}/{{ $stat.Name }}">Add HyperStat</a></h4>
         {{ range $skill := $skills }}
         {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
         {{ if eq $skill.LinkStat.Name $stat.Name}}
@@ -67,12 +100,12 @@
 
         {{ range $power := .Powers }}
         <div class="card-body">
-          <strong>{{ . }}</strong> <a type="btn" href="/modify_power/{{ $character.ID}}/{{ $power.Slug}}">Modify</a>
-        <a type="btn btn-danger" href="/delete_power/{{ $character.ID}}/{{ $power.Slug}}">Delete</a></p>
-          {{ range $quality := .Qualities }}
+          <strong>{{ $power }}</strong> <a type="btn" href="/modify_power/{{ $character.ID}}/{{ $power.Slug}}">Modify</a>
+        <a type="btn btn-danger" href="/delete_power/{{ $character.ID}}/{{ $power.Slug }}">Delete</a></p>
+          {{ range $quality := $power.Qualities }}
             <p>{{ $quality }} <a href={{ qualityRoll $character $power $quality 1 }}>Roll</a></p>
         {{ end }}
-        <i>Effect: {{ .Effect }}</i>
+        <i>Effect: {{ $power.Effect }}</i>
           <hr>
         </div>
         {{ end }}

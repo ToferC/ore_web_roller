@@ -75,7 +75,12 @@
               </div>
               <hr>
               {{ end }} <!-- End Intrinsics Loop -->
-</div>
+
+              <div class="input-group">
+                <label for="Description">Description</label>
+                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="5" value ="{{ $character.Description }}">{{ $character.Description }}</textarea>
+              </div>
+            </div>
 
               <div class="col-sm-3 col-md-3 col-lg-3">
                 <br>

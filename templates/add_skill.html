@@ -1,0 +1,138 @@
+{{define "content"}}
+
+{{ $character := .Character }}
+{{ $skill := .Skill }}
+{{ $dice := $skill.Dice }}
+
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-sm-3 col-md-3 col-lg-3">
+            <div>
+              <h3>Base Stat</h3>
+              <h3>{{ $skill.LinkStat }}</h3>
+            </div>
+            <form action="" method="POST">
+              <h3>New Skill</h3>
+              <div class="input-group">
+                <span class="input-group-addon" id="name-addon">Name</span>
+                <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $skill.Name }}">
+              </div>
+
+              <label for="Quality">Choose a Quality</label>
+              <select type="text" class="form-control" id="Quality" name="Quality">
+                <option>Useful</option>
+                <option>Attack</option>
+                <option>Defend</option>
+              </select>
+
+              <div class="input-group">
+                <span class="input-group-addon" id="normal-addon">Normal Dice</span>
+                <input type="text" class="form-control" aria-describedby="normal-addon" name="Normal" value ="{{ $dice.Normal }}">
+              </div>
+
+              <label for="ReqSpec">Does the Skill require a Specialization?</label>
+              <select type="text" class="form-control" id="ReqSpec" name="ReqSpec">
+                <option>Yes</option>
+                <option>No</option>
+              </select>
+
+              <div class="input-group">
+                <span class="input-group-addon" id="specialization-addon">Specialization</span>
+                <input type="text" class="form-control" aria-describedby="specialization-addon" name="Specialization" value ="{{ $skill.Specialization }}">
+              </div>
+
+              <input class="button" type="submit" value="Save">
+            </form>
+          </div>
+
+          <div class="col-sm-9 col-md-9 col-lg-9">
+                <div class="row">
+                  <div class="col-sm-4 col-md-4 col-lg-4">
+                    <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
+                    <h4>Image</h4>
+
+                      {{ if $character.Archetype }}
+                    <h4>Archetype: {{ $character.Archetype.Type }}</h4>
+                    <h4>Sources</h4>
+                    {{ range $source := $character.Archetype.Sources }}
+                      <ul><h4>{{ $source }}</h4></ul>
+                    {{ end }}
+
+                    <h4>Permissions</h4>
+                    {{ range $permission := $character.Archetype.Permissions }}
+                      <ul><h4>{{ $permission }}</h4></ul>
+                    {{ end }}
+
+                    <h4>Intrinsics</h4>
+                    {{ range $intrinsic := $character.Archetype.Intrinsics }}
+                      <ul><h4>{{ $intrinsic }}</h4></ul>
+                    {{ end }}
+
+                    {{ end }}
+
+                    <h4>Description</h4>
+                      <h4>Base Will: {{ $character.BaseWill }}</h4>
+                      <h4>Willpower: {{ $character.Willpower }}</h4>
+                  </div>
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <h3>Skills</h3>
+                {{ range $stat := $character.Statistics }}
+                <h4>{{ $stat }}</h4>
+                {{ range $skill := $character.Skills }}
+                {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
+                {{ if eq $skill.LinkStat.Name $stat.Name}}
+                  <ul>{{ $skill }}</ul>
+                  {{ end }}
+                {{ end }}
+                {{end}}
+              {{ end }}
+              </div>
+
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <h3>Powers</h3>
+
+                {{ range $stat := $character.Statistics }}
+                  {{ if $stat.HyperStat }}
+                  <div class="card-body">
+                    <strong>{{ $stat.HyperStat }}</strong></p>
+                    {{ range $quality := $stat.HyperStat.Qualities }}
+                      <p>{{ $quality }}</p>
+                  {{ end }}
+                  <i>Effect: {{ $stat.HyperStat.Effect }}</i>
+                    <hr>
+                  </div>
+                  {{ end }}
+                {{ end }}
+
+                {{ range $skill := $character.Skills }}
+                {{ if $skill.HyperSkill }}
+                <div class="card-body">
+                  <strong>{{ $skill.HyperSkill }}</strong></p>
+                  {{ range $quality := $skill.HyperSkill.Qualities }}
+                  <p>{{ $quality }}</p>
+                  {{ end }}
+                  <i>Effect: {{ $skill.HyperSkill.Effect }}</i>
+                  <hr>
+                </div>
+                {{ end }}
+                {{ end }}
+
+                {{ range $power := $character.Powers }}
+                <div class="card-body">
+                  <strong>{{ $power }}</strong></p>
+                  {{ range $quality := $power.Qualities }}
+                    <p>{{ $quality }}</p>
+                {{ end }}
+                <i>Effect: {{ $power.Effect }}</i>
+                  <hr>
+                </div>
+                {{ end }}
+                <hr>
+
+              </div>
+            </div> <!-- END outer column 9 -->
+          </div> <!-- END outer ROW -->
+        </div> <!-- END container -->
+
+{{ end }} <!-- end content -->

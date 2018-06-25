@@ -125,6 +125,10 @@ func add(a, b int) int {
 	return a + b
 }
 
+func multiply(a, b int) int {
+	return a * b
+}
+
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
 	tmpl := make(map[string]*template.Template)
@@ -136,6 +140,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"qualityRoll": qualityRoll,
 		"subtract":    subtract,
 		"add":         add,
+		"multiply":    multiply,
 	}
 
 	baseTemplate := "templates/layout.html"

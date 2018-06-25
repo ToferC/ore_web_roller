@@ -123,6 +123,8 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
+		c.Description = req.FormValue("Description")
+
 		for _, st := range c.StatMap {
 			c.Statistics[st].Dice.Normal, _ = strconv.Atoi(req.FormValue(st))
 		}
@@ -165,6 +167,38 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 
+	a := c.Archetype
+
+	// Assign additional empty Sources to populate form
+	if len(a.Sources) < 4 {
+		for i := len(a.Sources); i < 4; i++ {
+			tempS := oneroll.Source{
+				Type: "",
+			}
+			a.Sources = append(a.Sources, &tempS)
+		}
+	}
+
+	// Assign additional empty Permissions to populate form
+	if len(a.Permissions) < 4 {
+		for i := len(a.Permissions); i < 4; i++ {
+			tempP := oneroll.Permission{
+				Type: "",
+			}
+			a.Permissions = append(a.Permissions, &tempP)
+		}
+	}
+
+	// Assign additional empty Sources to populate form
+	if len(a.Intrinsics) < 5 {
+		for i := len(a.Intrinsics); i < 5; i++ {
+			tempI := oneroll.Intrinsic{
+				Name: "",
+			}
+			a.Intrinsics = append(a.Intrinsics, &tempI)
+		}
+	}
+
 	wc := WebChar{
 		Character:   c,
 		Modifiers:   oneroll.Modifiers,
@@ -188,6 +222,43 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		c.Name = req.FormValue("Name")
+
+		c.Archetype = &oneroll.Archetype{
+			Type: req.FormValue("Archetype"),
+		}
+
+		for _, s := range wc.Counter[:3] { // Loop
+
+			sType := req.FormValue(fmt.Sprintf("Source-%d", s))
+
+			pType := req.FormValue(fmt.Sprintf("Permission-%d", s))
+
+			if sType != "" {
+				c.Archetype.Sources = append(c.Archetype.Sources, oneroll.Sources[sType])
+			}
+			if pType != "" {
+				c.Archetype.Permissions = append(c.Archetype.Permissions, oneroll.Permissions[pType])
+			}
+		}
+
+		for _, s := range wc.Counter[:5] {
+			iName := req.FormValue(fmt.Sprintf("Intrinsic-%d-Name", s))
+
+			iInfo := req.FormValue(fmt.Sprintf("Intrinsic-%d-Info", s))
+
+			if iName != "" {
+				i := oneroll.Intrinsics[iName]
+				l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Intrinsic-%d-Level", s)))
+				if err != nil {
+					l = 1
+				}
+				i.Level = l
+				i.Info = iInfo
+				c.Archetype.Intrinsics = append(c.Archetype.Intrinsics, i)
+			}
+		}
+
+		c.Description = req.FormValue("Description")
 
 		for _, st := range c.StatMap {
 			c.Statistics[st].Dice.Normal, _ = strconv.Atoi(req.FormValue(st))

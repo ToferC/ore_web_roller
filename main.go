@@ -89,6 +89,8 @@ func main() {
 		http.HandleFunc("/modify_hyperskill/", ModifyHyperSkillHandler)
 		http.HandleFunc("/delete_hyperskill/", DeleteHyperSkillHandler)
 
+		http.HandleFunc("/add_skill/", AddSkillHandler)
+
 		log.Fatal(http.ListenAndServe(":"+port, nil))
 	}
 

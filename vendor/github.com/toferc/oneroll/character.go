@@ -10,6 +10,7 @@ type Character struct {
 	ID           int64
 	Name         string
 	Setting      string
+	Description  string
 	Statistics   map[string]*Statistic
 	StatMap      []string
 	BaseWill     int
@@ -24,6 +25,16 @@ type Character struct {
 	LocationMap  []string
 	PointCost    int
 	InPlay       bool
+	XP           int
+	Updates      []*Update
+}
+
+// Update tracks live changes to Character
+type Update struct {
+	Date       string
+	ChangeFrom string
+	ChangeTo   string
+	Cost       int
 }
 
 // Display character
