@@ -58,7 +58,7 @@
         {{ range $skill := $skills }}
         {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
         {{ if eq $skill.LinkStat.Name $stat.Name}}
-          <ul>{{ . }} <a href={{ skillRoll $character $skill 1 }}>Roll</a>
+          <ul>{{ . }} <a href={{ skillRoll $character $skill $stat 1 }}>Roll</a>
             <a class="btn btn-secondary" href="/add_hyperskill/{{ $character.ID }}/{{ $skill.Name }}">Add HyperSkill</a></h4>
           </ul>
           {{ end }}

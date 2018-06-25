@@ -45,10 +45,10 @@ func SplitLines(s string) []string {
 	return sli
 }
 
-func skillRoll(c *oneroll.Character, s *oneroll.Skill, ac int) string {
+func skillRoll(c *oneroll.Character, sk *oneroll.Skill, st *oneroll.Statistic, ac int) string {
 
-	skill := oneroll.ReturnDice(s)
-	stat := oneroll.ReturnDice(s.LinkStat)
+	skill := oneroll.ReturnDice(sk)
+	stat := oneroll.ReturnDice(st)
 
 	normal := stat.Normal + skill.Normal
 	hard := stat.Hard + skill.Hard
