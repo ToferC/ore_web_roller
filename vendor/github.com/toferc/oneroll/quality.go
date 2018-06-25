@@ -20,7 +20,7 @@ func (q Quality) String() string {
 	text := fmt.Sprintf("%s ", q.Type)
 
 	// Add formatting for additional levels of Quality
-	if q.Level > 1 {
+	if q.Level > 0 {
 		text += fmt.Sprintf(" +%d ", q.Level)
 	}
 
@@ -111,9 +111,9 @@ func (q *Quality) CalculateCost(b int) {
 			b += m.CostPerLevel
 		}
 	}
-	if b < 1 {
-		// Minimum cost per die in a quality is 1
-		b = 1
+	if b < 0 {
+		// No negative costs allowed
+		b = 0
 	}
 	q.CostPerDie = b
 }

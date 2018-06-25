@@ -42,6 +42,13 @@
               </div>
               <h4>Cost Per Die: {{ $hyperstat.CostPerDie }}</h4>
               <h4>Cost: {{ $hyperstat.Cost }}</h4>
+
+              <label for="Apply">Apply Modifiers to Base Stat?</label>
+              <select type="text" class="form-control" id="Apply" name="Apply">
+                <option>Yes</option>
+                <option>No</option>
+              </select>
+
               <input class="button" type="submit" value="Save">
           </div>
 
@@ -101,32 +108,32 @@
 
                 <div class="col-sm-4 col-md-4 col-lg-4">
 
-                  {{ range $m := $counter }} <!-- modifiers loop -->
+                  {{ range $m, $v := $q.Modifiers }} <!-- modifiers loop -->
 
-                  {{ if lt $m 5 }}
+                  {{ if lt $m 4 }}
 
-                  <label for="Q{{add $i 1}}-M{{$m}}-Name">Extra {{$m}}</label>
-                  <select type="text" class="form-control" id="Q{{add $i 1}}-M{{$m}}-Name" name="Q{{add $i 1}}-M{{$m}}-Name">
+                  <label for="Q{{add $i 1}}-M{{add $m 1}}-Name">Extra {{add $m 1}}</label>
+                  <select type="text" class="form-control" id="Q{{add $i 1}}-M{{add $m 1}}-Name" name="Q{{add $i 1}}-M{{add $m 1}}-Name">
                     <option></option>
                     {{ range $modifiers }}
                       {{ if gt .CostPerLevel 0 }}
-                        <option value={{.Name}}>{{ .Name }} (+{{ .CostPerLevel }})</option>
+                        <option {{if eq $v.Name .Name }} selected {{ end }} value={{.Name}}>{{ .Name }} (+{{ .CostPerLevel }})</option>
                       {{ end }}
                       {{ end }}
                     <option>-------------</option>
                     {{ range $modifiers }}
                     {{ if lt .CostPerLevel 0 }}
-                      <option value={{.Name}}>{{ .Name }} ({{ .CostPerLevel }})</option>
+                    <option {{if eq $v.Name .Name }} selected {{ end }} value={{.Name}}>{{ .Name }} ({{ .CostPerLevel }})</option>
                     {{ end }}
                     {{ end }}
                   </select>
                   <div class="input-group">
-                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ $m}}-Level-addon">Level</span>
-                    <input type="number" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ $m }}-Level-addon" name="Q{{add $i 1}}-M{{ $m}}-Level" value ="1">
+                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon">Level</span>
+                    <input type="number" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Level" value ="{{ $v.Level }}">
                   </div>
                   <div class="input-group">
-                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ $m}}-Info-addon">Info</span>
-                    <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ $m}}-Info-addon" name="Q{{add $i 1}}-M{{$m }}-Info" value ="">
+                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon">Info</span>
+                    <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Info" value ="{{ $v.Info }}">
                   </div>
                   <hr>
                   {{ end }} <!-- End Modifier lower IF -->
@@ -135,32 +142,32 @@
 
               <div class="col-sm-4 col-md-4 col-lg-4">
 
-                  {{ range $m := $counter }} <!-- modifiers loop -->
+                  {{ range $m, $v := $q.Modifiers }} <!-- modifiers loop -->
 
-                  {{ if gt $m 4 }}
+                  {{ if gt $m 3 }}
 
-                  <label for="Q{{add $i 1}}-M{{$m}}-Name">Flaw {{subtract $m 4}}</label>
-                  <select type="text" class="form-control" id="Q{{add $i 1}}-M{{$m}}-Name" name="Q{{add $i 1}}-M{{$m}}-Name">
+                  <label for="Q{{add $i 1}}-M{{add $m 1}}-Name">Flaw {{subtract $m 3}}</label>
+                  <select type="text" class="form-control" id="Q{{add $i 1}}-M{{add $m 1}}-Name" name="Q{{add $i 1}}-M{{add $m 1}}-Name">
                     <option></option>
                     {{ range $modifiers }}
                       {{ if lt .CostPerLevel 0 }}
-                        <option value={{.Name}}>{{ .Name }} ({{ .CostPerLevel }})</option>
+                        <option {{if eq $v.Name .Name }} selected {{ end }} value={{.Name}}>{{ .Name }} ({{ .CostPerLevel }})</option>
                       {{ end }}
                       {{ end }}
                     <option>-------------</option>
                     {{ range $modifiers }}
                     {{ if gt .CostPerLevel 0 }}
-                      <option value={{.Name}}>{{ .Name }} (+{{ .CostPerLevel }})</option>
+                    <option {{if eq $v.Name .Name }} selected {{ end }} value={{.Name}}>{{ .Name }} (+{{ .CostPerLevel }})</option>
                     {{ end }}
                     {{ end }}
                   </select>
                   <div class="input-group">
-                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ $m}}-Level-addon">Level</span>
-                    <input type="number" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ $m }}-Level-addon" name="Q{{$q}}-M{{ $m}}-Level" value ="1">
+                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon">Level</span>
+                    <input type="number" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Level" value ="{{ $v.Level }}">
                   </div>
                   <div class="input-group">
-                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ $m}}-Info-addon">Info</span>
-                    <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ $m}}-Info-addon" name="Q{{$q}}-M{{$m }}-Info" value ="">
+                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon">Info</span>
+                    <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Info" value ="{{ $v.Info }}">
                   </div>
                   <hr>
                   {{ end }} <!-- End Modifier upper IF -->

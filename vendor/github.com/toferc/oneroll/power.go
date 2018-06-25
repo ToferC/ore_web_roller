@@ -57,6 +57,10 @@ func (p *Power) CalculateCost() {
 			m.CalculateCost(0)
 		}
 		q.CalculateCost(2)
+		if q.CostPerDie < 1 {
+			// minimum cost of 1/die per Quality in a Power
+			q.CostPerDie = 1
+		}
 		b += q.CostPerDie
 	}
 

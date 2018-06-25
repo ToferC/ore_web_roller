@@ -30,11 +30,16 @@ var powerCapacities = []byte(`{
 }`)
 
 func (c Capacity) String() string {
-	text := fmt.Sprintf("%s (%s)",
-		c.Type,
-		c.Value)
 
-	// Modify value by level & booster
+	var text string
+
+	if c.Type == "Self" {
+		text = fmt.Sprintf("%s", c.Type)
+	} else {
+		text = fmt.Sprintf("%s (%s)",
+			c.Type,
+			c.Value)
+	}
 
 	return text
 }

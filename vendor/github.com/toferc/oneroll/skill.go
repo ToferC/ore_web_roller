@@ -24,6 +24,7 @@ type HyperSkill struct {
 	Qualities  []*Quality
 	Dice       *DiePool
 	Effect     string
+	Apply      bool
 	CostPerDie int
 	Cost       int
 }
@@ -49,8 +50,8 @@ func (hs HyperSkill) String() string {
 
 	for _, q := range hs.Qualities {
 		text += fmt.Sprintf("%s", string(q.Type[0]))
-		if q.Level > 1 {
-			text += fmt.Sprintf("+%d", q.Level-1)
+		if q.Level > 0 {
+			text += fmt.Sprintf("+%d", q.Level)
 		}
 	}
 
@@ -164,17 +165,28 @@ func ShowSkills(c *Character, allSkills bool) string {
 // CalculateCost determines the cost of a Skill
 // Called from Character.CalculateCharacterCost()
 func (s *Skill) CalculateCost() {
+
+	// Base Cost
 	b := 2
+	// Modifier Cost
+	mc := 0
 
 	// Add costs for modifiers
 	for _, m := range s.Modifiers {
 		m.CalculateCost(0)
 		if m.RequiresLevel {
-			b += m.CostPerLevel * m.Level
+			mc += m.CostPerLevel * m.Level
 		} else {
-			b += m.CostPerLevel
+			mc += m.CostPerLevel
 		}
 	}
+
+	if len(s.Modifiers) > 0 && mc < 1 {
+		// There are mods, but flaws reduce cost below 1
+		mc = 1
+	}
+
+	b += mc
 
 	total := b * s.Dice.Normal
 	total += b * 2 * s.Dice.Hard

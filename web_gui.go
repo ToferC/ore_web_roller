@@ -45,46 +45,73 @@ func SplitLines(s string) []string {
 	return sli
 }
 
-func skillRoll(c *oneroll.Character, s string, ac int) string {
+func skillRoll(c *oneroll.Character, s *oneroll.Skill, ac int) string {
+
+	skill := oneroll.ReturnDice(s)
+	stat := oneroll.ReturnDice(s.LinkStat)
+
+	normal := stat.Normal + skill.Normal
+	hard := stat.Hard + skill.Hard
+	wiggle := stat.Wiggle + skill.Wiggle
+	goFirst := oneroll.Max(stat.GoFirst, skill.GoFirst)
+	spray := oneroll.Max(stat.Spray, skill.Spray)
 
 	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&name=%s&nd=%d&nr=%d&sp=%d&wd=%d",
 		ac,
-		0, // Update roll mechanism to use Modifiers
-		c.Skills[s].Dice.Hard+c.Skills[s].LinkStat.Dice.Hard,
+		goFirst,
+		hard,
 		c.Name,
-		c.Skills[s].Dice.Normal+c.Skills[s].LinkStat.Dice.Normal,
-		0, // Update roll mechanism to use Modifiers
-		0, // Update roll mechanism to use Modifiers
-		c.Skills[s].Dice.Wiggle+c.Skills[s].LinkStat.Dice.Wiggle,
+		normal,
+		1, // Update roll mechanism to use Modifiers
+		spray,
+		wiggle,
 	)
 	return "/roll/" + rollString
 }
 
-func statRoll(c *oneroll.Character, s string, ac int) string {
+func statRoll(c *oneroll.Character, s *oneroll.Statistic, ac int) string {
+
+	td := oneroll.ReturnDice(s)
+
+	normal := td.Normal
+	hard := td.Hard
+	wiggle := td.Wiggle
+	goFirst := td.GoFirst
+	spray := td.Spray
 
 	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&name=%s&nd=%d&nr=%d&sp=%d&wd=%d",
 		ac,
-		0, // Update roll mechanism to use Modifiers
-		c.Statistics[s].Dice.Hard,
+		goFirst,
+		hard,
 		c.Name,
-		c.Statistics[s].Dice.Normal,
-		0, // Update roll mechanism to use Modifiers
-		0, // Update roll mechanism to use Modifiers
-		c.Statistics[s].Dice.Wiggle,
+		normal,
+		1, // Update roll mechanism to use Modifiers
+		spray,
+		wiggle,
 	)
 	return "/roll/" + rollString
 }
 
 func qualityRoll(c *oneroll.Character, p *oneroll.Power, q *oneroll.Quality, ac int) string {
 
+	for _, m := range q.Modifiers {
+		if m.Name == "Spray" {
+			q.Dice.Spray = m.Level
+		}
+
+		if m.Name == "Go First" {
+			q.Dice.GoFirst = m.Level
+		}
+	}
+
 	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&name=%s&nd=%d&nr=%d&sp=%d&wd=%d",
 		ac,
-		0, // Update roll mechanism to use Modifiers GF
+		q.Dice.GoFirst, // Update roll mechanism to use Modifiers GF
 		p.Dice.Hard,
 		c.Name,
 		p.Dice.Normal,
-		0, // Update roll mechanism to use Modifiers NR
-		0, // Update roll mechanism to use Modifiers SP
+		0,            // Update roll mechanism to use Modifiers NR
+		q.Dice.Spray, // Update roll mechanism to use Modifiers SP
 		p.Dice.Wiggle,
 	)
 	return "/roll/" + rollString

@@ -20,6 +20,7 @@ type HyperStat struct {
 	Qualities  []*Quality
 	Dice       *DiePool
 	Effect     string
+	Apply      bool
 	CostPerDie int
 	Cost       int
 }
@@ -89,22 +90,14 @@ func (hs HyperStat) String() string {
 
 	for _, q := range hs.Qualities {
 		text += fmt.Sprintf("%s", string(q.Type[0]))
-		if q.Level > 1 {
-			text += fmt.Sprintf("+%d", q.Level-1)
+		if q.Level > 0 {
+			text += fmt.Sprintf("+%d", q.Level)
 		}
 	}
 
 	text += fmt.Sprintf(") [%d/die] %dpts\n",
 		hs.CostPerDie,
 		hs.Cost)
-
-	for _, q := range hs.Qualities {
-		text += fmt.Sprintf("%s\n", q)
-	}
-
-	if hs.Effect != "" {
-		text += fmt.Sprintf("Effect: %s", hs.Effect)
-	}
 
 	return text
 }
@@ -121,9 +114,9 @@ func (s *Statistic) CalculateCost() {
 	for _, m := range s.Modifiers {
 		m.CalculateCost(0)
 		if m.RequiresLevel {
-			b += m.CostPerLevel * m.Level
+			mc += m.CostPerLevel * m.Level
 		} else {
-			b += m.CostPerLevel
+			mc += m.CostPerLevel
 		}
 	}
 
@@ -144,7 +137,7 @@ func (s *Statistic) CalculateCost() {
 // CalculateCost generates and udpates the cost for HypeSKills
 func (hs *HyperStat) CalculateCost() {
 
-	b := 4
+	b := 4 // Base Cost
 
 	for _, q := range hs.Qualities {
 

@@ -55,6 +55,15 @@ func (c *Character) String() string {
 			s := c.Statistics[stat]
 			if s.HyperStat != nil {
 				text += fmt.Sprintf("\n%s\n", s.HyperStat)
+
+				for _, q := range s.HyperStat.Qualities {
+					text += fmt.Sprintf("%s\n", q)
+				}
+
+				if s.HyperStat.Effect != "" {
+					text += fmt.Sprintf("Effect: %s", s.HyperStat.Effect)
+				}
+
 				if len(s.Modifiers) > 0 {
 					cost := 0
 					text += fmt.Sprintf("+ added modifiers to main stat: ")
@@ -72,6 +81,15 @@ func (c *Character) String() string {
 		for _, s := range c.Skills {
 			if s.HyperSkill != nil {
 				text += fmt.Sprintf("\n%s\n", s.HyperSkill)
+
+				for _, q := range s.HyperSkill.Qualities {
+					text += fmt.Sprintf("%s\n", q)
+				}
+
+				if s.HyperSkill.Effect != "" {
+					text += fmt.Sprintf("Effect: %s", s.HyperSkill.Effect)
+				}
+
 				if len(s.Modifiers) > 0 {
 					cost := 0
 					text += fmt.Sprintf("+ added modifiers to main skill: ")

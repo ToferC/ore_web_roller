@@ -82,6 +82,12 @@ func main() {
 		http.HandleFunc("/delete_power/", DeletePowerHandler)
 
 		http.HandleFunc("/add_hyperstat/", AddHyperStatHandler)
+		http.HandleFunc("/modify_hyperstat/", ModifyHyperStatHandler)
+		http.HandleFunc("/delete_hyperstat/", DeleteHyperStatHandler)
+
+		http.HandleFunc("/add_hyperskill/", AddHyperSkillHandler)
+		http.HandleFunc("/modify_hyperskill/", ModifyHyperSkillHandler)
+		http.HandleFunc("/delete_hyperskill/", DeleteHyperSkillHandler)
 
 		log.Fatal(http.ListenAndServe(":"+port, nil))
 	}

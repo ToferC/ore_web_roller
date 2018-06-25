@@ -202,7 +202,7 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 				q.Modifiers = append(q.Modifiers, tempM)
 			}
 		}
-	} // i = 0 - 9 // i = 3 -
+	}
 
 	wc := WebChar{
 		Character: c,
@@ -315,7 +315,7 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// DeleteCharacterHandler renders a character in a Web page
+// DeletePowerHandler renders a character in a Web page
 func DeletePowerHandler(w http.ResponseWriter, req *http.Request) {
 
 	s := req.URL.Path[len("/delete_power/"):]

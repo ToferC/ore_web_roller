@@ -20,35 +20,49 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Skills</h3>
         {{ range $stat := $statistics }}
-        <h4>{{ . }} <a href={{ statRoll $character $stat.Name 1 }}>Roll</a>
+        <h4>{{ . }} <a href={{ statRoll $character $stat 1 }}>Roll</a>
         <a class="btn btn-secondary" href="/add_hyperstat/{{ $character.ID }}/{{ $stat.Name }}">Add HyperStat</a></h4>
         {{ range $skill := $skills }}
         {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
         {{ if eq $skill.LinkStat.Name $stat.Name}}
-          <ul>{{ . }} <a href={{ skillRoll $character $skill.Name 1 }}>Roll</a></ul>
+          <ul>{{ . }} <a href={{ skillRoll $character $skill 1 }}>Roll</a>
+            <a class="btn btn-secondary" href="/add_hyperskill/{{ $character.ID }}/{{ $skill.Name }}">Add HyperSkill</a></h4>
+          </ul>
           {{ end }}
         {{ end }}
         {{end}}
       {{ end }}
       </div>
+
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Powers</h3>
-        {{ range .Skills }}
-          {{ if .HyperSkill }}
-            <p>{{ .HyperSkill }}</p>
-            <hr>
-          {{ end }}
-        {{ end }}
 
         {{ range $stat := $statistics }}
           {{ if $stat.HyperStat }}
-            <p>{{ $stat.HyperStat }}</p>
+          <div class="card-body">
+            <strong>{{ $stat.HyperStat }}</strong> <a type="btn" href="/modify_hyperstat/{{ $character.ID }}/{{ $stat.Name }}">Modify</a>
+          <a type="btn btn-danger" href="/delete_hyperstat/{{ $character.ID}}/{{ $stat.Name }}">Delete</a></p>
             {{ range $quality := $stat.HyperStat.Qualities }}
               <p>{{ $quality }}</p>
           {{ end }}
           <i>Effect: {{ $stat.HyperStat.Effect }}</i>
             <hr>
+          </div>
           {{ end }}
+        {{ end }}
+
+        {{ range $skill := .Skills }}
+        {{ if $skill.HyperSkill }}
+        <div class="card-body">
+          <strong>{{ $skill.HyperSkill }}</strong> <a type="btn" href="/modify_hyperskill/{{ $character.ID }}/{{ $skill.Name }}">Modify</a>
+          <a type="btn btn-danger" href="/delete_hyperskill/{{ $character.ID}}/{{ $skill.Name }}">Delete</a></p>
+          {{ range $quality := $skill.HyperSkill.Qualities }}
+          <p>{{ $quality }}</p>
+          {{ end }}
+          <i>Effect: {{ $skill.HyperSkill.Effect }}</i>
+          <hr>
+        </div>
+        {{ end }}
         {{ end }}
 
         {{ range $power := .Powers }}
