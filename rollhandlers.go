@@ -17,76 +17,74 @@ const blankDieString string = "ac+d+hd+wd+gf+sp+nr"
 // RollHandler generates a Web user interface
 func RollHandler(w http.ResponseWriter, req *http.Request) {
 
-	var nd, hd, wd, gf, sp, ac string
+	fullString := req.URL.Path[len("/roll/"):]
+
+	q, err := url.ParseQuery(fullString)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	pk := q.Get("ID")
+
+	var dieString string
+
+	dieString = fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp+%snr",
+		q.Get("ac"),
+		q.Get("nd"),
+		q.Get("hd"),
+		q.Get("wd"),
+		q.Get("gf"),
+		q.Get("sp"),
+		q.Get("nr"),
+	)
+
+	if dieString == blankDieString {
+		dieString = baseDieString
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		id = 9999
+	}
+
+	c, err := database.PKLoadCharacter(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		c = &oneroll.Character{
+			Name: "Player 1",
+		}
+	}
+
+	roll := oneroll.Roll{
+		Actor:  c,
+		Action: "Act",
+	}
+
+	nd, hd, wd, gf, sp, ac, nr, err := roll.ParseString(dieString)
+
+	wv := WebView{
+		Actor:       []*oneroll.Character{c},
+		Rolls:       []oneroll.Roll{},
+		Matches:     []oneroll.Match{},
+		Normal:      []int{nd},
+		Hard:        []int{hd},
+		Wiggle:      []int{wd},
+		GoFirst:     []int{gf},
+		Spray:       []int{sp},
+		Actions:     []int{ac},
+		NumRolls:    []int{nr},
+		ErrorString: []error{err},
+		DieString:   []string{dieString},
+	}
+
+	for x := 0; x < wv.NumRolls[0]; x++ {
+		tempRoll := roll
+		tempRoll.Resolve(dieString)
+		wv.Rolls = append(wv.Rolls, tempRoll)
+		tempRoll = oneroll.Roll{}
+	}
 
 	if req.Method == "GET" {
-
-		fullString := req.URL.Path[len("/roll/"):]
-
-		q, err := url.ParseQuery(fullString)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		pk := q.Get("ID")
-
-		var dieString string
-
-		dieString = fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp+%snr",
-			q.Get("ac"),
-			q.Get("nd"),
-			q.Get("hd"),
-			q.Get("wd"),
-			q.Get("gf"),
-			q.Get("sp"),
-			q.Get("nr"),
-		)
-
-		if dieString == blankDieString {
-			dieString = baseDieString
-		}
-
-		id, err := strconv.Atoi(pk)
-		if err != nil {
-			http.Redirect(w, req, "/", http.StatusSeeOther)
-		}
-
-		c, err := database.PKLoadCharacter(db, int64(id))
-		if err != nil {
-			fmt.Println(err)
-			c = &oneroll.Character{
-				Name: "Player 1",
-			}
-		}
-
-		roll := oneroll.Roll{
-			Actor:  c,
-			Action: "Act",
-		}
-
-		nd, hd, wd, gf, sp, ac, nr, err := roll.ParseString(dieString)
-
-		wv := WebView{
-			Actor:       []*oneroll.Character{c},
-			Rolls:       []oneroll.Roll{},
-			Matches:     []oneroll.Match{},
-			Normal:      []int{nd},
-			Hard:        []int{hd},
-			Wiggle:      []int{wd},
-			GoFirst:     []int{gf},
-			Spray:       []int{sp},
-			Actions:     []int{ac},
-			NumRolls:    []int{nr},
-			ErrorString: []error{err},
-			DieString:   []string{dieString},
-		}
-
-		for x := 0; x < wv.NumRolls[0]; x++ {
-			tempRoll := roll
-			tempRoll.Resolve(dieString)
-			wv.Rolls = append(wv.Rolls, tempRoll)
-			tempRoll = oneroll.Roll{}
-		}
 
 		Render(w, "templates/roller.html", wv)
 
@@ -94,32 +92,28 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 
 	} else {
 
-		pk := req.FormValue("ID")
+		ndQ := req.FormValue("nd")
+		hdQ := req.FormValue("hd")
+		wdQ := req.FormValue("wd")
 
-		nd = req.FormValue("nd")
-		hd = req.FormValue("hd")
-		wd = req.FormValue("wd")
+		gfQ := req.FormValue("gofirst")
+		spQ := req.FormValue("spray")
+		acQ := req.FormValue("actions")
 
-		gf = req.FormValue("gofirst")
-		sp = req.FormValue("spray")
-		ac = req.FormValue("actions")
+		nrQ := req.FormValue("numrolls")
 
-		nr := req.FormValue("numrolls")
+		rollString := fmt.Sprintf("ac=%s&gf=%s&hd=%s&ID=%d&nd=%s&nr=%s&sp=%s&wd=%s",
+			acQ,
+			gfQ, // Update roll mechanism to use Modifiers GF
+			hdQ,
+			c.ID,
+			ndQ,
+			nrQ, // Update roll mechanism to use Modifiers NR
+			spQ, // Update roll mechanism to use Modifiers SP
+			wdQ,
+		)
 
-		q := req.URL.Query()
-
-		q.Add("ID", pk)
-		q.Add("ac", ac)
-		q.Add("nd", nd)
-		q.Add("hd", hd)
-		q.Add("wd", wd)
-		q.Add("gf", gf)
-		q.Add("sp", sp)
-		q.Add("nr", nr)
-
-		qs := q.Encode()
-
-		http.Redirect(w, req, "/roll/"+qs, http.StatusSeeOther)
+		http.Redirect(w, req, "/roll/"+rollString, http.StatusSeeOther)
 	}
 }
 

@@ -1,5 +1,8 @@
 {{define "content"}}
 
+{{ $character1 := index .Actor 0 }}
+{{ $character2 := index .Actor 1 }}
+
       <div class="container">
         <p>Roll dice for two players and determine matches and initiative.</p>
         <div class="row">
@@ -8,7 +11,7 @@
             <div class="col-sm-3 col-md-3 col-lg-3">
             <p>Build Player 1's die pool below and then click "Roll Dice".</p>
           <div class="input-group">
-            <input type="text" class="form-control" aria-describedby="name-addon" name="name" value="{{index .Actor 0}}">
+            <input type="text" class="form-control" aria-describedby="name-addon" name="name" value="{{ $character1.Name }}">
             <span class="input-group-addon" id="name-addon">Name</span>
           </div>
 
@@ -55,7 +58,7 @@
     <div class="col-sm-3 col-md-3 col-lg-3">
       <p>Build Player 2's die pool below and then click "Roll Dice".</p>
       <div class="input-group">
-        <input type="text" class="form-control" aria-describedby="name-addon2" name="name2" value="{{index .Actor 1}}">
+        <input type="text" class="form-control" aria-describedby="name-addon2" name="name2" value="{{ $character2.Name }}">
         <span class="input-group-addon" id="name-addon2">Name</span>
       </div>
 
