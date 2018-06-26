@@ -18,10 +18,17 @@
           <input type="text" class="form-control" aria-describedby="nd-addon" name="nd" value="{{ index .Normal 0}}">
           <span class="input-group-addon" id="nd-addon">Normal Dice</span>
         </div>
+        {{ if eq $character.Setting "RE" }}
+        <div class="input-group">
+          <input type="text" class="form-control" aria-describedby="ed-addon" name="ed" value="{{ index .Expert 0}}">
+          <span class="input-group-addon" id="ed-addon">Expert Dice Setting</span>
+        </div>
+        {{ else }}
         <div class="input-group">
           <input type="text" class="form-control" aria-describedby="hd-addon" name="hd" value="{{ index .Hard 0}}">
           <span class="input-group-addon" id="hd-addon">Hard Dice</span>
         </div>
+        {{ end }}
         <div class="input-group">
           <input type="text" class="form-control" aria-describedby="wd-addon" name="wd" value="{{ index .Wiggle 0}}">
           <span class="input-group-addon" id="wd-addon">Wiggle Dice</span>

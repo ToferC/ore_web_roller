@@ -90,6 +90,7 @@ func main() {
 		http.HandleFunc("/delete_hyperskill/", DeleteHyperSkillHandler)
 
 		http.HandleFunc("/add_skill/", AddSkillHandler)
+		http.HandleFunc("/add_advantages/", ModifyAdvantageHandler)
 
 		log.Fatal(http.ListenAndServe(":"+port, nil))
 	}

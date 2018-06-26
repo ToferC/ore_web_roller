@@ -179,6 +179,14 @@ func (c *Character) CalculateCost() {
 		cost += power.Cost
 	}
 
+	for _, advantage := range c.Advantages {
+		if advantage.RequiresLevel {
+			cost += advantage.Cost * advantage.Level
+		} else {
+			cost += advantage.Cost
+		}
+	}
+
 	// Update BaseWill automaticallly if Character isn't in play
 
 	calcBaseWill := 0

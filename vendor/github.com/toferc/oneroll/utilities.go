@@ -86,7 +86,14 @@ func SkillRated(s *Skill) bool {
 
 // SumDice sums a DiePool - used in determining BaseWill
 func SumDice(d *DiePool) int {
-	r := d.Normal + d.Hard + d.Wiggle
+
+	var r int
+
+	if d.Expert > 0 {
+		r = d.Normal + d.Hard + d.Wiggle + 1
+	} else {
+		r = d.Normal + d.Hard + d.Wiggle
+	}
 	return r
 }
 

@@ -17,6 +17,7 @@ type WebView struct {
 	Normal      []int
 	Hard        []int
 	Wiggle      []int
+	Expert      []int
 	GoFirst     []int
 	Spray       []int
 	Actions     []int
@@ -53,11 +54,12 @@ func skillRoll(c *oneroll.Character, sk *oneroll.Skill, st *oneroll.Statistic, a
 
 	normal := stat.Normal + skill.Normal
 	hard := stat.Hard + skill.Hard
+	expert := skill.Expert
 	wiggle := stat.Wiggle + skill.Wiggle
 	goFirst := oneroll.Max(stat.GoFirst, skill.GoFirst)
 	spray := oneroll.Max(stat.Spray, skill.Spray)
 
-	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&ID=%d&nd=%d&nr=%d&sp=%d&wd=%d",
+	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&ID=%d&nd=%d&nr=%d&sp=%d&wd=%d&ed=%d",
 		ac,
 		goFirst,
 		hard,
@@ -66,6 +68,7 @@ func skillRoll(c *oneroll.Character, sk *oneroll.Skill, st *oneroll.Statistic, a
 		1, // Update roll mechanism to use Modifiers
 		spray,
 		wiggle,
+		expert,
 	)
 	return "/roll/" + rollString
 }

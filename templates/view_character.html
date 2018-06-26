@@ -9,7 +9,6 @@
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
             <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
-            <h4>Image</h4>
             <hr>
 
             {{ if $character.Archetype }}
@@ -76,7 +75,17 @@
       </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
+        {{ if eq $character.Setting "RE" }}
+        <h3>Advantages</h3>
+        <ul>
+        {{ range $advantage := $character.Advantages }}
+        <li><strong>{{ $advantage }}</strong></li>
+        {{ end }}
+      </ul>
+      <hr>
+        {{ else }}
         <h3>Powers</h3>
+        {{ end }}
 
         {{ range $power := .Powers }}
         <div class="card-body">
@@ -119,8 +128,11 @@
         {{ end }}
         {{ end }}
 
-        <hr>
+        {{ if eq $character.Setting "RE" }}
+        <a class="btn btn-primary" href="/add_advantages/{{ $character.ID }}">Add Advantages</a></p>
+        {{ else }}
         <a class="btn btn-primary" href="/add_power/{{ $character.ID }}">Add Power</a></p>
+        {{ end }}
       </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">

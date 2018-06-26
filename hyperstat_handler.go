@@ -206,6 +206,7 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 					stat.Modifiers = append(stat.Modifiers, m)
 				}
 			}
+			hs.Effect += "\n++Added modifiers to base skill"
 		}
 
 		fmt.Println(c)

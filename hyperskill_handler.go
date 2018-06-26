@@ -110,6 +110,7 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 
 		nd, _ := strconv.Atoi(req.FormValue("Normal"))
 		hd, _ := strconv.Atoi(req.FormValue("Hard"))
+		ed, _ := strconv.Atoi(req.FormValue("Expert"))
 		wd, _ := strconv.Atoi(req.FormValue("Wiggle"))
 
 		skill.HyperSkill = new(oneroll.HyperSkill)
@@ -122,6 +123,7 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 			Normal: nd,
 			Hard:   hd,
 			Wiggle: wd,
+			Expert: ed,
 		}
 
 		hs.Qualities = []*oneroll.Quality{}
@@ -193,6 +195,7 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 					skill.Modifiers = append(skill.Modifiers, m)
 				}
 			}
+			hs.Effect += "\n++Added modifiers to base skill"
 		}
 
 		fmt.Println(c)
@@ -288,6 +291,7 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 
 		nd, _ := strconv.Atoi(req.FormValue("Normal"))
 		hd, _ := strconv.Atoi(req.FormValue("Hard"))
+		ed, _ := strconv.Atoi(req.FormValue("Expert"))
 		wd, _ := strconv.Atoi(req.FormValue("Wiggle"))
 
 		skill.HyperSkill = new(oneroll.HyperSkill)
@@ -299,6 +303,7 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		hs.Dice = &oneroll.DiePool{
 			Normal: nd,
 			Hard:   hd,
+			Expert: ed,
 			Wiggle: wd,
 		}
 
@@ -371,6 +376,7 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 					skill.Modifiers = append(skill.Modifiers, m)
 				}
 			}
+			hs.Effect += "\n++Added modifiers to base skill"
 		}
 
 		fmt.Println(c)
