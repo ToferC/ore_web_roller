@@ -28,6 +28,8 @@ type DiePool struct {
 	Normal  int
 	Hard    int
 	Wiggle  int
+	Expert  bool
+	Master  bool
 	Spray   int
 	GoFirst int
 }

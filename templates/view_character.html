@@ -39,13 +39,16 @@
             {{ end }}
 
             <hr>
-            {{ end }}
+            {{ end }} <!-- End Archetype IF -->
 
             <h4>Description</h4>
             {{ $character.Description }}
+            <hr>
 
+            {{ if ne $character.Setting "RE" }}
               <h4>Base Will: {{ .BaseWill }}</h4>
               <h4>Willpower: {{ .Willpower }}</h4>
+            {{ end }}
               <a class="btn btn-primary" href="/modify/{{ .ID }}">Modify</a>
               <a class="btn btn-danger" href="/delete/{{ .ID }}">Delete</a></h4>
           </div>

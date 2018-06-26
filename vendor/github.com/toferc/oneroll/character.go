@@ -22,6 +22,8 @@ type Character struct {
 	Permissions  map[string]*Permission
 	Powers       map[string]*Power
 	HitLocations map[string]*Location
+	Passions     []*Passion
+	Advantages   []*Advantage
 	LocationMap  []string
 	PointCost    int
 	InPlay       bool
@@ -35,6 +37,13 @@ type Update struct {
 	ChangeFrom string
 	ChangeTo   string
 	Cost       int
+}
+
+// Passion represents loyalties or drives
+type Passion struct {
+	Type        string
+	Description string
+	Value       int
 }
 
 // Display character
@@ -136,9 +145,11 @@ func (c *Character) CalculateCost() {
 
 	var cost int
 
-	if len(c.Archetype.Sources) > 0 {
-		UpdateCost(c.Archetype)
-		cost += c.Archetype.Cost
+	if c.Setting != "RE" {
+		if len(c.Archetype.Sources) > 0 {
+			UpdateCost(c.Archetype)
+			cost += c.Archetype.Cost
+		}
 	}
 
 	for _, stat := range c.Statistics {
@@ -172,22 +183,23 @@ func (c *Character) CalculateCost() {
 
 	calcBaseWill := 0
 
-	for _, stat := range c.Statistics {
-		if stat.EffectsWill {
-			calcBaseWill += SumDice(stat.Dice)
-			if stat.HyperStat != nil {
-				calcBaseWill += SumDice(stat.HyperStat.Dice)
+	if c.Setting != "RE" {
+		for _, stat := range c.Statistics {
+			if stat.EffectsWill {
+				calcBaseWill += SumDice(stat.Dice)
+				if stat.HyperStat != nil {
+					calcBaseWill += SumDice(stat.HyperStat.Dice)
+				}
 			}
 		}
-	}
 
-	if !c.InPlay {
-		c.BaseWill = calcBaseWill
-		c.Willpower = calcBaseWill
-	} else {
-		cost += 3*c.BaseWill - calcBaseWill
-		cost += c.Willpower - c.BaseWill
+		if !c.InPlay {
+			c.BaseWill = calcBaseWill
+			c.Willpower = calcBaseWill
+		} else {
+			cost += 3*c.BaseWill - calcBaseWill
+			cost += c.Willpower - c.BaseWill
+		}
 	}
-
 	c.PointCost = cost
 }

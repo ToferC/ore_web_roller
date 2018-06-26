@@ -35,6 +35,7 @@ type WebChar struct {
 	Sources     map[string]*oneroll.Source
 	Permissions map[string]*oneroll.Permission
 	Intrinsics  map[string]*oneroll.Intrinsic
+	Advantages  map[string]*oneroll.Advantage
 	Capacities  map[string]float32
 	Counter     []int
 }

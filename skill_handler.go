@@ -84,6 +84,7 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		if req.FormValue("ReqSpec") == "Yes" {
+			skill.ReqSpec = true
 			skill.Specialization = req.FormValue("Specialization")
 		}
 
@@ -99,6 +100,6 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+c.Name, http.StatusSeeOther)
+		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
 	}
 }

@@ -21,9 +21,10 @@
 
               <div class="input-group">
                 <span class="input-group-addon" id="setting-addon">Setting</span>
-                <input type="text" class="form-control" aria-describedby="setting-addon" name="Setting" value ="{{ $character.Setting }}">
+                <input type="text" class="form-control" aria-describedby="setting-addon" name="Setting" value ="{{ $character.Setting }}" readonly>
               </div>
 
+              {{ if $character.Archetype }}
               <div class="input-group">
                 <span class="input-group-addon" id="archetype-addon">Archetype</span>
                 <input type="text" class="form-control" aria-describedby="archetype-addon" name="Archetype" value ="{{ $character.Archetype.Type }}">
@@ -75,6 +76,7 @@
               </div>
               <hr>
               {{ end }} <!-- End Intrinsics Loop -->
+              {{ end }} <!-- End Archetype IF -->
 
               <div class="input-group">
                 <label for="Description">Description</label>

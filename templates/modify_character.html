@@ -21,6 +21,7 @@
               <h4>
               <h4>Setting: {{ $character.Setting }}</h4>
               <hr>
+              {{ if $character.Archetype }}
               <div class="input-group">
                 <span class="input-group-addon" id="archetype-addon">Archetype</span>
                 <input type="text" class="form-control" aria-describedby="archetype-addon" name="Archetype" value ="{{ $character.Archetype.Type }}">
@@ -75,6 +76,7 @@
               <hr>
               {{ end }} <!-- end IF -->
               {{ end }} <!-- End Intrinsics Loop -->
+              {{ end }} <!-- End Archetype IF -->
               <hr>
             </div>
 

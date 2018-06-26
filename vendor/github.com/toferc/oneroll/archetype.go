@@ -272,9 +272,13 @@ var Intrinsics = map[string]*Intrinsic{
 		Cost:        -8,
 	},
 	"Vulnerable": &Intrinsic{
-		Name:        "Vulnerable",
-		Description: "",
-		Cost:        8,
+		Name:          "Vulnerable",
+		RequiresInfo:  true,
+		Info:          "Substance frequency x threat",
+		RequiresLevel: true,
+		Level:         8,
+		Description:   "Default to Frequent & Kills",
+		Cost:          -1,
 	},
 	"Willpower Contest": &Intrinsic{
 		Name:        "Willpower Contest",
