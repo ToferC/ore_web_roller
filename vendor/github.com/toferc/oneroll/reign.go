@@ -371,8 +371,6 @@ func NewReignCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
-			ReqSpec:        true,
-			Specialization: "Alchemy",
 		},
 		"Languages": &Skill{
 			Name: "Languages",
@@ -444,8 +442,6 @@ func NewReignCharacter(name string) *Character {
 			Dice: &DiePool{
 				Normal: 0,
 			},
-			ReqSpec:        true,
-			Specialization: "Standup",
 		},
 		"Graces": &Skill{
 			Name: "Graces",
