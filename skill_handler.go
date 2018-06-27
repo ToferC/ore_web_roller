@@ -67,13 +67,13 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 
 		sQuality := req.FormValue("Quality")
 
-		skill.Quality = &oneroll.Quality{
-			Type: sQuality,
-		}
-
 		nd, _ := strconv.Atoi(req.FormValue("Normal"))
 
 		skill = new(oneroll.Skill)
+
+		skill.Quality = &oneroll.Quality{
+			Type: sQuality,
+		}
 
 		skill.Name = sName
 

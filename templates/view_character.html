@@ -95,8 +95,9 @@
           {{ range $quality := $power.Qualities }}
           <p>{{ $quality }} <a href={{ qualityRoll $character $power $quality 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
           {{ end }}
+          {{ if $power.Effect }}
           <i>Effect: {{ $power.Effect }}</i>
-          <hr>
+          {{end}}<hr>
         </div>
         {{ end }}
 
@@ -108,8 +109,9 @@
             {{ range $quality := $stat.HyperStat.Qualities }}
               <p>{{ $quality }}</p>
           {{ end }}
+          {{ if $stat.HyperStat.Effect }}
           <i>Effect: {{ $stat.HyperStat.Effect }}</i>
-            <hr>
+            {{end}}<hr>
           </div>
           {{ end }}
         {{ end }}
@@ -122,8 +124,9 @@
           {{ range $quality := $skill.HyperSkill.Qualities }}
           <p>{{ $quality }}</p>
           {{ end }}
+          {{ if $skill.HyperSkill.Effect }}
           <i>Effect: {{ $skill.HyperSkill.Effect }}</i>
-          <hr>
+          {{end}}<hr>
         </div>
         {{ end }}
         {{ end }}
