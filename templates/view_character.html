@@ -1,6 +1,8 @@
 {{define "content"}}
 
-{{ $character := . }}
+{{ $character := .Character }}
+{{ $shock := .Shock }}
+{{ $kill := .Kill }}
 {{ $statistics := $character.Statistics }}
 {{ $skills := $character.Skills }}
 
@@ -45,11 +47,11 @@
             <hr>
 
             {{ if ne $character.Setting "RE" }}
-              <h4>Base Will: {{ .BaseWill }}</h4>
-              <h4>Willpower: {{ .Willpower }}</h4>
+              <h4>Base Will: {{ $character.BaseWill }}</h4>
+              <h4>Willpower: {{ $character.Willpower }}</h4>
             {{ end }}
-              <a class="btn btn-primary" href="/modify/{{ .ID }}">Modify</a>
-              <a class="btn btn-danger" href="/delete/{{ .ID }}">Delete</a></h4>
+              <a class="btn btn-primary" href="/modify/{{ $character.ID }}">Modify</a>
+              <a class="btn btn-danger" href="/delete/{{ $character.ID }}">Delete</a></h4>
           </div>
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Skills</h3>
@@ -87,7 +89,7 @@
         <h3>Powers</h3>
         {{ end }}
 
-        {{ range $power := .Powers }}
+        {{ range $power := $character.Powers }}
         <div class="card-body">
           <strong>{{ $power }}</strong>
           <a href="/modify_power/{{ $character.ID}}/{{ $power.Slug}}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
@@ -116,7 +118,7 @@
           {{ end }}
         {{ end }}
 
-        {{ range $skill := .Skills }}
+        {{ range $skill := $character.Skills }}
         {{ if $skill.HyperSkill }}
         <div class="card-body">
           <strong>{{ $skill.HyperSkill }}</strong> <a href="/modify_hyperskill/{{ $character.ID }}/{{ $skill.Name }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
@@ -140,8 +142,8 @@
 
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Hit Locations</h3>
-          {{ range .HitLocations }}
-            <p>{{ . }}<input type="checkbox" name="checkbox" value="" id="checkbox"></p>
+          {{ range $k, $v := $shock }}
+            <p>{{ $k }}: {{ range $v }} <input type="checkbox" name="checkbox" value="" id="checkbox">{{ end }}
           {{ end }}
       </div>
     </div>

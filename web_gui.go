@@ -21,9 +21,12 @@ type WebView struct {
 	GoFirst     []int
 	Spray       []int
 	Actions     []int
-	NumRolls    []int
 	DieString   []string
+	NumRolls    []int
 	ErrorString []error
+}
+
+type WebLoc struct {
 }
 
 // WebChar is a framework to send objects & data to a Web view
@@ -32,6 +35,8 @@ type WebChar struct {
 	Power       *oneroll.Power
 	Statistic   *oneroll.Statistic
 	Skill       *oneroll.Skill
+	Shock       map[string][]int
+	Kill        map[string][]int
 	Modifiers   map[string]*oneroll.Modifier
 	Sources     map[string]*oneroll.Source
 	Permissions map[string]*oneroll.Permission

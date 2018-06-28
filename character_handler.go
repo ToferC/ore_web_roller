@@ -42,7 +42,25 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			fmt.Println(err)
 		}
 
-		Render(w, "templates/view_character.html", c)
+		// Generate hit boxes for Locations
+
+		webLocShock := map[string][]int{}
+		webLocKill := map[string][]int{}
+
+		for k, v := range c.HitLocations {
+			for i := 0; i < v.Boxes; i++ {
+				webLocShock[k] = append(webLocShock[k], 0)
+				webLocKill[k] = append(webLocShock[k], 0)
+			}
+		}
+
+		wc := WebChar{
+			Character: c,
+			Shock:     webLocShock,
+			Kill:      webLocKill,
+		}
+
+		Render(w, "templates/view_character.html", wc)
 
 	} else {
 
