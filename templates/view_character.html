@@ -141,9 +141,39 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Hit Locations</h3>
           {{ range .HitLocations }}
-            <p>{{ . }}</p>
+            <p>{{ . }}<input type="checkbox" name="checkbox" value="" id="checkbox"></p>
           {{ end }}
       </div>
     </div>
       </div>
+
+      <script type="text/javascript">
+          var $check = $("input[type=checkbox]"),
+      el;
+
+    $check.data("checked", 0).click(function(e) {
+      el = $(this);
+
+      switch (el.data("checked")) {
+        // unchecked, going indeterminate
+        case 0:
+          el.data("checked", 1);
+          el.prop("indeterminate", true);
+          break;
+
+        // indeterminate, going checked
+        case 1:
+          el.data("checked", 2);
+          el.prop("indeterminate", false);
+          el.prop("checked", true);
+          break;
+
+        // checked, going unchecked
+        default:
+          el.data("checked", 0);
+          el.prop("indeterminate", false);
+          el.prop("checked", false);
+      }
+    });
+      </script>
 {{end}}

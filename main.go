@@ -14,8 +14,8 @@ import (
 var db *pg.DB
 
 func init() {
-	os.Setenv("DBUser", "chris")
-	os.Setenv("DBPass", "12345")
+	os.Setenv("DBUser", "postgres")
+	os.Setenv("DBPass", "devpass")
 	os.Setenv("DBName", "ore_engine")
 
 }
