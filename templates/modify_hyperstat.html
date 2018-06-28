@@ -54,12 +54,11 @@
 
           <div class="col-sm-9 col-md-9 col-lg-9">
                 {{ range $i, $q := $qualities }}
-                {{ if lt $i 4}}
                 <div class="row">
                   <div class="col-sm-4 col-md-4 col-lg-4">
                     <h3>{{ $q.Type }} Quality</h3>
                 <div class="input-group">
-                  {{ if eq $q.Type ""}}
+                  {{ if gt $i 2 }}
                   <label for="Q{{$q}}-Type">Quality {{add $i 1}} Type</label>
                   <select type="text" class="form-control" id="Q{{add $i 1}}-Type" name="Q{{add $i 1}}-Type">
                     <option></option>
@@ -169,7 +168,6 @@
 
               </div> <!-- END inner ROW -->
               <hr>
-              {{ end }} <!-- end if -->
               {{ end }} <!-- End Outer Quality Loop -->
             </form>
             </div> <!-- END outer column 9 -->

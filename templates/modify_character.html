@@ -56,7 +56,7 @@
               <hr>
 
               <h4>Intrinsics</h4>
-   1            {{ range $i, $v := $character.Archetype.Intrinsics }} <!-- intrinsics loop -->
+              {{ range $i, $v := $character.Archetype.Intrinsics }} <!-- intrinsics loop -->
               {{ if lt $i 5 }}
               <label for="Intrinsic-{{$i}}">Intrinsic {{add $i 1}}</label>
               <select type="text" class="form-control" id="Intrinsic-{{add $i 1}}" name="Intrinsic-{{add $i 1}}-Name">

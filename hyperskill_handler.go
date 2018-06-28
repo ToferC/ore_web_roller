@@ -61,6 +61,12 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 			tempQ := oneroll.NewQuality("")
 			hs.Qualities = append(hs.Qualities, tempQ)
 		}
+	} else {
+		// Always create at least 2 Qualities
+		for i := 0; i < 2; i++ {
+			tempQ := oneroll.NewQuality("")
+			hs.Qualities = append(hs.Qualities, tempQ)
+		}
 	}
 
 	// Assign additional empty Capacities to populate form

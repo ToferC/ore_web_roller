@@ -42,7 +42,6 @@
 
           <div class="col-sm-9 col-md-9 col-lg-9">
                 {{ range $i, $q := $qualities }}
-                {{ if lt $i 4}}
                 <div class="row">
                   <div class="col-sm-4 col-md-4 col-lg-4">
                 <div class="input-group">
@@ -64,7 +63,6 @@
                 </div>
                 <hr>
                 {{ range $c, $v := $q.Capacities }}
-                {{ if lt $c 3}}
                 <label for="Q{{add $i 1}}-C{{add $c 1}}-Type">Capacity {{add $c 1}}</label>
                 <select type="text" class="form-control" id="Q{{add $i 1}}-C{{add $c 1}}-Type" name="Q{{add $i 1}}-C{{add $c 1}}-Type">
                   <option></option>
@@ -73,7 +71,6 @@
                   <option {{if eq $v.Type "Speed"}} selected {{ end }} >Speed</option>
                   <option {{if eq $v.Type "Self"}} selected {{ end }} >Self</option>
                 </select>
-                {{ end }} <!-- End if -->
                 {{ end }} <!-- End Capacities Inner Loop -->
 
               </div> <!-- End Qualities Column -->
@@ -148,7 +145,6 @@
 
               </div> <!-- END inner ROW -->
               <hr>
-              {{ end }} <!-- end if -->
               {{ end }} <!-- End Outer Quality Loop -->
             </form>
             </div> <!-- END outer column 9 -->

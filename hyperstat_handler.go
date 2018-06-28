@@ -206,7 +206,7 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 					stat.Modifiers = append(stat.Modifiers, m)
 				}
 			}
-			hs.Effect += "\n++Added modifiers to base skill"
+			hs.Effect += "\n++Added modifiers to base stat"
 		}
 
 		fmt.Println(c)
@@ -250,6 +250,12 @@ func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 	// Assign additional empty Qualities to populate form
 	if len(hs.Qualities) < 4 {
 		for i := len(hs.Qualities); i < 4; i++ {
+			tempQ := oneroll.NewQuality("")
+			hs.Qualities = append(hs.Qualities, tempQ)
+		}
+	} else {
+		// Always create at least 2 Qualities
+		for i := 0; i < 2; i++ {
 			tempQ := oneroll.NewQuality("")
 			hs.Qualities = append(hs.Qualities, tempQ)
 		}
@@ -385,6 +391,7 @@ func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 					stat.Modifiers = append(stat.Modifiers, m)
 				}
 			}
+			hs.Effect += "\n++Added modifiers to base stat"
 		}
 
 		fmt.Println(c)
