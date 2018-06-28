@@ -59,14 +59,6 @@ func (hs HyperSkill) String() string {
 		hs.CostPerDie,
 		hs.Cost)
 
-	for _, q := range hs.Qualities {
-		text += fmt.Sprintf("\n%s", q)
-	}
-
-	if hs.Effect != "" {
-		text += fmt.Sprintf("\nEffect: %s", hs.Effect)
-	}
-
 	return text
 }
 

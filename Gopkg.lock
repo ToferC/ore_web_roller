@@ -17,8 +17,8 @@
     "orm",
     "types"
   ]
-  revision = "1ddcce74abb167edaee8a5a3a467eff45a2886bf"
-  version = "v6.13.6"
+  revision = "c50b16b9e4d66e48a92a41f3425a60772fbc1ee9"
+  version = "v6.14.0"
 
 [[projects]]
   branch = "master"
@@ -30,7 +30,7 @@
   branch = "master"
   name = "github.com/toferc/oneroll"
   packages = ["."]
-  revision = "d9f4c6fbb31938ee350efa404b20036ebe97dfeb"
+  revision = "8b8c4335d2a7645073e9862f32233eb131637b7b"
 
 [solve-meta]
   analyzer-name = "dep"
