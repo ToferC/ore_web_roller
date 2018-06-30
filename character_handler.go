@@ -71,7 +71,8 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 				}
 			}
 		}
-		err = database.SaveCharacter(db, c)
+
+		err = database.UpdateCharacter(db, c)
 		if err != nil {
 			panic(err)
 		} else {
