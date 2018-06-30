@@ -22,50 +22,65 @@ func IndexHandler(w http.ResponseWriter, req *http.Request) {
 // CharacterHandler renders a character in a Web page
 func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
+	pk := req.URL.Path[len("/view/"):]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	c, err := database.PKLoadCharacter(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	wc := WebChar{
+		Character: c,
+	}
+
 	if req.Method == "GET" {
 
 		// Render page
-
-		pk := req.URL.Path[len("/view/"):]
-
-		if len(pk) == 0 {
-			http.Redirect(w, req, "/", http.StatusSeeOther)
-		}
-
-		id, err := strconv.Atoi(pk)
-		if err != nil {
-			http.Redirect(w, req, "/", http.StatusSeeOther)
-		}
-
-		c, err := database.PKLoadCharacter(db, int64(id))
-		if err != nil {
-			fmt.Println(err)
-		}
-
-		// Generate hit boxes for Locations
-
-		webLocShock := map[string][]int{}
-		webLocKill := map[string][]int{}
-
-		for k, v := range c.HitLocations {
-			for i := 0; i < v.Boxes; i++ {
-				webLocShock[k] = append(webLocShock[k], 0)
-				webLocKill[k] = append(webLocShock[k], 0)
-			}
-		}
-
-		wc := WebChar{
-			Character: c,
-			Shock:     webLocShock,
-			Kill:      webLocKill,
-		}
-
 		Render(w, "templates/view_character.html", wc)
 
 	} else {
 
 		// Parse Form and redirect
+		err := req.ParseForm()
+		if err != nil {
+			panic(err)
+		}
 
+		fmt.Println(req.Form)
+
+		for k, v := range c.HitLocations {
+			for i := range v.Shock {
+				v.Shock[i] = false
+				if req.FormValue(fmt.Sprintf("%s-Shock-%d", k, i)) != "" {
+					v.Shock[i] = true
+				}
+			}
+			for i := range v.Kill {
+				v.Kill[i] = false
+				if req.FormValue(fmt.Sprintf("%s-Kill-%d", k, i)) != "" {
+					v.Kill[i] = true
+				}
+			}
+		}
+		err = database.SaveCharacter(db, c)
+		if err != nil {
+			panic(err)
+		} else {
+			fmt.Println("Saved")
+		}
+
+		fmt.Println(c)
+		// Render page
+		Render(w, "templates/view_character.html", wc)
 	}
 
 }

@@ -74,8 +74,8 @@ func NewSRCharacter(name string) *Character {
 			Name:     "Head",
 			HitLoc:   []int{10},
 			Boxes:    4,
-			Stun:     0,
-			Kill:     0,
+			Shock:    []bool{},
+			Kill:     []bool{},
 			LAR:      0,
 			HAR:      0,
 			Disabled: false,
@@ -84,8 +84,8 @@ func NewSRCharacter(name string) *Character {
 			Name:     "Body",
 			HitLoc:   []int{7, 8, 9},
 			Boxes:    10,
-			Stun:     0,
-			Kill:     0,
+			Shock:    []bool{},
+			Kill:     []bool{},
 			LAR:      0,
 			HAR:      0,
 			Disabled: false,
@@ -94,8 +94,8 @@ func NewSRCharacter(name string) *Character {
 			Name:     "Left Arm",
 			HitLoc:   []int{5, 6},
 			Boxes:    6,
-			Stun:     0,
-			Kill:     0,
+			Shock:    []bool{},
+			Kill:     []bool{},
 			LAR:      0,
 			HAR:      0,
 			Disabled: false,
@@ -104,8 +104,8 @@ func NewSRCharacter(name string) *Character {
 			Name:     "Right Arm",
 			HitLoc:   []int{3, 4},
 			Boxes:    6,
-			Stun:     0,
-			Kill:     0,
+			Shock:    []bool{},
+			Kill:     []bool{},
 			LAR:      0,
 			HAR:      0,
 			Disabled: false,
@@ -114,8 +114,8 @@ func NewSRCharacter(name string) *Character {
 			Name:     "Left Leg",
 			HitLoc:   []int{2},
 			Boxes:    6,
-			Stun:     0,
-			Kill:     0,
+			Shock:    []bool{},
+			Kill:     []bool{},
 			LAR:      0,
 			HAR:      0,
 			Disabled: false,
@@ -124,12 +124,16 @@ func NewSRCharacter(name string) *Character {
 			Name:     "Right Leg",
 			HitLoc:   []int{1},
 			Boxes:    6,
-			Stun:     0,
-			Kill:     0,
+			Shock:    []bool{},
+			Kill:     []bool{},
 			LAR:      0,
 			HAR:      0,
 			Disabled: false,
 		},
+	}
+
+	for _, v := range c.HitLocations {
+		v.FillWounds()
 	}
 
 	for _, stat := range c.Statistics {
@@ -146,7 +150,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Athletics",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: body,
 			Dice: &DiePool{
@@ -159,7 +163,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Block",
 			Quality: &Quality{
 				Type:  "Defend",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: body,
 			Dice: &DiePool{
@@ -172,7 +176,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Brawling",
 			Quality: &Quality{
 				Type:  "Attack",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: body,
 			Dice: &DiePool{
@@ -185,7 +189,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Endurance",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: body,
 			Dice: &DiePool{
@@ -199,7 +203,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Acrobatics",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: coordination,
 			Dice: &DiePool{
@@ -212,7 +216,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Close Combat",
 			Quality: &Quality{
 				Type:  "Attack",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: coordination,
 			Dice: &DiePool{
@@ -224,7 +228,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Dodge",
 			Quality: &Quality{
 				Type:  "Defend",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: coordination,
 			Dice: &DiePool{
@@ -236,7 +240,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Escape Artist",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: coordination,
 			Dice: &DiePool{
@@ -248,7 +252,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Pilot",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: coordination,
 			Dice: &DiePool{
@@ -262,7 +266,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Small Arms",
 			Quality: &Quality{
 				Type:  "Attack",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: coordination,
 			Dice: &DiePool{
@@ -274,7 +278,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Stealth",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: coordination,
 			Dice: &DiePool{
@@ -286,7 +290,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Heavy Weapons",
 			Quality: &Quality{
 				Type:  "Attack",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: coordination,
 			Dice: &DiePool{
@@ -298,7 +302,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Vehicle Weapons",
 			Quality: &Quality{
 				Type:  "Attack",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: coordination,
 			Dice: &DiePool{
@@ -311,7 +315,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Artisan",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: sense,
 			Dice: &DiePool{
@@ -322,7 +326,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Empathy",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: sense,
 			Dice: &DiePool{
@@ -333,7 +337,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Perception",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: sense,
 			Dice: &DiePool{
@@ -344,7 +348,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Scrutiny",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: sense,
 			Dice: &DiePool{
@@ -355,7 +359,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Tracking",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: sense,
 			Dice: &DiePool{
@@ -366,7 +370,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Disguise",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: sense,
 			Dice: &DiePool{
@@ -378,7 +382,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Computer",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -389,7 +393,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Armorer",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -400,7 +404,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Cybertechnology",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -411,7 +415,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "First Aid",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -422,7 +426,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Knowledge",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -435,7 +439,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Engineering",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -446,7 +450,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Demolitions",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -457,7 +461,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Electronic Warfare",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -467,7 +471,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Hacking",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -478,7 +482,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Languages",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -491,7 +495,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Medicine",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -502,7 +506,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Navigation",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -513,7 +517,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Data Search",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -524,7 +528,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Security Systems",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -535,7 +539,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Software",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -546,7 +550,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Streetwise",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -557,7 +561,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Tactics",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: mind,
 			Dice: &DiePool{
@@ -569,7 +573,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Con",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: charm,
 			Dice: &DiePool{
@@ -580,7 +584,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Ettiquette",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: charm,
 			Dice: &DiePool{
@@ -591,7 +595,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Lie",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: charm,
 			Dice: &DiePool{
@@ -602,7 +606,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Performance",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: charm,
 			Dice: &DiePool{
@@ -615,7 +619,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Persuasion",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: charm,
 			Dice: &DiePool{
@@ -627,7 +631,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Arcane",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: command,
 			Dice: &DiePool{
@@ -638,7 +642,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Interrogation",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: command,
 			Dice: &DiePool{
@@ -649,7 +653,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Intimidation",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: command,
 			Dice: &DiePool{
@@ -660,7 +664,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Leadership",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: command,
 			Dice: &DiePool{
@@ -671,7 +675,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Stability",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: command,
 			Dice: &DiePool{
@@ -682,7 +686,7 @@ func NewSRCharacter(name string) *Character {
 			Name: "Survival",
 			Quality: &Quality{
 				Type:  "Useful",
-				Level: 1,
+				Level: 0,
 			},
 			LinkStat: command,
 			Dice: &DiePool{

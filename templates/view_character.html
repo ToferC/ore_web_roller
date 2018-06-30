@@ -142,40 +142,17 @@
 
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Hit Locations</h3>
-          {{ range $k, $v := $shock }}
-            <p>{{ $k }}: {{ range $v }} <input type="checkbox" name="checkbox" value="" id="checkbox">{{ end }}
+        <form action="" method="POST">
+        {{ range $loc := $character.HitLocations }}
+            <p>{{ $loc }}
+              <br>Shock: {{ range $i, $v := .Shock }}  <input type="checkbox" name="{{ $loc.Name }}-Shock-{{ $i }}" value="true" id="checkbox" {{if eq $v true }} checked {{ end }}>{{ end }}
+              <br>Kill: {{ range $j, $q := .Kill }}  <input type="checkbox" name="{{ $loc.Name }}-Kill-{{ $j }}" value="true" id="checkbox" {{if eq $q true }} checked {{ end }}>{{ end }}
           {{ end }}
+          <br>
+        <button class="btn btn-primary" type="submit" value="Save Wound State">Save Wound State</button>
+      </form>
       </div>
     </div>
       </div>
 
-      <script type="text/javascript">
-          var $check = $("input[type=checkbox]"),
-      el;
-
-    $check.data("checked", 0).click(function(e) {
-      el = $(this);
-
-      switch (el.data("checked")) {
-        // unchecked, going indeterminate
-        case 0:
-          el.data("checked", 1);
-          el.prop("indeterminate", true);
-          break;
-
-        // indeterminate, going checked
-        case 1:
-          el.data("checked", 2);
-          el.prop("indeterminate", false);
-          el.prop("checked", true);
-          break;
-
-        // checked, going unchecked
-        default:
-          el.data("checked", 0);
-          el.prop("indeterminate", false);
-          el.prop("checked", false);
-      }
-    });
-      </script>
 {{end}}

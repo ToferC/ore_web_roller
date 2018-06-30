@@ -7,8 +7,8 @@ type Location struct {
 	Name     string
 	HitLoc   []int
 	Boxes    int
-	Stun     int
-	Kill     int
+	Shock    []bool
+	Kill     []bool
 	LAR      int
 	HAR      int
 	Disabled bool
@@ -30,12 +30,41 @@ func (l Location) String() string {
 		text += fmt.Sprintf(" HAR %d", l.HAR)
 	}
 
-	if l.Kill > 0 {
-		text += fmt.Sprintf(" Kill %d", l.Kill)
+	k, s := l.CountWounds()
+
+	if k > 0 {
+		text += fmt.Sprintf(" Kill %d", k)
 	}
 
-	if l.Stun > 0 {
-		text += fmt.Sprintf(" Stun %d", l.Stun)
+	if s > 0 {
+		text += fmt.Sprintf(" Shock %d", s)
 	}
 	return text
+}
+
+// FillWounds creates the array of empty wound boxes
+func (l *Location) FillWounds() {
+	for i := 0; i < l.Boxes; i++ {
+		l.Kill = append(l.Kill, false)
+		l.Shock = append(l.Shock, false)
+	}
+}
+
+// CountWounds returns the number of wounds based on the bool Kill & Shock slices
+func (l *Location) CountWounds() (int, int) {
+
+	var kill, shock int
+
+	for _, box := range l.Kill {
+		if box {
+			kill++
+		}
+	}
+
+	for _, box := range l.Shock {
+		if box {
+			shock++
+		}
+	}
+	return kill, shock
 }
