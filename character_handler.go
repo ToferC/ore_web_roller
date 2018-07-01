@@ -40,6 +40,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	wc := WebChar{
 		Character: c,
+		Counter:   []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 	}
 
 	if req.Method == "GET" {
@@ -55,7 +56,14 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		fmt.Println(req.Form)
+		wp, err := strconv.Atoi(req.FormValue("Willpower"))
+		if err != nil {
+			panic(err)
+		}
+
+		c.InPlay = true
+
+		c.Willpower = wp
 
 		for k, v := range c.HitLocations {
 			for i := range v.Shock {
@@ -102,10 +110,55 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		c = oneroll.NewReignCharacter("")
 	}
 
+	if c.Setting != "RE" {
+		a := c.Archetype
+
+		// Assign additional empty Sources to populate form
+		if len(a.Sources) < 4 {
+			for i := len(a.Sources); i < 4; i++ {
+				tempS := oneroll.Source{
+					Type: "",
+				}
+				a.Sources = append(a.Sources, &tempS)
+			}
+		}
+
+		// Assign additional empty Permissions to populate form
+		if len(a.Permissions) < 4 {
+			for i := len(a.Permissions); i < 4; i++ {
+				tempP := oneroll.Permission{
+					Type: "",
+				}
+				a.Permissions = append(a.Permissions, &tempP)
+			}
+		}
+
+		// Assign additional empty Sources to populate form
+		if len(a.Intrinsics) < 5 {
+			for i := len(a.Intrinsics); i < 5; i++ {
+				tempI := oneroll.Intrinsic{
+					Name: "",
+				}
+				a.Intrinsics = append(a.Intrinsics, &tempI)
+			}
+		}
+
+		// Assign additional empty HitLocations to populate form
+		if len(c.HitLocations) < 10 {
+			for i := len(c.HitLocations); i < 10; i++ {
+				t := oneroll.Location{
+					Name: "",
+				}
+				c.HitLocations["z"+string(i)] = &t
+			}
+		}
+
+	}
+
 	wc := WebChar{
 		Character:   c,
 		Modifiers:   oneroll.Modifiers,
-		Counter:     []int{1, 2, 3},
+		Counter:     []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		Sources:     oneroll.Sources,
 		Permissions: oneroll.Permissions,
 		Intrinsics:  oneroll.Intrinsics,
@@ -184,6 +237,43 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
+		// Hit locations - need to add new map or amend old one
+
+		newHL := map[string]*oneroll.Location{}
+
+		for i := range c.HitLocations {
+
+			name := req.FormValue(fmt.Sprintf("%s-Name", i))
+
+			if name != "" {
+
+				boxes, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Boxes", i)))
+				lar, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-LAR", i)))
+				har, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-HAR", i)))
+
+				fmt.Println(name, boxes, lar, har)
+
+				newHL[name] = &oneroll.Location{
+					Name:   name,
+					Boxes:  boxes,
+					LAR:    lar,
+					HAR:    har,
+					HitLoc: []int{},
+				}
+
+				newHL[name].FillWounds()
+
+				for j := 1; j < 11; j++ {
+					if req.FormValue(fmt.Sprintf("%s-%d-loc", i, j)) != "" {
+						newHL[name].HitLoc = append(newHL[name].HitLoc, j)
+					}
+				}
+			}
+		}
+
+		fmt.Println(newHL)
+		c.HitLocations = newHL
+
 		err = database.SaveCharacter(db, c)
 		if err != nil {
 			panic(err)
@@ -247,12 +337,23 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				a.Intrinsics = append(a.Intrinsics, &tempI)
 			}
 		}
+
+		// Assign additional empty HitLocations to populate form
+		if len(c.HitLocations) < 10 {
+			for i := len(c.HitLocations); i < 10; i++ {
+				t := oneroll.Location{
+					Name: "",
+				}
+				c.HitLocations["z"+string(i)] = &t
+			}
+		}
+
 	}
 
 	wc := WebChar{
 		Character:   c,
 		Modifiers:   oneroll.Modifiers,
-		Counter:     []int{1, 2, 3, 4, 5, 6, 7, 8},
+		Counter:     []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		Sources:     oneroll.Sources,
 		Permissions: oneroll.Permissions,
 		Intrinsics:  oneroll.Intrinsics,
@@ -323,6 +424,42 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				sk.Specialization = req.FormValue(fmt.Sprintf("%s-Spec", sk.Name))
 			}
 		}
+
+		// Hit locations - need to add new map or amend old one
+
+		newHL := map[string]*oneroll.Location{}
+
+		for i := range c.HitLocations {
+
+			name := req.FormValue(fmt.Sprintf("%s-Name", i))
+
+			if name != "" {
+				boxes, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-Boxes", i)))
+				lar, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-LAR", i)))
+				har, _ := strconv.Atoi(req.FormValue(fmt.Sprintf("%s-HAR", i)))
+
+				fmt.Println(name, boxes, lar, har)
+
+				newHL[name] = &oneroll.Location{
+					Name:   name,
+					Boxes:  boxes,
+					LAR:    lar,
+					HAR:    har,
+					HitLoc: []int{},
+				}
+
+				newHL[name].FillWounds()
+
+				for j := 1; j < 11; j++ {
+					if req.FormValue(fmt.Sprintf("%s-%d-loc", i, j)) != "" {
+						newHL[name].HitLoc = append(newHL[name].HitLoc, j)
+					}
+				}
+			}
+		}
+
+		fmt.Println(newHL)
+		c.HitLocations = newHL
 
 		err = database.UpdateCharacter(db, c)
 		if err != nil {

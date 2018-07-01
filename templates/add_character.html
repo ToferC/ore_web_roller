@@ -6,12 +6,14 @@
 {{ $intrinsics := .Intrinsics }}
 {{ $sources := .Sources }}
 {{ $permissions := .Permissions }}
+
 {{ $counter := .Counter }}
 
       <div class="container">
         <hr>
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
+            <h3>Basic Character Info</h3>
             <form action="" method="POST">
 
               <div class="input-group">
@@ -24,68 +26,71 @@
                 <input type="text" class="form-control" aria-describedby="setting-addon" name="Setting" value ="{{ $character.Setting }}" readonly>
               </div>
 
-              {{ if $character.Archetype }}
-              <div class="input-group">
-                <span class="input-group-addon" id="archetype-addon">Archetype</span>
-                <input type="text" class="form-control" aria-describedby="archetype-addon" name="Archetype" value ="{{ $character.Archetype.Type }}">
-              </div>
-
-              {{ range $s := $counter }} <!-- sources loop -->
-
-              <label for="Source-{{$s}}">Source {{$s}}</label>
-              <select type="text" class="form-control" id="Source-{{$s}}" name="Source-{{$s}}">
-                <option></option>
-                {{ range $sources }}
-                    <option value={{.Type}}>{{ .Type }} ({{ .Cost }}pts)</option>
-                {{ end }}
-              </select>
-
-              {{ end }} <!-- end Sources -->
-
-              <hr>
-
-              {{ range $p := $counter }} <!-- permissions loop -->
-
-              <label for="Permission-{{$p}}">Permission {{$p}}</label>
-              <select type="text" class="form-control" id="Permission-{{$p}}" name="Permission-{{$p}}">
-                <option></option>
-                {{ range $permissions }}
-                    <option value={{.Type}}>{{ .Type }} ({{ .Cost }}pts)</option>
-                {{ end }}
-              </select>
-
-              {{ end }} <!-- end Sources -->
-              <hr>
-
-              {{ range $i := $counter }} <!-- intrinsics loop -->
-
-              <label for="Intrinsic-{{$i}}">Intrinsic {{$i}}</label>
-              <select type="text" class="form-control" id="Intrinsic-{{$i}}" name="Intrinsic-{{$i}}-Name">
-                <option></option>
-                {{ range $intrinsics }}
-                <option value={{.Name}}>{{ .Name }} ({{ .Cost }}pts)</option>
-                {{ end }}
-              </select>
-              <div class="input-group">
-                <span class="input-group-addon" id="Intrinsic-{{$i}}-Level">Level</span>
-                <input type="number" class="form-control" aria-describedby="Intrinsic-{{$i}}-Level-addon" name="Intrinsic-{{$i}}-Level" value ="1">
-              </div>
-              <div class="input-group">
-                <span class="input-group-addon" id="Intrinsic-{{$i}}-Info-addon">Info</span>
-                <input type="text" class="form-control" aria-describedby="Intrinsic-{{$i}}-Info-addon" name="Intrinsic-{{$i}}-Info" value ="">
-              </div>
-              <hr>
-              {{ end }} <!-- End Intrinsics Loop -->
-              {{ end }} <!-- End Archetype IF -->
-
               <div class="input-group">
                 <label for="Description">Description</label>
-                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="5" value ="{{ $character.Description }}">{{ $character.Description }}</textarea>
+                <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value ="{{ $character.Description }}">{{ $character.Description }}</textarea>
               </div>
+              <hr>
+              <button class="brn btn-primary" type="submit" value="Save">Save</button>
+
             </div>
 
+            {{ if $character.Archetype }}
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <h3>Archetype</h3>
+            <div class="input-group">
+              <span class="input-group-addon" id="archetype-addon">Archetype</span>
+              <input type="text" class="form-control" aria-describedby="archetype-addon" name="Archetype" value ="{{ $character.Archetype.Type }}">
+            </div>
+
+            <h4>Sources</h4>
+            {{ range $s, $v := $character.Archetype.Sources }} <!-- sources loop -->
+            <label for="Source-{{add $s 1}}">Source {{add $s 1}}</label>
+            <select type="text" class="form-control" id="Source-{{add $s 1}}" name="Source-{{add $s 1}}">
+              <option></option>
+              {{ range $sources }}
+                  <option {{if eq $v.Type .Type }} selected {{ end }} value={{.Type}}>{{ .Type }} ({{ .Cost }}pts)</option>
+              {{ end }}
+            </select>
+
+            {{ end }} <!-- end Sources -->
+            <hr>
+            <h4>Permissions</h4>
+            {{ range $p, $v := $character.Archetype.Permissions }} <!-- permissions loop -->
+            <label for="Permission-{{add $p 1}}">Permission {{add $p 1}}</label>
+            <select type="text" class="form-control" id="Permission-{{add $p 1}}" name="Permission-{{add $p 1}}">
+              <option></option>
+              {{ range $permissions }}
+                  <option {{if eq $v.Type .Type }} selected {{ end }} value={{.Type}}>{{ .Type }} ({{ .Cost }}pts)</option>
+              {{ end }}
+            </select>
+            {{ end }} <!-- end Permissions -->
+            <hr>
+
+            <h4>Intrinsics</h4>
+            {{ range $i, $v := $character.Archetype.Intrinsics }} <!-- intrinsics loop -->
+            <label for="Intrinsic-{{$i}}">Intrinsic {{add $i 1}}</label>
+            <select type="text" class="form-control" id="Intrinsic-{{add $i 1}}" name="Intrinsic-{{add $i 1}}-Name">
+              <option></option>
+              {{ range $intrinsics }}
+              <option {{if eq $v.Name .Name }} selected {{ end }} value={{.Name}}>{{ .Name }} ({{ .Cost }}pts)</option>
+              {{ end }}
+            </select>
+            <div class="input-group">
+              <span class="input-group-addon" id="Intrinsic-{{add $i 1}}-Level">Level</span>
+              <input type="number" class="form-control" aria-describedby="Intrinsic-{{add $i 1}}-Level-addon" name="Intrinsic-{{add $i 1}}-Level" value ="{{ $v.Level }}">
+            </div>
+            <div class="input-group">
+              <span class="input-group-addon" id="Intrinsic-{{add $i 1}}-Info-addon">Info</span>
+              <input type="text" class="form-control" aria-describedby="Intrinsic-{{add $i 1}}-Info-addon" name="Intrinsic-{{add $i 1}}-Info" value ="{{ $v.Info }}">
+            </div>
+            <hr>
+            {{ end }} <!-- End Intrinsics Loop -->
+          </div>
+          {{ end }} <!-- End Archetype IF -->
+
               <div class="col-sm-3 col-md-3 col-lg-3">
-                <br>
+                <h3>Stats & Skills</h3>
               {{ range $stat := $statistics }}
 
               <div class="input-group">
@@ -110,40 +115,48 @@
               {{ end }}
               {{end}}
               {{ end }}
-              <br>
-              <input class="button" type="submit" value="Save">
-              <br>
-            </form>
           </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
-        <h3>Powers</h3>
-        {{ range $character.Skills }}
-          {{ if .HyperSkill }}
-            <p>{{ .HyperSkill }}</p>
-          {{ end }}
-        {{ end }}
-
-        {{ range $character.Statistics }}
-          {{ if .HyperStat }}
-            <p>{{ .HyperStat }}</p>
-          {{ end }}
-        {{ end }}
-
-        {{ range $character.Powers }}
-          <strong>{{ . }}</strong>
-          {{ range .Qualities }}
-            <p>{{ . }} <a type="button" href="/">Roll</a></p>
-        {{ end }}
-        <i>Effect: {{ .Effect }}</i>
-        {{ end }}
-      </div>
-      <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Hit Locations</h3>
-          {{ range $character.HitLocations }}
-            <p>{{ . }}</p>
-          {{ end }}
+          {{ range $i, $loc := $character.HitLocations }}
+
+          <div class="input-group">
+            <span class="input-group-addon" id="{{ $i }}-name-addon">Name</span>
+            <input type="text" class="form-control" aria-describedby="{{ $i }}-name-addon" name="{{ $i }}-Name" value ="{{ $loc.Name }}">
+          </div>
+          <br>
+
+          <div class="input-group">
+            <span class="input-group-addon" id="{{ $i }}-boxes-addon">Wound Boxes</span>
+            <input type="number" class="form-control" aria-describedby="{{ $i }}-boxes-addon" name="{{ $i }}-Boxes" value ="{{ $loc.Boxes }}">
+          </div>
+          <br>
+
+          <div class="input-group">
+            <span class="input-group-addon" id="{{ $i }}-lar-addon">LAR</span>
+            <input type="number" class="form-control" aria-describedby="{{ $i }}-lar-addon" name="{{ $i }}-LAR" value ="{{ $loc.LAR }}">
+          </div>
+          <br>
+
+          <div class="input-group">
+            <span class="input-group-addon" id="{{ $i }}-har-addon">HAR</span>
+            <input type="number" class="form-control" aria-describedby="{{ $i }}-har-addon" name="{{ $i }}-HAR" value ="{{ $loc.HAR }}">
+          </div>
+          <br>
+
+          <label for="Locs">Select Hit Locations</label>
+          {{ range $c := $counter }}
+              {{ if isIn $loc.HitLoc $c }}
+            {{ $c }} <input type="checkbox" name="{{ $i }}-{{ $c }}-loc" value="{{ $c }}" id="{{ $i }}-{{ $c }}-loc" checked>
+              {{ else }}
+            {{ $c }} <input type="checkbox" name="{{ $i }}-{{ $c }}-loc" value="{{ $c }}" id="{{ $i }}-{{ $c }}-loc">
+              {{ end }} <!-- END if isIn -->
+          {{ end }} <!-- END counter Loop -->
+          <hr>
+          {{ end }} <!-- END overall location loop -->
       </div>
+    </form>
     </div>
       </div>
 {{end}}

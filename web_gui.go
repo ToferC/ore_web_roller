@@ -138,6 +138,15 @@ func multiply(a, b int) int {
 	return a * b
 }
 
+func isIn(s []int, t int) bool {
+	for _, n := range s {
+		if n == t {
+			return true
+		}
+	}
+	return false
+}
+
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
 	tmpl := make(map[string]*template.Template)
@@ -150,6 +159,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"subtract":    subtract,
 		"add":         add,
 		"multiply":    multiply,
+		"isIn":        isIn,
 	}
 
 	baseTemplate := "templates/layout.html"

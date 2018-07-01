@@ -48,8 +48,15 @@
 
             {{ if ne $character.Setting "RE" }}
               <h4>Base Will: {{ $character.BaseWill }}</h4>
-              <h4>Willpower: {{ $character.Willpower }}</h4>
+              <form action="" method="POST">
+              <div class="input-group">
+                <span class="input-group-addon" id="Willpower">Level</span>
+                <input type="number" class="form-control" aria-describedby="Willpower" name="Willpower" value ="{{ $character.Willpower }}">
+              </div>
             {{ end }}
+            <hr>
+            <button class="btn btn-primary" type="submit" value="Save Wound State">Update Character State</button>
+            <hr>
               <a class="btn btn-primary" href="/modify/{{ $character.ID }}">Modify</a>
               <a class="btn btn-danger" href="/delete/{{ $character.ID }}">Delete</a></h4>
           </div>
@@ -142,14 +149,12 @@
 
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Hit Locations</h3>
-        <form action="" method="POST">
         {{ range $loc := $character.HitLocations }}
             <p>{{ $loc }}
               <br>Shock: {{ range $i, $v := .Shock }}  <input type="checkbox" name="{{ $loc.Name }}-Shock-{{ $i }}" value="true" id="checkbox" {{if eq $v true }} checked {{ end }}>{{ end }}
               <br>Kill: {{ range $j, $q := .Kill }}  <input type="checkbox" name="{{ $loc.Name }}-Kill-{{ $j }}" value="true" id="checkbox" {{if eq $q true }} checked {{ end }}>{{ end }}
           {{ end }}
           <br>
-        <button class="btn btn-primary" type="submit" value="Save Wound State">Save Wound State</button>
       </form>
       </div>
     </div>

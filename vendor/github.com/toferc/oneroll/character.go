@@ -203,7 +203,6 @@ func (c *Character) CalculateCost() {
 
 		if !c.InPlay {
 			c.BaseWill = calcBaseWill
-			c.Willpower = calcBaseWill
 		} else {
 			cost += 3*c.BaseWill - calcBaseWill
 			cost += c.Willpower - c.BaseWill
