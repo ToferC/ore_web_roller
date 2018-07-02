@@ -56,14 +56,16 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		wp, err := strconv.Atoi(req.FormValue("Willpower"))
-		if err != nil {
-			panic(err)
+		if c.Setting != "RE" {
+			wp, err := strconv.Atoi(req.FormValue("Willpower"))
+			if err != nil {
+				wp = c.Willpower
+			}
+			c.Willpower = wp
 		}
 
+		// Set up character for actual play
 		c.InPlay = true
-
-		c.Willpower = wp
 
 		for k, v := range c.HitLocations {
 			for i := range v.Shock {
