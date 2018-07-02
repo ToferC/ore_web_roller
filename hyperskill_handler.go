@@ -105,7 +105,9 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/add_hyperskill.html", wc)
 
-	} else { // POST
+	}
+
+	if req.Method == "POST" { // POST
 
 		err := req.ParseForm()
 		if err != nil {
@@ -214,7 +216,7 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -286,7 +288,9 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/modify_hyperskill.html", wc)
 
-	} else { // POST
+	}
+
+	if req.Method == "POST" { // POST
 
 		err := req.ParseForm()
 		if err != nil {
@@ -395,7 +399,7 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -430,7 +434,9 @@ func DeleteHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/delete_hyperskill.html", wc)
 
-	} else {
+	}
+
+	if req.Method == "POST" {
 
 		targetSkill.HyperSkill = nil
 
@@ -444,6 +450,6 @@ func DeleteHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }

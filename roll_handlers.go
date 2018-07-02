@@ -92,7 +92,9 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 
 		// wv.Rolls = []oneroll.Roll{}
 
-	} else {
+	}
+
+	if req.Method == "POST" {
 
 		ndQ := req.FormValue("nd")
 		hdQ := req.FormValue("hd")
@@ -230,7 +232,9 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 
 		// wv.Rolls = []oneroll.Roll{}
 
-	} else {
+	}
+
+	if req.Method == "POST" {
 		// Submit form
 
 		// Player 1

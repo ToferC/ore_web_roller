@@ -56,7 +56,9 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/add_skill.html", wc)
 
-	} else { // POST
+	}
+
+	if req.Method == "POST" { // POST
 
 		err := req.ParseForm()
 		if err != nil {
@@ -83,6 +85,10 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 			Normal: nd,
 		}
 
+		if req.FormValue("Free") != "" {
+			skill.Free = true
+		}
+
 		if req.FormValue("ReqSpec") == "Yes" {
 			skill.ReqSpec = true
 			skill.Specialization = req.FormValue("Specialization")
@@ -100,6 +106,6 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }

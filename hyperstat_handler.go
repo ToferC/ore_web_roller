@@ -112,7 +112,9 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/add_hyperstat.html", wc)
 
-	} else { // POST
+	}
+
+	if req.Method == "POST" { // POST
 
 		err := req.ParseForm()
 		if err != nil {
@@ -219,7 +221,7 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -297,7 +299,9 @@ func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/modify_hyperstat.html", wc)
 
-	} else { // POST
+	}
+
+	if req.Method == "POST" { // POST
 
 		err := req.ParseForm()
 		if err != nil {
@@ -404,7 +408,7 @@ func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -439,7 +443,9 @@ func DeleteHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/delete_hyperstat.html", wc)
 
-	} else {
+	}
+
+	if req.Method == "POST" {
 
 		targetStat.HyperStat = nil
 
@@ -453,6 +459,6 @@ func DeleteHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }

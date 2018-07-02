@@ -69,13 +69,16 @@ func main() {
 		}
 
 		fmt.Println("Starting Webserver at port " + port)
-		http.HandleFunc("/", IndexHandler)
+		http.HandleFunc("/", CharacterIndexHandler)
 		http.HandleFunc("/roll/", RollHandler)
 		http.HandleFunc("/opposed/", OpposeHandler)
-		http.HandleFunc("/view/", CharacterHandler)
+		http.HandleFunc("/view_character/", CharacterHandler)
 		http.HandleFunc("/new/", NewCharacterHandler)
 		http.HandleFunc("/modify/", ModifyCharacterHandler)
 		http.HandleFunc("/delete/", DeleteCharacterHandler)
+
+		http.HandleFunc("/index_powers/", PowerIndexHandler)
+		http.HandleFunc("/view_power/", PowerHandler)
 
 		http.HandleFunc("/add_power/", AddPowerHandler)
 		http.HandleFunc("/modify_power/", ModifyPowerHandler)

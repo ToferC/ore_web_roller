@@ -10,6 +10,52 @@ import (
 	"github.com/toferc/ore_web_roller/database"
 )
 
+func PowerIndexHandler(w http.ResponseWriter, req *http.Request) {
+
+	powers, err := database.ListPowers(db)
+	if err != nil {
+		panic(err)
+	}
+
+	Render(w, "templates/index_powers.html", powers)
+}
+
+// PowerHandler renders a character in a Web page
+func PowerHandler(w http.ResponseWriter, req *http.Request) {
+
+	pk := req.URL.Path[len("/view_power/"):]
+
+	if len(pk) == 0 {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		http.Redirect(w, req, "/", http.StatusSeeOther)
+	}
+
+	p, err := database.PKLoadPower(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	wc := WebChar{
+		Power: p,
+	}
+
+	if req.Method == "GET" {
+
+		// Render page
+		Render(w, "templates/view_power.html", wc)
+
+	}
+
+	if req.Method == "POST" {
+
+		// Parse Form and redirect
+	}
+}
+
 // AddPowerHandler renders a character in a Web page
 func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 
@@ -63,7 +109,9 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/add_power.html", wc)
 
-	} else { // POST
+	}
+
+	if req.Method == "POST" { // POST
 
 		err := req.ParseForm()
 		if err != nil {
@@ -142,6 +190,14 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 		c.Powers[p.Slug] = &p
 		delete(c.Powers, "default")
 
+		// Insert power into App archive if user authorizes
+		if req.FormValue("Archive") != "" {
+			p.DeterminePowerCapacities()
+			p.CalculateCost()
+
+			database.SavePower(db, &p)
+		}
+
 		fmt.Println(c)
 
 		err = database.UpdateCharacter(db, c)
@@ -152,7 +208,7 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -228,7 +284,9 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/modify_power.html", wc)
 
-	} else { // POST
+	}
+
+	if req.Method == "POST" { // POST
 
 		err := req.ParseForm()
 		if err != nil {
@@ -317,7 +375,7 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -353,7 +411,9 @@ func DeletePowerHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/delete_power.html", wc)
 
-	} else {
+	}
+
+	if req.Method == "POST" {
 
 		delete(c.Powers, pow)
 
@@ -367,6 +427,6 @@ func DeletePowerHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }

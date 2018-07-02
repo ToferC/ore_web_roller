@@ -9,20 +9,20 @@ import (
 	"github.com/toferc/ore_web_roller/database"
 )
 
-func IndexHandler(w http.ResponseWriter, req *http.Request) {
+func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	characters, err := database.ListCharacters(db)
 	if err != nil {
 		panic(err)
 	}
 
-	Render(w, "templates/index.html", characters)
+	Render(w, "templates/index_characters.html", characters)
 }
 
 // CharacterHandler renders a character in a Web page
 func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
-	pk := req.URL.Path[len("/view/"):]
+	pk := req.URL.Path[len("/view_character/"):]
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
@@ -48,7 +48,9 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/view_character.html", wc)
 
-	} else {
+	}
+
+	if req.Method == "POST" {
 
 		// Parse Form and redirect
 		err := req.ParseForm()
@@ -172,7 +174,9 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/add_character.html", wc)
 
-	} else { // POST
+	}
+
+	if req.Method == "POST" {
 
 		err := req.ParseForm()
 		if err != nil {
@@ -284,7 +288,7 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -367,7 +371,9 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		Render(w, "templates/modify_character.html", wc)
 
-	} else {
+	}
+
+	if req.Method == "POST" {
 
 		err := req.ParseForm()
 		if err != nil {
@@ -485,7 +491,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
 	}
 }
 
@@ -513,7 +519,9 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Render page
 		Render(w, "templates/delete_character.html", c)
 
-	} else {
+	}
+
+	if req.Method == "POST" {
 
 		database.DeleteCharacter(db, c.ID)
 
