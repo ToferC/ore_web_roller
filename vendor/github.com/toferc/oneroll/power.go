@@ -4,6 +4,7 @@ import "fmt"
 
 // Power is a non-standard ability or miracle
 type Power struct {
+	ID         int64
 	Name       string
 	Qualities  []*Quality
 	Dice       *DiePool

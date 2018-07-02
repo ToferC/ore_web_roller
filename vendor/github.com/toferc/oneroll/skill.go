@@ -15,6 +15,7 @@ type Skill struct {
 	Specialization string
 	HyperSkill     *HyperSkill
 	Modifiers      []*Modifier
+	Free           bool
 	Cost           int
 }
 
@@ -33,8 +34,13 @@ func (s Skill) String() string {
 
 	td := ReturnDice(&s)
 
-	text := fmt.Sprintf("%s ",
-		s.Name)
+	text := ""
+
+	if s.HyperSkill != nil {
+		text += fmt.Sprintf("%s* ", s.Name)
+	} else {
+		text = fmt.Sprintf("%s ", s.Name)
+	}
 
 	if s.ReqSpec {
 		text += fmt.Sprintf("[%s] ", s.Specialization)
@@ -161,8 +167,13 @@ func ShowSkills(c *Character, allSkills bool) string {
 // Called from Character.CalculateCharacterCost()
 func (s *Skill) CalculateCost() {
 
+	var b int
+
 	// Base Cost
-	b := 2
+	if !s.Free {
+		b = 2
+	}
+
 	// Modifier Cost
 	mc := 0
 

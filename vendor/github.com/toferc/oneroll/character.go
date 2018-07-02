@@ -26,6 +26,7 @@ type Character struct {
 	Advantages   []*Advantage
 	LocationMap  []string
 	PointCost    int
+	DetailedCost map[string]int
 	InPlay       bool
 	XP           int
 	Updates      []*Update
@@ -143,32 +144,34 @@ func (c *Character) String() string {
 // total costs of all character elements. Call this on each character update
 func (c *Character) CalculateCost() {
 
-	var cost int
+	var statsCost, skillsCost, powerCost int
+	var archetypeCost, baseWillCost, willpowerCost int
+	var advantageCost int
 
 	if c.Setting != "RE" {
 		if len(c.Archetype.Sources) > 0 {
 			UpdateCost(c.Archetype)
-			cost += c.Archetype.Cost
+			archetypeCost += c.Archetype.Cost
 		}
 	}
 
 	for _, stat := range c.Statistics {
 		UpdateCost(stat)
-		cost += stat.Cost
+		statsCost += stat.Cost
 
 		if stat.HyperStat != nil {
 			UpdateCost(stat.HyperStat)
-			cost += stat.HyperStat.Cost
+			powerCost += stat.HyperStat.Cost
 		}
 	}
 
 	for _, skill := range c.Skills {
 		UpdateCost(skill)
-		cost += skill.Cost
+		skillsCost += skill.Cost
 
 		if skill.HyperSkill != nil {
 			UpdateCost(skill.HyperSkill)
-			cost += skill.HyperSkill.Cost
+			powerCost += skill.HyperSkill.Cost
 		}
 	}
 
@@ -176,14 +179,14 @@ func (c *Character) CalculateCost() {
 		// Determine power capacities
 		power.DeterminePowerCapacities()
 		UpdateCost(power)
-		cost += power.Cost
+		powerCost += power.Cost
 	}
 
 	for _, advantage := range c.Advantages {
 		if advantage.RequiresLevel {
-			cost += advantage.Cost * advantage.Level
+			advantageCost += advantage.Cost * advantage.Level
 		} else {
-			cost += advantage.Cost
+			advantageCost += advantage.Cost
 		}
 	}
 
@@ -201,12 +204,26 @@ func (c *Character) CalculateCost() {
 			}
 		}
 
-		if !c.InPlay {
+		if c.BaseWill == 0 {
+			// Auto-calculate base costs and levels for base character
 			c.BaseWill = calcBaseWill
-		} else {
-			cost += 3*c.BaseWill - calcBaseWill
-			cost += c.Willpower - c.BaseWill
+			c.Willpower = c.BaseWill
+		}
+
+		if !c.InPlay {
+			baseWillCost += 3 * (c.BaseWill - calcBaseWill)
+			willpowerCost += c.Willpower - c.BaseWill
 		}
 	}
-	c.PointCost = cost
+
+	c.DetailedCost = map[string]int{
+		"archetype":  archetypeCost,
+		"stats":      statsCost,
+		"skills":     skillsCost,
+		"powers":     powerCost,
+		"advantages": advantageCost,
+		"willpower":  willpowerCost,
+		"basewill":   baseWillCost,
+	}
+	c.PointCost = archetypeCost + statsCost + skillsCost + powerCost + advantageCost + willpowerCost + baseWillCost
 }

@@ -61,7 +61,11 @@ func (a *Archetype) CalculateCost() {
 	}
 
 	for _, i := range a.Intrinsics {
-		c += i.Cost
+		if i.RequiresLevel {
+			c += i.Cost * i.Level
+		} else {
+			c += i.Cost
+		}
 	}
 
 	a.Cost = c
@@ -284,5 +288,14 @@ var Intrinsics = map[string]*Intrinsic{
 		Name:        "Willpower Contest",
 		Description: "",
 		Cost:        -10,
+	},
+	"Custom": &Intrinsic{
+		Name:          "Custom",
+		RequiresInfo:  true,
+		Info:          "",
+		RequiresLevel: true,
+		Level:         1,
+		Description:   "Default to Frequent & Kills",
+		Cost:          -1,
 	},
 }

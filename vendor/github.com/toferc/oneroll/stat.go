@@ -78,9 +78,13 @@ func (s Statistic) String() string {
 
 	td := ReturnDice(&s)
 
-	text := fmt.Sprintf("%s: %s",
-		s.Name,
-		td)
+	text := ""
+
+	if s.HyperStat != nil {
+		text += fmt.Sprintf("%s*: %s", s.Name, td)
+	} else {
+		text = fmt.Sprintf("%s: %s", s.Name, td)
+	}
 
 	return text
 }

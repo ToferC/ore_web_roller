@@ -16,28 +16,27 @@ type Location struct {
 
 // Strings
 func (l Location) String() string {
-	text := fmt.Sprintf("%s - %s: Boxes: %d",
+	text := fmt.Sprintf("(%s) - %s\n",
 		TrimSliceBrackets(l.HitLoc),
 		l.Name,
-		l.Boxes,
 	)
 
 	if l.LAR > 0 {
-		text += fmt.Sprintf(" LAR %d", l.LAR)
+		text += fmt.Sprintf("LAR: %d ", l.LAR)
 	}
 
 	if l.HAR > 0 {
-		text += fmt.Sprintf(" HAR %d", l.HAR)
+		text += fmt.Sprintf("HAR: %d ", l.HAR)
 	}
 
 	k, s := l.CountWounds()
 
 	if k > 0 {
-		text += fmt.Sprintf(" Kill %d", k)
+		text += fmt.Sprintf(" Kill: %d", k)
 	}
 
 	if s > 0 {
-		text += fmt.Sprintf(" Shock %d", s)
+		text += fmt.Sprintf(" Shock: %d", s)
 	}
 	return text
 }

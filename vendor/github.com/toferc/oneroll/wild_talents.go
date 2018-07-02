@@ -136,14 +136,6 @@ func NewWTCharacter(name string) *Character {
 		v.FillWounds()
 	}
 
-	for _, stat := range c.Statistics {
-		if stat.EffectsWill {
-			c.BaseWill += stat.Dice.Normal
-		}
-	}
-
-	c.Willpower = c.BaseWill
-
 	c.Skills = map[string]*Skill{
 		// Body Skills
 		"Athletics": &Skill{

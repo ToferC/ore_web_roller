@@ -25,6 +25,18 @@
                 <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value ="{{ $character.Description }}">{{ $character.Description }}</textarea>
               </div>
               <hr>
+
+              <div class="input-group">
+                <span class="input-group-addon" id="basewill-addon">Base Will</span>
+                <input type="number" class="form-control" aria-describedby="basewill-addon" name="BaseWill" value ="{{ $character.BaseWill }}">
+              </div>
+
+              <div class="input-group">
+                <span class="input-group-addon" id="willpower-addon">Willpower</span>
+                <input type="number" class="form-control" aria-describedby="willpower-addon" name="Willpower" value ="{{ $character.Willpower }}">
+              </div>
+              <hr>
+
               <button class="btn btn-primary" type="submit" value="Save">Update</button>
 
             </div>

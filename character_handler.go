@@ -414,6 +414,20 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		c.Description = req.FormValue("Description")
 
+		bw, err := strconv.Atoi(req.FormValue("BaseWill"))
+		if err != nil {
+			bw = c.BaseWill
+		}
+
+		c.BaseWill = bw
+
+		wp, err := strconv.Atoi(req.FormValue("Willpower"))
+		if err != nil {
+			wp = c.Willpower
+		}
+
+		c.Willpower = wp
+
 		for _, st := range c.StatMap {
 			c.Statistics[st].Dice.Normal, _ = strconv.Atoi(req.FormValue(st))
 		}

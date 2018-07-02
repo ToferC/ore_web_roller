@@ -136,14 +136,7 @@ func NewSRCharacter(name string) *Character {
 		v.FillWounds()
 	}
 
-	for _, stat := range c.Statistics {
-		if stat.EffectsWill {
-			c.BaseWill += stat.Dice.Normal
-		}
-	}
-
-	c.Willpower = c.BaseWill
-
+	// Shadowrun skills
 	c.Skills = map[string]*Skill{
 		// Body Skills
 		"Athletics": &Skill{
@@ -434,6 +427,7 @@ func NewSRCharacter(name string) *Character {
 			},
 			ReqSpec:        true,
 			Specialization: "Biology",
+			Free:           true,
 		},
 		"Engineering": &Skill{
 			Name: "Engineering",
@@ -489,6 +483,7 @@ func NewSRCharacter(name string) *Character {
 				Normal: 0,
 			},
 			ReqSpec:        true,
+			Free:           true,
 			Specialization: "Chinese",
 		},
 		"Medicine": &Skill{
@@ -617,6 +612,17 @@ func NewSRCharacter(name string) *Character {
 		},
 		"Persuasion": &Skill{
 			Name: "Persuasion",
+			Quality: &Quality{
+				Type:  "Useful",
+				Level: 0,
+			},
+			LinkStat: charm,
+			Dice: &DiePool{
+				Normal: 0,
+			},
+		},
+		"Wealth": &Skill{
+			Name: "Wealth",
 			Quality: &Quality{
 				Type:  "Useful",
 				Level: 0,

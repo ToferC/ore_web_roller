@@ -45,7 +45,9 @@ func InitDB(db *pg.DB) error {
 }
 
 func createSchema(db *pg.DB) error {
-	for _, model := range []interface{}{(*oneroll.Character)(nil)} {
+	for _, model := range []interface{}{
+		(*oneroll.Character)(nil),
+		(*oneroll.Power)(nil)} {
 		err := db.CreateTable(model, &orm.CreateTableOptions{
 			Temp:        false,
 			IfNotExists: true,

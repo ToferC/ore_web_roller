@@ -50,7 +50,7 @@
               <h4>Base Will: {{ $character.BaseWill }}</h4>
               <form action="" method="POST">
               <div class="input-group">
-                <span class="input-group-addon" id="Willpower">Level</span>
+                <span class="input-group-addon" id="Willpower">Willpower</span>
                 <input type="number" class="form-control" aria-describedby="Willpower" name="Willpower" value ="{{ $character.Willpower }}">
               </div>
             {{ end }}
@@ -59,6 +59,13 @@
             <hr>
               <a class="btn btn-primary" href="/modify/{{ $character.ID }}">Modify</a>
               <a class="btn btn-danger" href="/delete/{{ $character.ID }}">Delete</a></h4>
+            <hr>
+            <h4>Detailed Costs</h4>
+            <ul>
+            {{ range $k, $v := $character.DetailedCost }}
+              <li>{{ $k }}: {{ $v }}</li>
+            {{ end }}
+          </ul>
           </div>
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Skills</h3>
