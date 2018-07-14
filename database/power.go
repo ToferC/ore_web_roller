@@ -35,8 +35,8 @@ func UpdatePower(db *pg.DB, p *oneroll.Power) error {
 }
 
 // ListPowers queries Power names and add to slice
-func ListPowers(db *pg.DB) ([]*oneroll.Power, error) {
-	var pows []*oneroll.Power
+func ListPowers(db *pg.DB) (map[string]oneroll.Power, error) {
+	var pows []oneroll.Power
 
 	_, err := db.Query(&pows, `SELECT * FROM powers`)
 
@@ -44,11 +44,14 @@ func ListPowers(db *pg.DB) ([]*oneroll.Power, error) {
 		panic(err)
 	}
 
-	// Print names and PK
-	for i, n := range pows {
-		fmt.Println(i, n.Name)
+	powMap := map[string]oneroll.Power{}
+
+	// Create Map
+	for i, p := range pows {
+		powMap[oneroll.ToSnakeCase(p.Name)] = p
+		fmt.Println(i, p.Name)
 	}
-	return pows, nil
+	return powMap, nil
 }
 
 // LoadPower loads a single power from the DB by name

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 
+	"github.com/gorilla/mux"
 	"github.com/toferc/oneroll"
 	"github.com/toferc/ore_web_roller/database"
 )
@@ -13,13 +13,11 @@ import (
 // AddSkillHandler renders a character in a Web page
 func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 
-	s := req.URL.Path[len("/add_skill/"):]
+	vars := mux.Vars(req)
+	pk := vars["id"]
+	s := vars["skill"]
 
-	sSlice := strings.Split(s, "/")
-
-	ch, s := sSlice[0], sSlice[1]
-
-	id, err := strconv.Atoi(ch)
+	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
@@ -106,6 +104,9 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
+
+		url := fmt.Sprintf("/view_character/%d", c.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 }

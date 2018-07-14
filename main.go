@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gorilla/mux"
+
 	"github.com/go-pg/pg"
 	"github.com/toferc/ore_web_roller/database"
 )
@@ -68,34 +70,39 @@ func main() {
 			port = "8080"
 		}
 
+		r := mux.NewRouter()
+
 		fmt.Println("Starting Webserver at port " + port)
-		http.HandleFunc("/", CharacterIndexHandler)
-		http.HandleFunc("/roll/", RollHandler)
-		http.HandleFunc("/opposed/", OpposeHandler)
-		http.HandleFunc("/view_character/", CharacterHandler)
-		http.HandleFunc("/new/", NewCharacterHandler)
-		http.HandleFunc("/modify/", ModifyCharacterHandler)
-		http.HandleFunc("/delete/", DeleteCharacterHandler)
+		r.HandleFunc("/", CharacterIndexHandler)
+		r.HandleFunc("/roll/", RollHandler)
+		r.HandleFunc("/opposed/", OpposeHandler)
+		r.HandleFunc("/view_character/{id}", CharacterHandler)
+		r.HandleFunc("/new/{setting}", NewCharacterHandler)
+		r.HandleFunc("/modify/{id}", ModifyCharacterHandler)
+		r.HandleFunc("/delete/{id}", DeleteCharacterHandler)
 
-		http.HandleFunc("/index_powers/", PowerIndexHandler)
-		http.HandleFunc("/view_power/", PowerHandler)
+		r.HandleFunc("/index_powers/", PowerIndexHandler)
+		r.HandleFunc("/view_power/{id}", PowerHandler)
 
-		http.HandleFunc("/add_power/", AddPowerHandler)
-		http.HandleFunc("/modify_power/", ModifyPowerHandler)
-		http.HandleFunc("/delete_power/", DeletePowerHandler)
+		r.HandleFunc("/add_power/{id}", AddPowerHandler)
+		r.HandleFunc("/add_power_from_list/{id}", PowerListHandler)
+		r.HandleFunc("/modify_power/{id}/{power}", ModifyPowerHandler)
+		r.HandleFunc("/delete_power/{id}/{power}", DeletePowerHandler)
 
-		http.HandleFunc("/add_hyperstat/", AddHyperStatHandler)
-		http.HandleFunc("/modify_hyperstat/", ModifyHyperStatHandler)
-		http.HandleFunc("/delete_hyperstat/", DeleteHyperStatHandler)
+		r.HandleFunc("/add_hyperstat/{id}/{stat}", AddHyperStatHandler)
+		r.HandleFunc("/modify_hyperstat/{id}/{stat}", ModifyHyperStatHandler)
+		r.HandleFunc("/delete_hyperstat/{id}/{stat}", DeleteHyperStatHandler)
 
-		http.HandleFunc("/add_hyperskill/", AddHyperSkillHandler)
-		http.HandleFunc("/modify_hyperskill/", ModifyHyperSkillHandler)
-		http.HandleFunc("/delete_hyperskill/", DeleteHyperSkillHandler)
+		r.HandleFunc("/add_hyperskill/{id}/{skill}", AddHyperSkillHandler)
+		r.HandleFunc("/modify_hyperskill/{id}/{skill}", ModifyHyperSkillHandler)
+		r.HandleFunc("/delete_hyperskill/{id}/{skill}", DeleteHyperSkillHandler)
 
-		http.HandleFunc("/add_skill/", AddSkillHandler)
-		http.HandleFunc("/add_advantages/", ModifyAdvantageHandler)
+		r.HandleFunc("/add_skill/{id}/{skill}", AddSkillHandler)
+		r.HandleFunc("/add_advantages/{id}", ModifyAdvantageHandler)
 
-		log.Fatal(http.ListenAndServe(":"+port, nil))
+		http.Handle("/", r)
+
+		log.Fatal(http.ListenAndServe(":"+port, r))
 	}
 
 }

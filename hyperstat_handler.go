@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 
+	"github.com/gorilla/mux"
 	"github.com/toferc/oneroll"
 	"github.com/toferc/ore_web_roller/database"
 )
@@ -13,13 +13,11 @@ import (
 // AddHyperStatHandler renders a character in a Web page
 func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 
-	s := req.URL.Path[len("/add_hyperstat/"):]
+	vars := mux.Vars(req)
+	pk := vars["id"]
+	s := vars["stat"]
 
-	sSlice := strings.Split(s, "/")
-
-	ch, s := sSlice[0], sSlice[1]
-
-	id, err := strconv.Atoi(ch)
+	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
@@ -221,20 +219,21 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
+
+		url := fmt.Sprintf("/view_character/%d", c.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 }
 
 // ModifyHyperStatHandler renders a character in a Web page
 func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 
-	s := req.URL.Path[len("/modify_hyperstat/"):]
+	vars := mux.Vars(req)
+	pk := vars["id"]
+	s := vars["stat"]
 
-	sSlice := strings.Split(s, "/")
-
-	ch, s := sSlice[0], sSlice[1]
-
-	id, err := strconv.Atoi(ch)
+	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
@@ -408,20 +407,21 @@ func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
+
+		url := fmt.Sprintf("/view_character/%d", c.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 }
 
 // DeleteHyperStatHandler renders a character in a Web page
 func DeleteHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 
-	s := req.URL.Path[len("/delete_hyperstat/"):]
+	vars := mux.Vars(req)
+	pk := vars["id"]
+	s := vars["stat"]
 
-	sSlice := strings.Split(s, "/")
-
-	ch, stat := sSlice[0], sSlice[1]
-
-	id, err := strconv.Atoi(ch)
+	id, err := strconv.Atoi(pk)
 	if err != nil {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
@@ -431,7 +431,7 @@ func DeleteHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 
-	targetStat := c.Statistics[stat]
+	targetStat := c.Statistics[s]
 
 	wc := WebChar{
 		Character: c,
@@ -459,6 +459,9 @@ func DeleteHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
+
+		url := fmt.Sprintf("/view_character/%d", c.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 }

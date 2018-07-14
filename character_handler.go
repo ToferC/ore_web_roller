@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/toferc/oneroll"
 	"github.com/toferc/ore_web_roller/database"
 )
@@ -22,7 +23,8 @@ func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 // CharacterHandler renders a character in a Web page
 func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
-	pk := req.URL.Path[len("/view_character/"):]
+	vars := mux.Vars(req)
+	pk := vars["id"]
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
@@ -103,7 +105,8 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	c := &oneroll.Character{Setting: "WT"}
 
-	setting := req.URL.Path[len("/new/"):]
+	vars := mux.Vars(req)
+	setting := vars["setting"]
 
 	switch setting {
 	case "SR":
@@ -288,14 +291,18 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
+
+		url := fmt.Sprintf("/view_character/%d", c.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 }
 
 // ModifyCharacterHandler renders a character in a Web page
 func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
-	pk := req.URL.Path[len("/modify/"):]
+	vars := mux.Vars(req)
+	pk := vars["id"]
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
@@ -405,16 +412,22 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			for _, s := range wc.Counter[:5] {
 				iName := req.FormValue(fmt.Sprintf("Intrinsic-%d-Name", s))
 
-				iInfo := req.FormValue(fmt.Sprintf("Intrinsic-%d-Info", s))
-
 				if iName != "" {
 					i := oneroll.Intrinsics[iName]
-					l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Intrinsic-%d-Level", s)))
-					if err != nil {
-						l = 1
+
+					if i.RequiresLevel {
+						l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Intrinsic-%d-Level", s)))
+						if err != nil {
+							l = 1
+						}
+						i.Level = l
 					}
-					i.Level = l
-					i.Info = iInfo
+
+					if i.RequiresInfo {
+						iInfo := req.FormValue(fmt.Sprintf("Intrinsic-%d-Info", s))
+						i.Info = iInfo
+					}
+
 					c.Archetype.Intrinsics = append(c.Archetype.Intrinsics, i)
 				}
 			}
@@ -491,14 +504,18 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		fmt.Println(c)
-		http.Redirect(w, req, "/view_character/"+string(c.ID), http.StatusSeeOther)
+
+		url := fmt.Sprintf("/view_character/%d", c.ID)
+
+		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 }
 
 // DeleteCharacterHandler renders a character in a Web page
 func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
-	pk := req.URL.Path[len("/delete/"):]
+	vars := mux.Vars(req)
+	pk := vars["id"]
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)

@@ -43,6 +43,7 @@ type WebChar struct {
 	Intrinsics  map[string]*oneroll.Intrinsic
 	Advantages  map[string]*oneroll.Advantage
 	Capacities  map[string]float32
+	Powers      map[string]oneroll.Power
 	Counter     []int
 }
 

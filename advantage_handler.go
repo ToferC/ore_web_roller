@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/toferc/oneroll"
 	"github.com/toferc/ore_web_roller/database"
 )
@@ -12,7 +13,8 @@ import (
 // ModifyAdvantageHandler renders a character in a Web page
 func ModifyAdvantageHandler(w http.ResponseWriter, req *http.Request) {
 
-	pk := req.URL.Path[len("/add_advantages/"):]
+	vars := mux.Vars(req)
+	pk := vars["id"]
 
 	if len(pk) == 0 {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
@@ -50,7 +52,9 @@ func ModifyAdvantageHandler(w http.ResponseWriter, req *http.Request) {
 
 		Render(w, "templates/add_advantages.html", wc)
 
-	} else {
+	}
+
+	if req.Method == "POST" {
 
 		err := req.ParseForm()
 		if err != nil {
@@ -85,5 +89,8 @@ func ModifyAdvantageHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	fmt.Println(c)
-	http.Redirect(w, req, "/view/"+string(c.ID), http.StatusSeeOther)
+
+	url := fmt.Sprintf("/view_character/%d", c.ID)
+
+	http.Redirect(w, req, url, http.StatusSeeOther)
 }

@@ -73,6 +73,7 @@
                 {{ end }} <!-- end Permissions -->
                 <hr>
 
+                {{ if $character.Archetype.Intrinsics }}
                 <h4>Intrinsics</h4>
                 {{ range $i, $v := $character.Archetype.Intrinsics }} <!-- intrinsics loop -->
                 <label for="Intrinsic-{{$i}}">Intrinsic {{add $i 1}}</label>
@@ -92,6 +93,7 @@
                 </div>
                 <hr>
                 {{ end }} <!-- End Intrinsics Loop -->
+                {{ end }} <!-- End Intrinsic IF -->
                 {{ end }} <!-- End Archetype IF -->
                 <hr>
             </div>
