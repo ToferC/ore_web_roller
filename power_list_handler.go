@@ -55,7 +55,9 @@ func PowerListHandler(w http.ResponseWriter, req *http.Request) {
 			panic(err)
 		}
 
-		c.Powers = map[string]*oneroll.Power{}
+		if c.Powers != nil {
+			c.Powers = map[string]*oneroll.Power{}
+		}
 
 		pName := req.FormValue("Name")
 
