@@ -76,7 +76,7 @@ func ModifyAdvantageHandler(w http.ResponseWriter, req *http.Request) {
 				}
 				a.Level = l
 				a.Info = aInfo
-				c.Advantages = append(c.Advantages, a)
+				c.Advantages = append(c.Advantages, &a)
 			}
 		}
 	}

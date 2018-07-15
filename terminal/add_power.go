@@ -242,7 +242,7 @@ func ChooseModifiers(q *oneroll.Quality) error {
 	if len(q.Capacities) > 1 {
 		tm := oneroll.Modifiers["Power Capacity"]
 		tm.Level = len(q.Capacities) - 1
-		q.Modifiers = append(q.Modifiers, tm)
+		q.Modifiers = append(q.Modifiers, &tm)
 		fmt.Println("\n**Added Power Capacity Extra at level ", tm.Level)
 	}
 
@@ -341,8 +341,9 @@ ExtrasOrFlawsLoop:
 				}
 			} // End ChooseModifiersLoop
 
+			tempMod := oneroll.Modifiers[answer]
 			// Add the selected source to Quality.Modifiers
-			q.Modifiers = append(q.Modifiers, oneroll.Modifiers[answer])
+			q.Modifiers = append(q.Modifiers, &tempMod)
 		}
 	} // End ExtrasOrFlawsLoop
 	return err

@@ -221,14 +221,16 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 					}
 					i.Level = l
 					i.Info = iInfo
-					c.Archetype.Intrinsics = append(c.Archetype.Intrinsics, i)
+					c.Archetype.Intrinsics = append(c.Archetype.Intrinsics, &i)
 				}
 
 				if sType != "" {
-					c.Archetype.Sources = append(c.Archetype.Sources, oneroll.Sources[sType])
+					tS := oneroll.Sources[sType]
+					c.Archetype.Sources = append(c.Archetype.Sources, &tS)
 				}
 				if pType != "" {
-					c.Archetype.Permissions = append(c.Archetype.Permissions, oneroll.Permissions[pType])
+					tP := oneroll.Permissions[pType]
+					c.Archetype.Permissions = append(c.Archetype.Permissions, &tP)
 				}
 			}
 		}
@@ -402,10 +404,12 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 				pType := req.FormValue(fmt.Sprintf("Permission-%d", s))
 
 				if sType != "" {
-					c.Archetype.Sources = append(c.Archetype.Sources, oneroll.Sources[sType])
+					tS := oneroll.Sources[sType]
+					c.Archetype.Sources = append(c.Archetype.Sources, &tS)
 				}
 				if pType != "" {
-					c.Archetype.Permissions = append(c.Archetype.Permissions, oneroll.Permissions[pType])
+					tP := oneroll.Permissions[pType]
+					c.Archetype.Permissions = append(c.Archetype.Permissions, &tP)
 				}
 			}
 
@@ -428,7 +432,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 						i.Info = iInfo
 					}
 
-					c.Archetype.Intrinsics = append(c.Archetype.Intrinsics, i)
+					c.Archetype.Intrinsics = append(c.Archetype.Intrinsics, &i)
 				}
 			}
 		}

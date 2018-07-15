@@ -149,7 +149,7 @@ func (hs *HyperStat) CalculateCost() {
 		if len(q.Capacities) > 3 {
 			tm := Modifiers["Power Capacity"]
 			tm.Level = len(q.Capacities) - 3
-			q.Modifiers = append(q.Modifiers, tm)
+			q.Modifiers = append(q.Modifiers, &tm)
 		}
 
 		for _, m := range q.Modifiers {

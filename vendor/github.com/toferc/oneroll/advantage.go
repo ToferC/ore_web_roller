@@ -31,8 +31,8 @@ func (a *Advantage) String() string {
 }
 
 // Advantages sets Wild Talents default permissions
-var Advantages = map[string]*Advantage{
-	"Animal Companion": &Advantage{
+var Advantages = map[string]Advantage{
+	"Animal Companion": Advantage{
 		Name:          "Animal Companion",
 		RequiresInfo:  true,
 		Info:          "Type of Animal",
@@ -41,19 +41,19 @@ var Advantages = map[string]*Advantage{
 		Description:   "See p.29",
 		Cost:          1,
 	},
-	"Beauty": &Advantage{
+	"Beauty": Advantage{
 		Name:          "Beauty",
 		RequiresLevel: true,
 		Level:         1,
 		Description:   "See p.29",
 		Cost:          1,
 	},
-	"Cannibal Smile": &Advantage{
+	"Cannibal Smile": Advantage{
 		Name:        "Cannibal Smile",
 		Description: "See p.31",
 		Cost:        1,
 	},
-	"Followers": &Advantage{
+	"Followers": Advantage{
 		Name:          "Followers",
 		RequiresInfo:  true,
 		Info:          "Type of Follower",
@@ -62,29 +62,29 @@ var Advantages = map[string]*Advantage{
 		Description:   "See p.29",
 		Cost:          1,
 	},
-	"Fool Lucky": &Advantage{
+	"Fool Lucky": Advantage{
 		Name:        "Fool Lucky",
 		Description: "See p.31",
 		Cost:        5,
 	},
-	"Knack for Learning": &Advantage{
+	"Knack for Learning": Advantage{
 		Name:         "Knack for Learning",
 		Description:  "See p.31",
 		RequiresInfo: true,
 		Info:         "Skill",
 		Cost:         5,
 	},
-	"Leather Hard": &Advantage{
+	"Leather Hard": Advantage{
 		Name:        "Leather Hard",
 		Description: "See p.31",
 		Cost:        5,
 	},
-	"Lucky": &Advantage{
+	"Lucky": Advantage{
 		Name:        "Lucky",
 		Description: "See p.31",
 		Cost:        1,
 	},
-	"Patron": &Advantage{
+	"Patron": Advantage{
 		Name:          "Patron",
 		RequiresInfo:  true,
 		Info:          "Type of Patron",
@@ -93,7 +93,7 @@ var Advantages = map[string]*Advantage{
 		Description:   "See p.29",
 		Cost:          1,
 	},
-	"Spells": &Advantage{
+	"Spells": Advantage{
 		Name:          "Spells",
 		RequiresInfo:  true,
 		Info:          "Type of Spells",
@@ -102,7 +102,7 @@ var Advantages = map[string]*Advantage{
 		Description:   "See p.29",
 		Cost:          1,
 	},
-	"Possession": &Advantage{
+	"Possession": Advantage{
 		Name:          "Possession",
 		RequiresInfo:  true,
 		Info:          "Type of Possession",
@@ -111,7 +111,7 @@ var Advantages = map[string]*Advantage{
 		Description:   "See p.29",
 		Cost:          1,
 	},
-	"Secret": &Advantage{
+	"Secret": Advantage{
 		Name:          "Secret",
 		RequiresInfo:  true,
 		Info:          "Type of Secret",
@@ -120,7 +120,7 @@ var Advantages = map[string]*Advantage{
 		Description:   "See p.29",
 		Cost:          1,
 	},
-	"Status": &Advantage{
+	"Status": Advantage{
 		Name:          "Status",
 		RequiresInfo:  true,
 		Info:          "Type of Status",
@@ -129,12 +129,12 @@ var Advantages = map[string]*Advantage{
 		Description:   "See p.29",
 		Cost:          1,
 	},
-	"Thick Headed": &Advantage{
+	"Thick Headed": Advantage{
 		Name:        "Thick Headed",
 		Description: "See p.33",
 		Cost:        1,
 	},
-	"Wealth": &Advantage{
+	"Wealth": Advantage{
 		Name:          "Wealth",
 		RequiresInfo:  true,
 		Info:          "Type of Wealth",

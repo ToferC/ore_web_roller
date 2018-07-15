@@ -21,6 +21,18 @@
   version = "v6.14.2"
 
 [[projects]]
+  name = "github.com/gorilla/context"
+  packages = ["."]
+  revision = "08b5f424b9271eedf6f9f0ce86cb9396ed337a42"
+  version = "v1.1.1"
+
+[[projects]]
+  name = "github.com/gorilla/mux"
+  packages = ["."]
+  revision = "e3702bed27f0d39777b0b37b664b6280e8ef8fbf"
+  version = "v1.6.2"
+
+[[projects]]
   branch = "master"
   name = "github.com/jinzhu/inflection"
   packages = ["."]
@@ -30,11 +42,11 @@
   branch = "master"
   name = "github.com/toferc/oneroll"
   packages = ["."]
-  revision = "1015a5c11d1fbdb9e0aae89450027f8a3da10443"
+  revision = "2b305f8bef42f830842f84e99bf10360bed957da"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "1ad10840b52ef9182bf5de06831eb146ffd05bf398cbec680c902cff7282517e"
+  inputs-digest = "891f846e7ee59ac78c0d80c14a155af24477e9e273199d2305bc91302af3face"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -216,7 +216,7 @@ func (hs *HyperSkill) CalculateCost() {
 		if len(q.Capacities) > 1 {
 			tm := Modifiers["Power Capacity"]
 			tm.Level = len(q.Capacities) - 1
-			q.Modifiers = append(q.Modifiers, tm)
+			q.Modifiers = append(q.Modifiers, &tm)
 		}
 
 		for _, m := range q.Modifiers {

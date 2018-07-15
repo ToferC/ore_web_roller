@@ -63,10 +63,10 @@ func (m *Modifier) CalculateCost(b int) {
 }
 
 // Modifiers creates map of standard WT extras & Flaws
-var Modifiers = map[string]*Modifier{
+var Modifiers = map[string]Modifier{
 
 	// Extras
-	"Custom Extra": &Modifier{
+	"Custom Extra": Modifier{
 		Name:          "Custom Extra",
 		Description:   "",
 		RequiresLevel: true,
@@ -75,7 +75,7 @@ var Modifiers = map[string]*Modifier{
 		Info:          "",
 		CostPerLevel:  1,
 	},
-	"Custom Flaw": &Modifier{
+	"Custom Flaw": Modifier{
 		Name:          "Custom Flaw",
 		Description:   "",
 		RequiresLevel: true,
@@ -86,7 +86,7 @@ var Modifiers = map[string]*Modifier{
 	},
 
 	// Shadowrun modifiers
-	"Drain": &Modifier{
+	"Drain": Modifier{
 		Name:          "Drain",
 		Description:   "One Shock damage once threshold passed.",
 		RequiresLevel: false,
@@ -95,7 +95,7 @@ var Modifiers = map[string]*Modifier{
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Essence Cost": &Modifier{
+	"Essence Cost": Modifier{
 		Name:          "Essence Cost",
 		Description:   "",
 		RequiresLevel: true,
@@ -106,7 +106,7 @@ var Modifiers = map[string]*Modifier{
 	},
 
 	// Regular modifiers
-	"Area": &Modifier{
+	"Area": Modifier{
 		Name:          "Area",
 		Description:   "",
 		RequiresLevel: true,
@@ -115,7 +115,7 @@ var Modifiers = map[string]*Modifier{
 		Info:          "",
 		CostPerLevel:  1,
 	},
-	"Augment": &Modifier{
+	"Augment": Modifier{
 		Name:          "Augment",
 		Description:   "",
 		RequiresLevel: false,
@@ -123,129 +123,129 @@ var Modifiers = map[string]*Modifier{
 		Info:          "",
 		CostPerLevel:  4,
 	},
-	"Booster": &Modifier{
+	"Booster": Modifier{
 		Name:          "Booster",
 		Description:   "",
 		RequiresLevel: true,
 		Level:         1,
 		CostPerLevel:  1,
 	},
-	"Burn": &Modifier{
+	"Burn": Modifier{
 		Name:         "Burn",
 		Description:  "",
 		CostPerLevel: 2,
 	},
-	"Controlled Effect": &Modifier{
+	"Controlled Effect": Modifier{
 		Name:         "Controlled Effect",
 		Description:  "",
 		CostPerLevel: 1,
 	},
-	"Daze": &Modifier{
+	"Daze": Modifier{
 		Name:         "Daze",
 		Description:  "",
 		CostPerLevel: 1,
 	},
-	"Deadly": &Modifier{
+	"Deadly": Modifier{
 		Name:          "Deadly",
 		Description:   "1: Killing, 2: Shock & Killing",
 		RequiresLevel: true,
 		Level:         1,
 		CostPerLevel:  1,
 	},
-	"Disintigrate": &Modifier{
+	"Disintigrate": Modifier{
 		Name:         "Disintigrate",
 		Description:  "",
 		CostPerLevel: 2,
 	},
-	"Duration": &Modifier{
+	"Duration": Modifier{
 		Name:         "Duration",
 		Description:  "",
 		CostPerLevel: 2,
 	},
-	"Electrocuting": &Modifier{
+	"Electrocuting": Modifier{
 		Name:         "Electrocuting",
 		Description:  "",
 		CostPerLevel: 1,
 	},
-	"Endless": &Modifier{
+	"Endless": Modifier{
 		Name:         "Endless",
 		Description:  "",
 		CostPerLevel: 3,
 	},
-	"Engulf": &Modifier{
+	"Engulf": Modifier{
 		Name:         "Engulf",
 		Description:  "",
 		CostPerLevel: 2,
 	},
-	"Go First": &Modifier{
+	"Go First": Modifier{
 		Name:          "Go First",
 		Description:   "",
 		RequiresLevel: true,
 		Level:         1,
 		CostPerLevel:  1,
 	},
-	"Hardened Defense": &Modifier{
+	"Hardened Defense": Modifier{
 		Name:         "Hardened Defense",
 		Description:  "",
 		CostPerLevel: 2,
 	},
-	"High Capacity": &Modifier{
+	"High Capacity": Modifier{
 		Name:         "High Capacity",
 		Description:  "",
 		RequiresInfo: true,
 		Info:         "",
 		CostPerLevel: 1,
 	},
-	"Interference": &Modifier{
+	"Interference": Modifier{
 		Name:         "Interference",
 		Description:  "",
 		CostPerLevel: 3,
 	},
-	"Native Power": &Modifier{
+	"Native Power": Modifier{
 		Name:         "Native Power",
 		Description:  "",
 		CostPerLevel: 1,
 	},
-	"No Physics": &Modifier{
+	"No Physics": Modifier{
 		Name:         "No Physics",
 		Description:  "",
 		CostPerLevel: 1,
 	},
-	"No Upward Limit": &Modifier{
+	"No Upward Limit": Modifier{
 		Name:         "No Upward Limit",
 		Description:  "",
 		CostPerLevel: 2,
 	},
-	"Non-Physical": &Modifier{
+	"Non-Physical": Modifier{
 		Name:         "Non-Physical",
 		Description:  "",
 		CostPerLevel: 2,
 	},
-	"On Sight": &Modifier{
+	"On Sight": Modifier{
 		Name:         "On Sight",
 		Description:  "",
 		CostPerLevel: 1,
 	},
-	"Penetration": &Modifier{
+	"Penetration": Modifier{
 		Name:          "Penetration",
 		Description:   "",
 		RequiresLevel: true,
 		Level:         1,
 		CostPerLevel:  1,
 	},
-	"Permanent": &Modifier{
+	"Permanent": Modifier{
 		Name:         "Permanent",
 		Description:  "",
 		CostPerLevel: 4,
 	},
-	"Radius": &Modifier{
+	"Radius": Modifier{
 		Name:          "Radius",
 		Description:   "10m x2/level",
 		RequiresLevel: true,
 		Level:         1,
 		CostPerLevel:  2,
 	},
-	"Power Capacity": &Modifier{
+	"Power Capacity": Modifier{
 		Name:          "Power Capacity",
 		Description:   "Power Capacity Type",
 		RequiresLevel: true,
@@ -254,36 +254,36 @@ var Modifiers = map[string]*Modifier{
 		Info:          "Mass, Range, Speed or Touch",
 		CostPerLevel:  1,
 	},
-	"Speeding Bullet": &Modifier{
+	"Speeding Bullet": Modifier{
 		Name:         "Speeding Bullet",
 		Description:  "",
 		CostPerLevel: 2,
 	},
-	"Spray": &Modifier{
+	"Spray": Modifier{
 		Name:          "Spray",
 		Description:   "",
 		RequiresLevel: true,
 		Level:         1,
 		CostPerLevel:  1,
 	},
-	"Subtle": &Modifier{
+	"Subtle": Modifier{
 		Name:         "Subtle",
 		Description:  "",
 		CostPerLevel: 1,
 	},
-	"Traumatic": &Modifier{
+	"Traumatic": Modifier{
 		Name:         "Traumatic",
 		Description:  "",
 		CostPerLevel: 1,
 	},
-	"Variable Effect": &Modifier{
+	"Variable Effect": Modifier{
 		Name:         "Variable Effect",
 		Description:  "",
 		CostPerLevel: 4,
 	},
 
 	// Flaws
-	"Always On": &Modifier{
+	"Always On": Modifier{
 		Name:          "Always On",
 		Description:   "Combines with Permanent Extra",
 		RequiresLevel: false,
@@ -292,7 +292,7 @@ var Modifiers = map[string]*Modifier{
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Armored Defense": &Modifier{
+	"Armored Defense": Modifier{
 		Name:          "Armored Defense",
 		Description:   "",
 		RequiresLevel: false,
@@ -301,17 +301,17 @@ var Modifiers = map[string]*Modifier{
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"Attached": &Modifier{
+	"Attached": Modifier{
 		Name: "Attached",
 		Description: `Attached is worth –2 if it applies only when you use a specific Miracle or Skill. If Attached applies when you use a
 particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		RequiresLevel: true,
 		Level:         1,
-		RequiresInfo:  false,
+		RequiresInfo:  true,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Automatic": &Modifier{
+	"Automatic": Modifier{
 		Name:          "Automatic",
 		Description:   "",
 		RequiresLevel: false,
@@ -320,7 +320,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Backfires": &Modifier{
+	"Backfires": Modifier{
 		Name:          "Backfires",
 		Description:   "",
 		RequiresLevel: false,
@@ -329,7 +329,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"Base Will Cost": &Modifier{
+	"Base Will Cost": Modifier{
 		Name:          "Base Will Cost",
 		Description:   "",
 		RequiresLevel: false,
@@ -338,7 +338,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -4,
 	},
-	"Delayed Effect": &Modifier{
+	"Delayed Effect": Modifier{
 		Name:          "Delayed Effect",
 		Description:   "",
 		RequiresLevel: false,
@@ -347,16 +347,16 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"Depleted": &Modifier{
+	"Depleted": Modifier{
 		Name:          "Depleted",
 		Description:   "",
 		RequiresLevel: false,
 		Level:         1,
-		RequiresInfo:  false,
+		RequiresInfo:  true,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Direct Feed": &Modifier{
+	"Direct Feed": Modifier{
 		Name:          "Direct Feed",
 		Description:   "",
 		RequiresLevel: false,
@@ -365,7 +365,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"Exhausted": &Modifier{
+	"Exhausted": Modifier{
 		Name:          "Exhausted",
 		Description:   "",
 		RequiresLevel: false,
@@ -374,16 +374,16 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -3,
 	},
-	"Focus": &Modifier{
+	"Focus": Modifier{
 		Name:          "Focus",
 		Description:   "",
 		RequiresLevel: false,
 		Level:         1,
-		RequiresInfo:  false,
+		RequiresInfo:  true,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Full Power Only": &Modifier{
+	"Full Power Only": Modifier{
 		Name:          "Full Power Only",
 		Description:   "",
 		RequiresLevel: false,
@@ -392,7 +392,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Fragile": &Modifier{
+	"Fragile": Modifier{
 		Name:          "Fragile",
 		Description:   "",
 		RequiresLevel: false,
@@ -401,7 +401,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Go Last": &Modifier{
+	"Go Last": Modifier{
 		Name:          "Go Last",
 		Description:   "",
 		RequiresLevel: false,
@@ -410,7 +410,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Horrifying": &Modifier{
+	"Horrifying": Modifier{
 		Name:          "Horrifying",
 		Description:   "",
 		RequiresLevel: false,
@@ -419,7 +419,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"If/Then": &Modifier{
+	"If/Then": Modifier{
 		Name:          "If/Then",
 		Description:   "",
 		RequiresLevel: true,
@@ -428,7 +428,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Limited Damage": &Modifier{
+	"Limited Damage": Modifier{
 		Name:          "Limited Damage",
 		Description:   "",
 		RequiresLevel: false,
@@ -437,7 +437,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Limited Width": &Modifier{
+	"Limited Width": Modifier{
 		Name:          "Limited Width",
 		Description:   "",
 		RequiresLevel: false,
@@ -446,16 +446,16 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Locational": &Modifier{
+	"Locational": Modifier{
 		Name:          "Locational",
 		Description:   "",
 		RequiresLevel: false,
 		Level:         1,
-		RequiresInfo:  false,
+		RequiresInfo:  true,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Loopy": &Modifier{
+	"Loopy": Modifier{
 		Name:          "Loopy",
 		Description:   "",
 		RequiresLevel: false,
@@ -464,7 +464,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Mental Strain": &Modifier{
+	"Mental Strain": Modifier{
 		Name:          "Mental Strain",
 		Description:   "",
 		RequiresLevel: false,
@@ -473,7 +473,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"No Physical Change": &Modifier{
+	"No Physical Change": Modifier{
 		Name:          "No Physical Change",
 		Description:   "",
 		RequiresLevel: false,
@@ -482,16 +482,16 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Obvious": &Modifier{
+	"Obvious": Modifier{
 		Name:          "Obvious",
 		Description:   "",
 		RequiresLevel: false,
 		Level:         1,
-		RequiresInfo:  false,
+		RequiresInfo:  true,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"One Use": &Modifier{
+	"One Use": Modifier{
 		Name:          "One Use",
 		Description:   "",
 		RequiresLevel: false,
@@ -500,16 +500,16 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -4,
 	},
-	"Reduced Capacities": &Modifier{
+	"Reduced Capacities": Modifier{
 		Name:          "Reduced Capacities",
 		Description:   "",
 		RequiresLevel: false,
 		Level:         1,
-		RequiresInfo:  false,
+		RequiresInfo:  true,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Scattered Damage": &Modifier{
+	"Scattered Damage": Modifier{
 		Name:          "Scattered Damage",
 		Description:   "",
 		RequiresLevel: false,
@@ -518,7 +518,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Self Only": &Modifier{
+	"Self Only": Modifier{
 		Name:          "Self Only",
 		Description:   "",
 		RequiresLevel: false,
@@ -527,7 +527,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -3,
 	},
-	"Slow": &Modifier{
+	"Slow": Modifier{
 		Name:          "Slow",
 		Description:   "",
 		RequiresLevel: false,
@@ -536,7 +536,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"Touch Only": &Modifier{
+	"Touch Only": Modifier{
 		Name:          "Touch Only",
 		Description:   "",
 		RequiresLevel: false,
@@ -545,7 +545,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"Uncontrollable": &Modifier{
+	"Uncontrollable": Modifier{
 		Name:          "Uncontrollable",
 		Description:   "",
 		RequiresLevel: false,
@@ -554,7 +554,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"Willpower Bid": &Modifier{
+	"Willpower Bid": Modifier{
 		Name:          "Willpower Bid",
 		Description:   "",
 		RequiresLevel: false,
@@ -563,7 +563,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Willpower Cost": &Modifier{
+	"Willpower Cost": Modifier{
 		Name:          "Willpower Cost",
 		Description:   "",
 		RequiresLevel: false,
@@ -572,7 +572,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"Willpower Investment": &Modifier{
+	"Willpower Investment": Modifier{
 		Name:          "Willpower Investment",
 		Description:   "",
 		RequiresLevel: false,
@@ -583,7 +583,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 	},
 
 	// Focus Flaws
-	"Accessible": &Modifier{
+	"Accessible": Modifier{
 		Name:          "Accessible",
 		Description:   "",
 		RequiresLevel: false,
@@ -593,7 +593,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Adaptation": &Modifier{
+	"Adaptation": Modifier{
 		Name:          "Adaptation",
 		Description:   "",
 		RequiresLevel: false,
@@ -603,7 +603,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"Booby-Trapped": &Modifier{
+	"Booby-Trapped": Modifier{
 		Name:          "Booby-Trapped",
 		Description:   "",
 		RequiresLevel: false,
@@ -613,7 +613,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  1,
 	},
-	"Bulky": &Modifier{
+	"Bulky": Modifier{
 		Name:          "Bulky",
 		Description:   "",
 		RequiresLevel: false,
@@ -623,7 +623,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Crew": &Modifier{
+	"Crew": Modifier{
 		Name:          "Crew",
 		Description:   "",
 		RequiresLevel: false,
@@ -633,7 +633,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Delicate": &Modifier{
+	"Delicate": Modifier{
 		Name:          "Delicate",
 		Description:   "",
 		RequiresLevel: false,
@@ -643,7 +643,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Durable": &Modifier{
+	"Durable": Modifier{
 		Name:          "Durable",
 		Description:   "",
 		RequiresLevel: false,
@@ -653,7 +653,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  1,
 	},
-	"Environment Bound": &Modifier{
+	"Environment Bound": Modifier{
 		Name:          "Environment Bound",
 		Description:   "",
 		RequiresLevel: false,
@@ -663,7 +663,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Friends Only": &Modifier{
+	"Friends Only": Modifier{
 		Name:          "Friends Only",
 		Description:   "",
 		RequiresLevel: false,
@@ -673,7 +673,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  2,
 	},
-	"Immutable": &Modifier{
+	"Immutable": Modifier{
 		Name:          "Immutable",
 		Description:   "",
 		RequiresLevel: false,
@@ -683,7 +683,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Indestructible": &Modifier{
+	"Indestructible": Modifier{
 		Name:          "Indestructible",
 		Description:   "",
 		RequiresLevel: false,
@@ -693,7 +693,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  2,
 	},
-	"Irreplaceable": &Modifier{
+	"Irreplaceable": Modifier{
 		Name:          "Irreplaceable",
 		Description:   "",
 		RequiresLevel: false,
@@ -703,7 +703,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -2,
 	},
-	"Manufacturable": &Modifier{
+	"Manufacturable": Modifier{
 		Name:          "Manufacturable",
 		Description:   "",
 		RequiresLevel: false,
@@ -713,7 +713,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  2,
 	},
-	"Operational Skill": &Modifier{
+	"Operational Skill": Modifier{
 		Name:          "Operational Skill",
 		Description:   "",
 		RequiresLevel: false,
@@ -723,7 +723,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  -1,
 	},
-	"Secret": &Modifier{
+	"Secret": Modifier{
 		Name:          "Secret",
 		Description:   "",
 		RequiresLevel: false,
@@ -733,7 +733,7 @@ particular Stat (which can be used with multiple Skills), it’s worth –1.`,
 		Info:          "",
 		CostPerLevel:  1,
 	},
-	"Unwieldy": &Modifier{
+	"Unwieldy": Modifier{
 		Name:          "Unwieldy",
 		Description:   "",
 		RequiresLevel: true,

@@ -168,14 +168,16 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 				for _, mLoop := range wc.Counter { // Modifier Loop
 					mName := req.FormValue(fmt.Sprintf("Q%d-M%d-Name", qLoop, mLoop))
 					if mName != "" {
-						l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-M%d-Level", qLoop, mLoop)))
-						if err != nil {
-							l = 1
-						}
 
-						m = oneroll.Modifiers[mName]
+						tM := oneroll.Modifiers[mName]
+
+						m = &tM
 
 						if m.RequiresLevel {
+							l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-M%d-Level", qLoop, mLoop)))
+							if err != nil {
+								l = 1
+							}
 							m.Level = l
 						}
 
@@ -344,28 +346,38 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 				for _, mLoop := range wc.Counter { // Modifier Loop
 					mName := req.FormValue(fmt.Sprintf("Q%d-M%d-Name", qLoop, mLoop))
 					if mName != "" {
-						l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-M%d-Level", qLoop, mLoop)))
-						if err != nil {
-							l = 1
-						}
 
-						m = oneroll.Modifiers[mName]
+						// Take base modifier struct from Modifiers
+						tM := oneroll.Modifiers[mName]
+
+						m = &tM
 
 						if m.RequiresLevel {
+							// Ensure level is a number or set to 1
+							l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-M%d-Level", qLoop, mLoop)))
+							if err != nil {
+								l = 1
+							}
 							m.Level = l
 						}
 
 						if m.RequiresInfo {
 							m.Info = req.FormValue(fmt.Sprintf("Q%d-M%d-Info", qLoop, mLoop))
 						}
+						// Append new modifier to Quality Modifiers
 						q.Modifiers = append(q.Modifiers, m)
+
 					}
 				}
+				// Append Quality to Power Qualities
 				p.Qualities = append(p.Qualities, q)
 			}
 		}
 
+		// Add Power to Character Powers map
 		c.Powers[p.Slug] = &p
+
+		// Remove the default Power
 		delete(c.Powers, "default")
 
 		fmt.Println(c)

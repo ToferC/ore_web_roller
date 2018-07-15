@@ -37,11 +37,11 @@ type WebChar struct {
 	Skill       *oneroll.Skill
 	Shock       map[string][]int
 	Kill        map[string][]int
-	Modifiers   map[string]*oneroll.Modifier
-	Sources     map[string]*oneroll.Source
-	Permissions map[string]*oneroll.Permission
-	Intrinsics  map[string]*oneroll.Intrinsic
-	Advantages  map[string]*oneroll.Advantage
+	Modifiers   map[string]oneroll.Modifier
+	Sources     map[string]oneroll.Source
+	Permissions map[string]oneroll.Permission
+	Intrinsics  map[string]oneroll.Intrinsic
+	Advantages  map[string]oneroll.Advantage
 	Capacities  map[string]float32
 	Powers      map[string]oneroll.Power
 	Counter     []int

@@ -56,7 +56,9 @@ ChooseSourcesLoop:
 
 		} else {
 			// Add the selected source to Archetype.Sources
-			a.Sources = append(a.Sources, oneroll.Sources[answer])
+			tA := oneroll.Sources[answer]
+
+			a.Sources = append(a.Sources, &tA)
 		}
 	} // End ChooseSourcesLoop
 
@@ -93,7 +95,8 @@ ChoosePermissionsLoop:
 
 		} else {
 			// Add the selected source to Archetype.Sources
-			a.Permissions = append(a.Permissions, oneroll.Permissions[answer])
+			tP := oneroll.Permissions[answer]
+			a.Permissions = append(a.Permissions, &tP)
 		}
 	} // End ChoosePermissionsLoop
 
@@ -130,7 +133,8 @@ ChooseIntrinsicsLoop:
 
 		} else {
 			// Add the selected source to Archetype.Sources
-			a.Intrinsics = append(a.Intrinsics, oneroll.Intrinsics[answer])
+			tI := oneroll.Intrinsics[answer]
+			a.Intrinsics = append(a.Intrinsics, &tI)
 		}
 	} // End ChoosePermissionsLoop
 

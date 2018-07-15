@@ -118,64 +118,64 @@ func (i Intrinsic) String() string {
 }
 
 // Sources Set Wild Talents Sources
-var Sources = map[string]*Source{
+var Sources = map[string]Source{
 
-	"Construct":        &Source{Type: "Construct", Cost: 5, Description: ""},
-	"Cyborg":           &Source{Type: "Cyborg", Cost: 5, Description: ""},
-	"Divine":           &Source{Type: "Divine", Cost: 5, Description: ""},
-	"Driven":           &Source{Type: "Driven", Cost: 5, Description: ""},
-	"Extraterrestrial": &Source{Type: "Extraterrestrial", Cost: 5, Description: ""},
-	"Genetic":          &Source{Type: "Genetic", Cost: 5, Description: ""},
-	"Life Force":       &Source{Type: "Life Force", Cost: 5, Description: ""},
-	"Paranormal":       &Source{Type: "Paranormal", Cost: 5, Description: ""},
-	"Power Focus":      &Source{Type: "Power Focus", Cost: -8, Description: ""},
-	"Psi":              &Source{Type: "Psi", Cost: 5, Description: ""},
-	"Technological":    &Source{Type: "Technological", Cost: 5, Description: ""},
-	"Unknown":          &Source{Type: "Unknown", Cost: -5, Description: ""},
+	"Construct":        Source{Type: "Construct", Cost: 5, Description: ""},
+	"Cyborg":           Source{Type: "Cyborg", Cost: 5, Description: ""},
+	"Divine":           Source{Type: "Divine", Cost: 5, Description: ""},
+	"Driven":           Source{Type: "Driven", Cost: 5, Description: ""},
+	"Extraterrestrial": Source{Type: "Extraterrestrial", Cost: 5, Description: ""},
+	"Genetic":          Source{Type: "Genetic", Cost: 5, Description: ""},
+	"Life Force":       Source{Type: "Life Force", Cost: 5, Description: ""},
+	"Paranormal":       Source{Type: "Paranormal", Cost: 5, Description: ""},
+	"Power Focus":      Source{Type: "Power Focus", Cost: -8, Description: ""},
+	"Psi":              Source{Type: "Psi", Cost: 5, Description: ""},
+	"Technological":    Source{Type: "Technological", Cost: 5, Description: ""},
+	"Unknown":          Source{Type: "Unknown", Cost: -5, Description: ""},
 }
 
 // Permissions sets Wild Talents default permissions
-var Permissions = map[string]*Permission{
+var Permissions = map[string]Permission{
 
-	"None": &Permission{
+	"None": Permission{
 		Type:        "None",
 		Cost:        0,
 		Description: "",
 	},
-	"Hypertrained": &Permission{
+	"Hypertrained": Permission{
 		Type:            "Hypertrained",
 		Cost:            5,
 		Description:     "",
 		AllowHyperSkill: true,
 	},
-	"Inhuman Stats": &Permission{
+	"Inhuman Stats": Permission{
 		Type:            "Inhuman Stats",
 		Cost:            1,
 		Description:     "",
 		AllowHyperSkill: true,
 	},
-	"Inventor": &Permission{
+	"Inventor": Permission{
 		Type:              "Inventor",
 		Cost:              5,
 		Description:       "",
 		AllowGadgeteering: true,
 		AllowGadgets:      true,
 	},
-	"One Power": &Permission{
+	"One Power": Permission{
 		Type:          "One Power",
 		Cost:          1,
 		Description:   "",
 		AllowMiracles: true,
 		PowerLimit:    1,
 	},
-	"Peak Performer": &Permission{
+	"Peak Performer": Permission{
 		Type:        "Peak Performer",
 		Cost:        5,
 		Description: "",
 		AllowWiggle: true,
 		AllowHard:   true,
 	},
-	"Power Theme": &Permission{
+	"Power Theme": Permission{
 		Type:            "Power Theme",
 		Cost:            5,
 		Description:     "",
@@ -185,13 +185,13 @@ var Permissions = map[string]*Permission{
 		AllowHard:       true,
 		AllowWiggle:     true,
 	},
-	"Prime Specimen": &Permission{
+	"Prime Specimen": Permission{
 		Type:           "Prime Specimen",
 		Cost:           5,
 		Description:    "",
 		AllowHyperStat: true,
 	},
-	"Super": &Permission{
+	"Super": Permission{
 		Type:            "Super",
 		Cost:            15,
 		Description:     "",
@@ -201,7 +201,7 @@ var Permissions = map[string]*Permission{
 		AllowHard:       true,
 		AllowWiggle:     true,
 	},
-	"Super Equipment": &Permission{
+	"Super Equipment": Permission{
 		Type:         "Super Equipment",
 		Cost:         2,
 		Description:  "",
@@ -210,9 +210,9 @@ var Permissions = map[string]*Permission{
 }
 
 // Intrinsics sets Wild Talents default permissions
-var Intrinsics = map[string]*Intrinsic{
+var Intrinsics = map[string]Intrinsic{
 
-	"Allergy": &Intrinsic{
+	"Allergy": Intrinsic{
 		Name:          "Allergy",
 		RequiresInfo:  true,
 		Info:          "Substance frequency x threat",
@@ -221,61 +221,65 @@ var Intrinsics = map[string]*Intrinsic{
 		Description:   "Default to Frequent & Kills",
 		Cost:          -1,
 	},
-	"Brute/Frail": &Intrinsic{
+	"Brute/Frail": Intrinsic{
 		Name:        "Brute/Frail",
 		Description: "",
 		Cost:        -8,
 	},
-	"Custom Stats": &Intrinsic{
+	"Custom Stats": Intrinsic{
 		Name:         "Custom Stats",
 		Description:  "",
 		RequiresInfo: true,
 		Info:         "",
 		Cost:         5,
 	},
-	"Globular": &Intrinsic{
+	"Globular": Intrinsic{
 		Name:        "Globular",
 		Description: "",
 		Cost:        8,
 	},
-	"Inhuman": &Intrinsic{
-		Name:        "Inhuman",
-		Description: "",
-		Cost:        -8,
+	"Inhuman": Intrinsic{
+		Name:          "Inhuman",
+		RequiresInfo:  true,
+		Info:          "",
+		RequiresLevel: true,
+		Level:         8,
+		Description:   "Terrifying",
+		Cost:          -1,
 	},
-	"Mandatory Power": &Intrinsic{
+	"Mandatory Power": Intrinsic{
 		Name:         "Mandatory Power",
 		RequiresInfo: true,
 		Info:         "",
 		Description:  "",
 		Cost:         0,
 	},
-	"Mutable": &Intrinsic{
+	"Mutable": Intrinsic{
 		Name:        "Mutable",
 		Description: "",
 		Cost:        15,
 	},
-	"No Base Will": &Intrinsic{
+	"No Base Will": Intrinsic{
 		Name:        "No Base Will",
 		Description: "",
 		Cost:        -10,
 	},
-	"No Willpower": &Intrinsic{
+	"No Willpower": Intrinsic{
 		Name:        "No Willpower",
 		Description: "",
 		Cost:        -5,
 	},
-	"No Willpower No Way": &Intrinsic{
+	"No Willpower No Way": Intrinsic{
 		Name:        "No Willpower No Way",
 		Description: "",
 		Cost:        -5,
 	},
-	"Unhealing": &Intrinsic{
+	"Unhealing": Intrinsic{
 		Name:        "Unhealing",
 		Description: "",
 		Cost:        -8,
 	},
-	"Vulnerable": &Intrinsic{
+	"Vulnerable": Intrinsic{
 		Name:          "Vulnerable",
 		RequiresInfo:  true,
 		Info:          "Substance frequency x threat",
@@ -284,12 +288,12 @@ var Intrinsics = map[string]*Intrinsic{
 		Description:   "Default to Frequent & Kills",
 		Cost:          -1,
 	},
-	"Willpower Contest": &Intrinsic{
+	"Willpower Contest": Intrinsic{
 		Name:        "Willpower Contest",
 		Description: "",
 		Cost:        -10,
 	},
-	"Custom": &Intrinsic{
+	"Custom": Intrinsic{
 		Name:          "Custom",
 		RequiresInfo:  true,
 		Info:          "",

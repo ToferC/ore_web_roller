@@ -173,7 +173,9 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 							l = 0
 						}
 
-						m = oneroll.Modifiers[mName]
+						tM := oneroll.Modifiers[mName]
+
+						m = &tM
 
 						if m.RequiresLevel {
 							m.Level = l
@@ -357,7 +359,9 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 							l = 0
 						}
 
-						m = oneroll.Modifiers[mName]
+						tM := oneroll.Modifiers[mName]
+
+						m = &tM
 
 						if m.RequiresLevel {
 							m.Level = l
