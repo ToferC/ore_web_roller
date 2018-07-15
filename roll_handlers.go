@@ -116,8 +116,8 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 // OpposeHandler generates a Web user interface
 func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 
-	var nd, hd, wd, gf, sp, ac, action string
-	var nd2, hd2, wd2, gf2, sp2, ac2, action2 string
+	var nd, hd, wd, gf, sp, ac, ed, action string
+	var nd2, hd2, wd2, gf2, sp2, ac2, ed2, action2 string
 
 	if req.Method == "GET" {
 
@@ -125,7 +125,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 
 		var dieString, dieString2 string
 
-		dieString = fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp+%snr",
+		dieString = fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp+%snr+%sed",
 			req.FormValue("ac"),
 			req.FormValue("nd"),
 			req.FormValue("hd"),
@@ -133,9 +133,10 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 			req.FormValue("gf"),
 			req.FormValue("sp"),
 			req.FormValue("nr"),
+			req.FormValue("ed"),
 		)
 
-		dieString2 = fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp+%snr",
+		dieString2 = fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp+%snr+%sed",
 			req.FormValue("ac2"),
 			req.FormValue("nd2"),
 			req.FormValue("hd2"),
@@ -143,6 +144,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 			req.FormValue("gf2"),
 			req.FormValue("sp2"),
 			req.FormValue("nr2"),
+			req.FormValue("ed2"),
 		)
 
 		if dieString == blankDieString {
@@ -229,6 +231,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		nd = req.FormValue("nd")
 		hd = req.FormValue("hd")
 		wd = req.FormValue("wd")
+		ed = req.FormValue("ed")
 
 		gf = req.FormValue("gofirst")
 		sp = req.FormValue("spray")
@@ -244,6 +247,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		nd2 = req.FormValue("nd2")
 		hd2 = req.FormValue("hd2")
 		wd2 = req.FormValue("wd2")
+		ed2 = req.FormValue("ed2")
 
 		gf2 = req.FormValue("gofirst2")
 		sp2 = req.FormValue("spray2")
@@ -260,6 +264,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		q.Add("wd", wd)
 		q.Add("gf", gf)
 		q.Add("sp", sp)
+		q.Add("ed", ed)
 
 		q.Add("name2", d.Name)
 		q.Add("ac2", ac2)
@@ -268,6 +273,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		q.Add("wd2", wd2)
 		q.Add("gf2", gf2)
 		q.Add("sp2", sp2)
+		q.Add("ed2", ed2)
 
 		// Encode URL.Query
 		qs := q.Encode()

@@ -36,6 +36,10 @@
           <span class="input-group-addon" id="hd-addon">Hard Dice</span>
         </div>
         <div class="input-group">
+          <input type="text" class="form-control" aria-describedby="ed-addon" name="ed" value="{{ index .Expert 0}}">
+          <span class="input-group-addon" id="ed-addon">Expert Die</span>
+        </div>
+        <div class="input-group">
           <input type="text" class="form-control" aria-describedby="wd-addon" name="wd" value="{{ index .Wiggle 0}}">
           <span class="input-group-addon" id="wd-addon">Wiggle Dice</span>
         </div>
@@ -81,6 +85,10 @@
       <div class="input-group">
         <input type="text" class="form-control" aria-describedby="hd-addon2" name="hd2" value="{{ index .Hard 1}}">
         <span class="input-group-addon" id="hd-addon2">Hard Dice</span>
+      </div>
+      <div class="input-group">
+        <input type="text" class="form-control" aria-describedby="ed-addon2" name="ed2" value="{{ index .Expert 1}}">
+        <span class="input-group-addon" id="ed-addon2">Expert Die</span>
       </div>
       <div class="input-group">
         <input type="text" class="form-control" aria-describedby="wd-addon2" name="wd2" value="{{ index .Wiggle 1}}">
