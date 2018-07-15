@@ -10,8 +10,8 @@ import (
 	"github.com/toferc/ore_web_roller/database"
 )
 
-const baseDieString string = "1ac+4d+0hd+0wd+0gf+0sp+1nr"
-const blankDieString string = "ac+d+hd+wd+gf+sp+nr"
+const baseDieString string = "1ac+4d+0hd+0wd+0gf+0sp+1nr+0ed"
+const blankDieString string = "ac+d+hd+wd+gf+sp+nr+ed"
 
 // RollHandler generates a Web user interface
 func RollHandler(w http.ResponseWriter, req *http.Request) {
