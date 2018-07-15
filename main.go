@@ -74,8 +74,35 @@ func main() {
 
 		fmt.Println("Starting Webserver at port " + port)
 		r.HandleFunc("/", CharacterIndexHandler)
-		r.HandleFunc("/roll/", RollHandler)
+
+		r.Path("/roll/{id}").HandlerFunc(RollHandler)
+		r.Path("/roll/{id}").Queries(
+			"ac", "",
+			"d", "",
+			"hd", "",
+			"wd", "",
+			"gf", "",
+			"sp", "",
+			"nr", "",
+			"ed", "").HandlerFunc(RollHandler).Name("RollHandler")
 		r.HandleFunc("/opposed/", OpposeHandler)
+		r.Path("/opposed/").Queries(
+			"name1", "",
+			"ac", "",
+			"nd", "",
+			"hd", "",
+			"wd", "",
+			"gf", "",
+			"sp", "",
+			"name2", "",
+			"ac2", "",
+			"nd2", "",
+			"hd2", "",
+			"wd2", "",
+			"gf2", "",
+			"sp2", "",
+		).HandlerFunc(OpposeHandler).Name("OpposeHandler")
+
 		r.HandleFunc("/view_character/{id}", CharacterHandler)
 		r.HandleFunc("/new/{setting}", NewCharacterHandler)
 		r.HandleFunc("/modify/{id}", ModifyCharacterHandler)

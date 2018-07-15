@@ -2,11 +2,10 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
-	"net/url"
 	"strconv"
 
+	"github.com/gorilla/mux"
 	"github.com/toferc/oneroll"
 	"github.com/toferc/ore_web_roller/database"
 )
@@ -17,26 +16,19 @@ const blankDieString string = "ac+d+hd+wd+gf+sp+nr"
 // RollHandler generates a Web user interface
 func RollHandler(w http.ResponseWriter, req *http.Request) {
 
-	fullString := req.URL.Path[len("/roll/"):]
-
-	q, err := url.ParseQuery(fullString)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	pk := q.Get("ID")
+	pk := mux.Vars(req)["id"]
 
 	var dieString string
 
 	dieString = fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp+%snr+%sed",
-		q.Get("ac"),
-		q.Get("nd"),
-		q.Get("hd"),
-		q.Get("wd"),
-		q.Get("gf"),
-		q.Get("sp"),
-		q.Get("nr"),
-		q.Get("ed"),
+		req.FormValue("ac"),
+		req.FormValue("nd"),
+		req.FormValue("hd"),
+		req.FormValue("wd"),
+		req.FormValue("gf"),
+		req.FormValue("sp"),
+		req.FormValue("nr"),
+		req.FormValue("ed"),
 	)
 
 	if dieString == blankDieString {
@@ -107,11 +99,11 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 
 		nrQ := req.FormValue("numrolls")
 
-		rollString := fmt.Sprintf("ac=%s&gf=%s&hd=%s&ID=%d&nd=%s&nr=%s&sp=%s&wd=%s&ed=%s",
+		url := fmt.Sprintf("/roll/%d?ac=%s&gf=%s&hd=%s&nd=%s&nr=%s&sp=%s&wd=%s&ed=%s",
+			c.ID,
 			acQ,
 			gfQ, // Update roll mechanism to use Modifiers GF
 			hdQ,
-			c.ID,
 			ndQ,
 			nrQ, // Update roll mechanism to use Modifiers NR
 			spQ, // Update roll mechanism to use Modifiers SP
@@ -119,7 +111,7 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 			edQ,
 		)
 
-		http.Redirect(w, req, "/roll/"+rollString, http.StatusSeeOther)
+		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
 }
 
@@ -131,35 +123,28 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 
 	if req.Method == "GET" {
 
-		fullString := req.URL.Path[len("/opposed/"):]
-
-		q, err := url.ParseQuery(fullString)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		charString, charString2 := q.Get("name"), q.Get("name2")
+		charString, charString2 := req.FormValue("name"), req.FormValue("name2")
 
 		var dieString, dieString2 string
 
 		dieString = fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp+%snr",
-			q.Get("ac"),
-			q.Get("nd"),
-			q.Get("hd"),
-			q.Get("wd"),
-			q.Get("gf"),
-			q.Get("sp"),
-			q.Get("nr"),
+			req.FormValue("ac"),
+			req.FormValue("nd"),
+			req.FormValue("hd"),
+			req.FormValue("wd"),
+			req.FormValue("gf"),
+			req.FormValue("sp"),
+			req.FormValue("nr"),
 		)
 
 		dieString2 = fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp+%snr",
-			q.Get("ac2"),
-			q.Get("nd2"),
-			q.Get("hd2"),
-			q.Get("wd2"),
-			q.Get("gf2"),
-			q.Get("sp2"),
-			q.Get("nr2"),
+			req.FormValue("ac2"),
+			req.FormValue("nd2"),
+			req.FormValue("hd2"),
+			req.FormValue("wd2"),
+			req.FormValue("gf2"),
+			req.FormValue("sp2"),
+			req.FormValue("nr2"),
 		)
 
 		if dieString == blankDieString {
@@ -167,7 +152,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		if charString == "" {
-			charString = "Player 1"
+			charString = "Player1"
 		}
 
 		if dieString2 == blankDieString {
@@ -175,7 +160,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		}
 
 		if charString2 == "" {
-			charString2 = "Player 2"
+			charString2 = "Player2"
 		}
 
 		c := oneroll.Character{
@@ -203,19 +188,18 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		nd2, hd2, wd2, ed2, gf2, sp2, ac2, nr2, _ := roll.ParseString(dieString2)
 
 		wv := WebView{
-			Actor:       []*oneroll.Character{&c, &d},
-			Rolls:       []oneroll.Roll{},
-			Matches:     []oneroll.Match{},
-			Normal:      []int{nd, nd2},
-			Hard:        []int{hd, hd2},
-			Wiggle:      []int{wd, wd2},
-			Expert:      []int{ed, ed2},
-			GoFirst:     []int{gf, gf2},
-			Spray:       []int{sp, sp2},
-			Actions:     []int{ac, ac2},
-			NumRolls:    []int{nr, nr2},
-			ErrorString: []error{err},
-			DieString:   []string{dieString, dieString2},
+			Actor:     []*oneroll.Character{&c, &d},
+			Rolls:     []oneroll.Roll{},
+			Matches:   []oneroll.Match{},
+			Normal:    []int{nd, nd2},
+			Hard:      []int{hd, hd2},
+			Wiggle:    []int{wd, wd2},
+			Expert:    []int{ed, ed2},
+			GoFirst:   []int{gf, gf2},
+			Spray:     []int{sp, sp2},
+			Actions:   []int{ac, ac2},
+			NumRolls:  []int{nr, nr2},
+			DieString: []string{dieString, dieString2},
 		}
 
 		roll.Resolve(dieString)
@@ -271,7 +255,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 
 		q := req.URL.Query()
 
-		q.Add("ID", c.Name)
+		q.Add("name1", c.Name)
 		q.Add("ac", ac)
 		q.Add("nd", nd)
 		q.Add("hd", hd)
@@ -290,6 +274,6 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		// Encode URL.Query
 		qs := q.Encode()
 
-		http.Redirect(w, req, "/opposed/"+qs, http.StatusSeeOther)
+		http.Redirect(w, req, "/opposed/?"+qs, http.StatusSeeOther)
 	}
 }

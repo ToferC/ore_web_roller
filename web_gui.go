@@ -65,18 +65,18 @@ func skillRoll(c *oneroll.Character, sk *oneroll.Skill, st *oneroll.Statistic, a
 	goFirst := oneroll.Max(stat.GoFirst, skill.GoFirst)
 	spray := oneroll.Max(stat.Spray, skill.Spray)
 
-	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&ID=%d&nd=%d&nr=%d&sp=%d&wd=%d&ed=%d",
+	url := fmt.Sprintf("/roll/%d?ac=%d&gf=%d&hd=%d&nd=%d&nr=%d&sp=%d&wd=%d&ed=%d",
+		c.ID,
 		ac,
 		goFirst,
 		hard,
-		c.ID,
 		normal,
 		1, // Update roll mechanism to use Modifiers
 		spray,
 		wiggle,
 		expert,
 	)
-	return "/roll/" + rollString
+	return url
 }
 
 func statRoll(c *oneroll.Character, s *oneroll.Statistic, ac int) string {
@@ -89,17 +89,17 @@ func statRoll(c *oneroll.Character, s *oneroll.Statistic, ac int) string {
 	goFirst := td.GoFirst
 	spray := td.Spray
 
-	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&ID=%d&nd=%d&nr=%d&sp=%d&wd=%d",
+	url := fmt.Sprintf("/roll/%d?ac=%d&gf=%d&hd=%d&nd=%d&nr=%d&sp=%d&wd=%d",
+		c.ID,
 		ac,
 		goFirst,
 		hard,
-		c.ID,
 		normal,
 		1, // Update roll mechanism to use Modifiers
 		spray,
 		wiggle,
 	)
-	return "/roll/" + rollString
+	return url
 }
 
 func qualityRoll(c *oneroll.Character, p *oneroll.Power, q *oneroll.Quality, ac int) string {
@@ -114,17 +114,17 @@ func qualityRoll(c *oneroll.Character, p *oneroll.Power, q *oneroll.Quality, ac 
 		}
 	}
 
-	rollString := fmt.Sprintf("ac=%d&gf=%d&hd=%d&ID=%d&nd=%d&nr=%d&sp=%d&wd=%d",
+	url := fmt.Sprintf("/roll/%d?ac=%d&gf=%d&hd=%d&nd=%d&nr=%d&sp=%d&wd=%d",
+		c.ID,
 		ac,
 		q.Dice.GoFirst, // Update roll mechanism to use Modifiers GF
 		p.Dice.Hard,
-		c.ID,
 		p.Dice.Normal,
 		0,            // Update roll mechanism to use Modifiers NR
 		q.Dice.Spray, // Update roll mechanism to use Modifiers SP
 		p.Dice.Wiggle,
 	)
-	return "/roll/" + rollString
+	return url
 }
 
 func subtract(a, b int) int {
