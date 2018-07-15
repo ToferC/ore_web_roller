@@ -18,6 +18,17 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 
 	pk := mux.Vars(req)["id"]
 
+	id, err := strconv.Atoi(pk)
+	if err != nil {
+		id = 9999
+	}
+
+	c, err := database.PKLoadCharacter(db, int64(id))
+	if err != nil {
+		fmt.Println(err)
+		c = oneroll.NewWTCharacter("Player 1")
+	}
+
 	var dieString string
 
 	dieString = fmt.Sprintf("%sac+%sd+%shd+%swd+%sgf+%ssp+%snr+%sed",
@@ -33,19 +44,6 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 
 	if dieString == blankDieString {
 		dieString = baseDieString
-	}
-
-	id, err := strconv.Atoi(pk)
-	if err != nil {
-		id = 9999
-	}
-
-	c, err := database.PKLoadCharacter(db, int64(id))
-	if err != nil {
-		fmt.Println(err)
-		c = &oneroll.Character{
-			Name: "Player 1",
-		}
 	}
 
 	roll := oneroll.Roll{
