@@ -114,7 +114,9 @@ func main() {
 		r.HandleFunc("/add_power/{id}", AddPowerHandler)
 		r.HandleFunc("/add_power_from_list/{id}", PowerListHandler)
 		r.HandleFunc("/modify_power/{id}/{power}", ModifyPowerHandler)
+		r.HandleFunc("/modify_standalone_power/{id}", ModifyStandalonePowerHandler)
 		r.HandleFunc("/delete_power/{id}/{power}", DeletePowerHandler)
+		r.HandleFunc("/delete_standalone_power/{id}", DeleteStandalonePowerHandler)
 
 		r.HandleFunc("/add_hyperstat/{id}/{stat}", AddHyperStatHandler)
 		r.HandleFunc("/modify_hyperstat/{id}/{stat}", ModifyHyperStatHandler)

@@ -14,6 +14,8 @@
   {{ if $power.Effect }}
   <i>Effect: {{ $power.Effect }}</i>
   {{end}}<hr>
+  <a class="btn btn-primary" href="/modify_standalone_power/{{ $power.ID }}">Modify</a>
+  <a class="btn btn-danger" href="/delete_standalone_power/{{ $power.ID }}">Delete</a>
 </div>
 
 </div>

@@ -3,11 +3,12 @@
       <div class="container">
         <div class="row">
 
-      <div class="col-sm-3 col-md-3 col-lg-3">
+      <div class="col-sm-6 col-md-6 col-lg-6">
         <h3>Powers</h3>
         <ul>
           {{ range . }}
-            <li><a href="/view_power/{{ .ID }}">{{ .Name }} ({{ .CostPerDie }}/die)</a></li>
+            <li><a href="/view_power/{{ .ID }}">{{ . }}</a>
+              <a href="/modify_standalone_power/{{ .ID }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a></li>
           {{ end }}
         </ul>
       </div>

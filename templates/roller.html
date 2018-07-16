@@ -48,7 +48,7 @@
             <input type="text" class="form-control" aria-describedby="nr-addon" name="numrolls" value="{{ index .NumRolls 0}}">
             <span class="input-group-addon" id="nr-addon">Rolls</span>
           </div>
-        <input type="submit" value="Roll Dice">
+        <input class="btn btn-primary" type="submit" value="Roll Dice">
       </form>
       <br>
         {{ if (index .Actor 0).ID }}
