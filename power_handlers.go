@@ -374,14 +374,14 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		// Add Power to Character Powers map
-		c.Powers[p.Slug] = &p
-
 		// Remove the base Power if necessary
 		if pName != pow {
 			// Remove previous map of the power if the name has changed
 			delete(c.Powers, pow)
 		}
+
+		// Add Power to Character Powers map
+		c.Powers[p.Slug] = &p
 
 		fmt.Println(c)
 
