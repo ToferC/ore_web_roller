@@ -1,6 +1,12 @@
+{{ define "title"}}
+
+<title>Modify Power</title>
+
+{{ end }}
+
 {{define "content"}}
 
-{{ $character := .Character }}
+{{ $character := .CharacterModel.Character }}
 {{ $power := .Power }}
 {{ $qualities := .Power.Qualities }}
 {{ $dice := $power.Dice }}

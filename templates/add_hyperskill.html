@@ -1,6 +1,15 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Add HyperSkill {{ $character.Name }}</title>
+
+{{ end }}
+
+
 {{define "content"}}
 
-{{ $character := .Character }}
+{{ $character := .CharacterModel.Character }}
 {{ $skill := .Skill }}
 {{ $hyperskill := $skill.HyperSkill }}
 {{ $dice := $hyperskill.Dice }}

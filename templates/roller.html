@@ -1,6 +1,13 @@
+{{ define "title"}}
+
+<title>ORE Die Roller</title>
+
+{{ end }}
+
 {{define "content"}}
 
-{{ $character := index .Actor 0 }}
+{{ $cm := index .Actor 0 }}
+{{ $character := $cm.Character}}
 {{ $statistics := $character.Statistics }}
 {{ $skills := $character.Skills }}
 {{ $powers := $character.Powers }}
@@ -52,13 +59,13 @@
       </form>
       <br>
         {{ if (index .Actor 0).ID }}
-        <a class="btn btn-primary" href="/view_character/{{ $character.ID }}">Return to Character</a>
+        <a class="btn btn-primary" href="/view_character/{{ $cm.ID }}">Return to Character</a>
         {{ end }}
     </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Results</h3>
-        <h4>{{  (index .Actor 0).Name }}</h4>
+        <h4>{{  $character.Name }}</h4>
         <p>Actions: {{ index .Actions 0}},
         {{ range .Rolls }}
             Results: {{ range .Results }}
@@ -83,11 +90,11 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
         {{ range $stat := $statistics }}
-        <p>{{ . }} <a href={{ statRoll $character $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
+        <p>{{ . }} <a href={{ statRoll $cm.ID $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
         {{ range $skill := $skills }}
         {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
         {{ if eq $skill.LinkStat.Name $stat.Name}}
-          <ul>{{ . }} <a href={{ skillRoll $character $skill $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></h4>
+          <ul>{{ . }} <a href={{ skillRoll $cm.ID $skill $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></h4>
           </ul>
           {{ end }}
         {{ end }}
@@ -101,7 +108,7 @@
         <div class="card-body">
           <strong>{{ $power }}</strong></p>
           {{ range $quality := $power.Qualities }}
-            <p>{{ $quality }} <a href={{ qualityRoll $character $power $quality 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
+            <p>{{ $quality }} <a href={{ qualityRoll $cm.ID $power $quality 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
         {{ end }}
         <i>Effect: {{ $power.Effect }}</i>
           <hr>

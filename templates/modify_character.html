@@ -1,6 +1,12 @@
+{{ define "title"}}
+
+<title>Modify Character</title>
+
+{{ end }}
+
 {{define "content"}}
 
-{{ $character := .Character}}
+{{ $character := .CharacterModel.Character}}
 {{ $statistics := $character.Statistics }}
 {{ $skills := $character.Skills }}
 {{ $intrinsics := .Intrinsics }}

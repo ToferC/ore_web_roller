@@ -1,6 +1,14 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Add HyperStat {{ $character.Name }}</title>
+
+{{ end }}
+
 {{define "content"}}
 
-{{ $character := .Character }}
+{{ $character := .CharacterModel.Character }}
 {{ $stat := .Statistic }}
 {{ $hyperstat := $stat.HyperStat }}
 {{ $dice := $hyperstat.Dice }}

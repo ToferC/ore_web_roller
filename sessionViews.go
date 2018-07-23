@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -8,6 +9,16 @@ import (
 	"github.com/toferc/ore_web_roller/database"
 	"github.com/toferc/ore_web_roller/models"
 )
+
+func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
+
+	users, err := database.ListUsers(db)
+	if err != nil {
+		panic(err)
+	}
+
+	Render(w, "templates/index_users.html", users)
+}
 
 //LogoutFunc Implements the logout functionality
 //Will delete the session information from the cookie Store
@@ -23,31 +34,52 @@ func LogoutFunc(w http.ResponseWriter, req *http.Request) {
 	// Redirect to main page
 }
 
+//LoginFunc implements the login functionality, will add a cookie to cookie Store
+//to manage authentication
 func LoginFunc(w http.ResponseWriter, req *http.Request) {
 	session, err := sessions.Store.Get(req, "session")
 
 	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
 		// in case of error
-	} else {
-		isLoggedIn := session.Values["loggedin"]
-		if isLoggedIn != true {
-			if req.Method == "POST" {
-				// first get user object
+	}
 
-				if req.FormValue("password") == "secret" && req.FormValue("username") == "user" {
-					session.Values["loggedin"] = "true"
-					session.Save(req, w)
-					http.Redirect(w, req, "/", 302)
-					return
-				} else if req.Method == "GET" {
-					Render(w, "templates/index_characters.html", nil)
-				}
-			}
+	switch req.Method {
+	case "GET":
+		Render(w, "templates/login.html", nil)
+	case "POST":
+		log.Print("Inside POST")
+		req.ParseForm()
+		username := req.Form.Get("username")
+		password := req.Form.Get("password")
+
+		if (username != "" && password != "") && database.ValidUser(db, username, password) {
+			session.Values["loggedin"] = "true"
+			session.Values["username"] = username
+			session.Save(req, w)
+			log.Print("user ", username, " is authenticated")
+			fmt.Println(session.Values)
+			http.Redirect(w, req, "/", 302)
+		} else {
+			log.Print("Invalid user " + username)
+			Render(w, "templates/login.html", nil)
 		}
 	}
 }
 
+//SignUpFunc implements sign-up functionality
 func SignUpFunc(w http.ResponseWriter, req *http.Request) {
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
 	if req.Method == "POST" {
 		req.ParseForm()
 
@@ -58,7 +90,7 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 		log.Println(username, password, email)
 
 		u := models.User{
-			Name:     username,
+			UserName: username,
 			Password: password,
 			Email:    email,
 		}
@@ -67,7 +99,15 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			http.Error(w, "Unable to sign user up", http.StatusInternalServerError)
 		} else {
-			Render(w, "/templates/index_characters.html", 302)
+			//Log in user and continue
+			session.Values["loggedin"] = "true"
+			session.Values["username"] = username
+			session.Save(req, w)
+			log.Print("user ", username, " is authenticated")
+			fmt.Println(session.Values)
+			http.Redirect(w, req, "/", 302)
 		}
+	} else if req.Method == "GET" {
+		Render(w, "templates/signup.html", nil)
 	}
 }

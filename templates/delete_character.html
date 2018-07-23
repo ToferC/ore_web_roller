@@ -1,19 +1,28 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Delete {{ $character.Name }}</title>
+
+{{ end }}
+
 {{define "content"}}
 
-{{ $statistics := .Statistics }}
-{{ $skills := .Skills }}
+{{ $character := .CharacterModel.Character }}
+{{ $statistics := $character.Statistics }}
+{{ $skills := $character.Skills }}
 
       <div class="container">
         <hr>
         <div class="row">
           <h1>DELETE CHARACTER</h1>
           <div class="col-sm-3 col-md-3 col-lg-3">
-            <h3>{{ .Name }} ({{ .PointCost }}pts)</h3>
+            <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
             <h4>Image</h4>
-            <h4>{{ .Archetype }}</h4>
+            <h4>{{ $character.Archetype }}</h4>
             <h4>Description</h4>
-              <h4>Base Will: {{ .BaseWill }}</h4>
-              <h4>Willpower: {{ .Willpower }}</h4>
+              <h4>Base Will: {{ $character.BaseWill }}</h4>
+              <h4>Willpower: {{ $character.Willpower }}</h4>
               <hr>
             <form action="" method="POST">
               <input class="btn btn-danger" type="submit" value="Delete">
@@ -33,19 +42,19 @@
       </div>
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Powers</h3>
-        {{ range .Skills }}
+        {{ range $character.Skills }}
           {{ if .HyperSkill }}
             <p>{{ .HyperSkill }}</p>
           {{ end }}
         {{ end }}
 
-        {{ range .Statistics }}
+        {{ range $character.Statistics }}
           {{ if .HyperStat }}
             <p>{{ .HyperStat }}</p>
           {{ end }}
         {{ end }}
 
-        {{ range .Powers }}
+        {{ range $character.Powers }}
           <strong>{{ . }}</strong>
           {{ range .Qualities }}
             <p>{{ . }} </p>
@@ -55,7 +64,7 @@
       </div>
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Hit Locations</h3>
-          {{ range .HitLocations }}
+          {{ range $character.HitLocations }}
             <p>{{ . }}</p>
           {{ end }}
       </div>

@@ -8,6 +8,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/toferc/oneroll"
 	"github.com/toferc/ore_web_roller/database"
+	"github.com/toferc/ore_web_roller/models"
 )
 
 const baseDieString string = "1ac+4d+0hd+0wd+0gf+0sp+1nr+0ed"
@@ -23,10 +24,14 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 		id = 9999
 	}
 
-	c, err := database.PKLoadCharacter(db, int64(id))
+	c := new(oneroll.Character)
+
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
-		c = oneroll.NewWTCharacter("Player 1")
+		c = oneroll.NewWTCharacter("Player1")
+	} else {
+		c = cm.Character
 	}
 
 	var dieString string
@@ -54,7 +59,7 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 	nd, hd, wd, ed, gf, sp, ac, nr, err := roll.ParseString(dieString)
 
 	wv := WebView{
-		Actor:       []*oneroll.Character{c},
+		Actor:       []*models.CharacterModel{cm},
 		Rolls:       []oneroll.Roll{},
 		Matches:     []oneroll.Match{},
 		Normal:      []int{nd},
@@ -98,7 +103,7 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 		nrQ := req.FormValue("numrolls")
 
 		url := fmt.Sprintf("/roll/%d?ac=%s&gf=%s&hd=%s&nd=%s&nr=%s&sp=%s&wd=%s&ed=%s",
-			c.ID,
+			cm.ID,
 			acQ,
 			gfQ, // Update roll mechanism to use Modifiers GF
 			hdQ,
@@ -173,6 +178,16 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 			Name: charString2,
 		}
 
+		cm := models.CharacterModel{
+			ID:        int64(9998),
+			Character: &c,
+		}
+
+		dm := models.CharacterModel{
+			ID:        int64(9999),
+			Character: &c,
+		}
+
 		roll := oneroll.Roll{
 			Actor:  &c,
 			Action: "Act",
@@ -188,7 +203,7 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		nd2, hd2, wd2, ed2, gf2, sp2, ac2, nr2, _ := roll.ParseString(dieString2)
 
 		wv := WebView{
-			Actor:     []*oneroll.Character{&c, &d},
+			Actor:     []*models.CharacterModel{&cm, &dm},
 			Rolls:     []oneroll.Roll{},
 			Matches:   []oneroll.Match{},
 			Normal:    []int{nd, nd2},

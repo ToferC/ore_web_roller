@@ -1,7 +1,13 @@
+{{ define "title"}}
+
+<title>ORE Opposed Roll</title>
+
+{{ end }}
+
 {{define "content"}}
 
-{{ $character1 := index .Actor 0 }}
-{{ $character2 := index .Actor 1 }}
+{{ $character1 := index .Actor.Character 0 }}
+{{ $character2 := index .Actor.Character 1 }}
 
       <div class="container">
         <p>Roll dice for two players and determine matches and initiative.</p>

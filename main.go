@@ -16,8 +16,8 @@ import (
 var db *pg.DB
 
 func init() {
-	os.Setenv("DBUser", "postgres")
-	os.Setenv("DBPass", "devpass")
+	os.Setenv("DBUser", "chris")
+	os.Setenv("DBPass", "12345")
 	os.Setenv("DBName", "ore_engine")
 
 }
@@ -75,6 +75,10 @@ func main() {
 		fmt.Println("Starting Webserver at port " + port)
 		r.HandleFunc("/", CharacterIndexHandler)
 
+		r.HandleFunc("/signup/", SignUpFunc)
+		r.HandleFunc("/login/", LoginFunc)
+		r.HandleFunc("/users/", UserIndexHandler)
+
 		r.Path("/roll/{id}").HandlerFunc(RollHandler)
 		r.Path("/roll/{id}").Queries(
 			"ac", "",
@@ -126,7 +130,7 @@ func main() {
 		r.HandleFunc("/modify_hyperskill/{id}/{skill}", ModifyHyperSkillHandler)
 		r.HandleFunc("/delete_hyperskill/{id}/{skill}", DeleteHyperSkillHandler)
 
-		r.HandleFunc("/add_skill/{id}/{skill}", AddSkillHandler)
+		r.HandleFunc("/add_skill/{id}/{stat}", AddSkillHandler)
 		r.HandleFunc("/add_advantages/{id}", ModifyAdvantageHandler)
 
 		http.Handle("/", r)

@@ -1,6 +1,14 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Add Power from List {{ $character.Name }}</title>
+
+{{ end }}
+
 {{define "content"}}
 
-{{ $character := .Character }}
+{{ $character := .CharacterModel.Character }}
 {{ $powers := .Powers }}
 
       <div class="container">

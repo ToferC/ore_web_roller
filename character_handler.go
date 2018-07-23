@@ -2,17 +2,20 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/oneroll"
 	"github.com/toferc/ore_web_roller/database"
+	"github.com/toferc/ore_web_roller/models"
 )
 
 func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 
-	characters, err := database.ListCharacters(db)
+	characters, err := database.ListCharacterModels(db)
 	if err != nil {
 		panic(err)
 	}
@@ -22,6 +25,15 @@ func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 // CharacterHandler renders a character in a Web page
 func CharacterHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
 
 	vars := mux.Vars(req)
 	pk := vars["id"]
@@ -35,14 +47,35 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	c, err := database.PKLoadCharacter(db, int64(id))
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
 	}
 
+	c := cm.Character
+
+	// Prep for user authentication
+	username := ""
+
+	u := session.Values["username"]
+
+	if user, ok := u.(string); !ok {
+	} else {
+		fmt.Println(user)
+		username = user
+	}
+
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	}
+
 	wc := WebChar{
-		Character: c,
-		Counter:   []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		CharacterModel: cm,
+		IsAuthor:       IsAuthor,
+		SessionUser:    username,
+		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 	}
 
 	if req.Method == "GET" {
@@ -86,7 +119,7 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			}
 		}
 
-		err = database.UpdateCharacter(db, c)
+		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			panic(err)
 		} else {
@@ -102,6 +135,29 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 // NewCharacterHandler renders a character in a Web page
 func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	username := ""
+
+	u := session.Values["username"]
+
+	if user, ok := u.(string); !ok {
+		username = ""
+	} else {
+		fmt.Println(user)
+		username = user
+	}
+
+	cm := models.CharacterModel{}
 
 	c := &oneroll.Character{Setting: "WT"}
 
@@ -162,14 +218,23 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	}
 
+	author := database.LoadUser(db, username)
+	fmt.Println(author)
+
+	cm = models.CharacterModel{
+		Character: c,
+		Author:    author,
+	}
+
 	wc := WebChar{
-		Character:   c,
-		Modifiers:   oneroll.Modifiers,
-		Counter:     []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-		Sources:     oneroll.Sources,
-		Permissions: oneroll.Permissions,
-		Intrinsics:  oneroll.Intrinsics,
-		Advantages:  nil,
+		CharacterModel: &cm,
+		SessionUser:    username,
+		Modifiers:      oneroll.Modifiers,
+		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		Sources:        oneroll.Sources,
+		Permissions:    oneroll.Permissions,
+		Intrinsics:     oneroll.Intrinsics,
+		Advantages:     nil,
 	}
 
 	if req.Method == "GET" {
@@ -285,7 +350,9 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(newHL)
 		c.HitLocations = newHL
 
-		err = database.SaveCharacter(db, c)
+		cm.Character = c
+
+		err = database.SaveCharacterModel(db, &cm)
 		if err != nil {
 			panic(err)
 		} else {
@@ -294,7 +361,7 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println(c)
 
-		url := fmt.Sprintf("/view_character/%d", c.ID)
+		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
@@ -303,6 +370,30 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 // ModifyCharacterHandler renders a character in a Web page
 func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
+	// Get session values or redirect to Login
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		http.Redirect(w, req, "/login/", 302)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	username := ""
+
+	// Get session User
+	u := session.Values["username"]
+
+	// Type assertation
+	if user, ok := u.(string); !ok {
+	} else {
+		fmt.Println(user)
+		username = user
+	}
+
+	// Get variables from URL
 	vars := mux.Vars(req)
 	pk := vars["id"]
 
@@ -315,10 +406,22 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	c, err := database.PKLoadCharacter(db, int64(id))
+	// Load CharacterModel
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	// Validate that User == Author
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	} else {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	c := cm.Character
 
 	if c.Setting != "RE" {
 		a := c.Archetype
@@ -366,12 +469,14 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		Character:   c,
-		Modifiers:   oneroll.Modifiers,
-		Counter:     []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
-		Sources:     oneroll.Sources,
-		Permissions: oneroll.Permissions,
-		Intrinsics:  oneroll.Intrinsics,
+		CharacterModel: cm,
+		SessionUser:    username,
+		IsAuthor:       IsAuthor,
+		Modifiers:      oneroll.Modifiers,
+		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
+		Sources:        oneroll.Sources,
+		Permissions:    oneroll.Permissions,
+		Intrinsics:     oneroll.Intrinsics,
 	}
 
 	if req.Method == "GET" {
@@ -500,7 +605,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(newHL)
 		c.HitLocations = newHL
 
-		err = database.UpdateCharacter(db, c)
+		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {
 			panic(err)
 		} else {
@@ -509,7 +614,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println(c)
 
-		url := fmt.Sprintf("/view_character/%d", c.ID)
+		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}
@@ -530,7 +635,7 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	c, err := database.PKLoadCharacter(db, int64(id))
+	cm, err := database.PKLoadCharacterModel(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -538,15 +643,15 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "GET" {
 
 		// Render page
-		Render(w, "templates/delete_character.html", c)
+		Render(w, "templates/delete_character.html", cm)
 
 	}
 
 	if req.Method == "POST" {
 
-		database.DeleteCharacter(db, c.ID)
+		database.DeleteCharacterModel(db, cm.ID)
 
-		fmt.Println("Deleted ", c.Name)
+		fmt.Println("Deleted ", cm.Character.Name)
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 }

@@ -1,6 +1,14 @@
+{{ define "title"}}
+
+{{ $character := .CharacterModel.Character }}
+
+<title>Add Power {{ $character.Name }}</title>
+
+{{ end }}
+
 {{define "content"}}
 
-{{ $character := .Character }}
+{{ $character := .CharacterModel.Character }}
 {{ $power := .Power }}
 {{ $dice := $power.Dice }}
 
@@ -140,7 +148,7 @@
                     </div>
                     <div class="input-group">
                       <span class="input-group-addon" id="Q{{$q}}-M{{ $m}}-Info-addon">Info</span>
-                      <input type="text" class="form-control" aria-describedby="Q{{$q}}-M{{ $m}}-Info-addon" name="Q{{$q}}-M{{$m }}-Info" value ="">
+                      <input type="text" class="form-control" aria-describedby="Q{{$q}}-M{{ $m}}-Info-addon" name="Q{{$q}}-M{{ $m }}-Info" value ="">
                     </div>
                     <hr>
                     {{ end }} <!-- End Modifier upper IF -->

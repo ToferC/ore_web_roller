@@ -22,7 +22,7 @@ func IsLoggedIn(req *http.Request) bool {
 //IsAuthor checks if the user matches the Character's author and return true
 func IsAuthor(req *http.Request, cr models.CharacterModel) bool {
 	session, _ := Store.Get(req, "session")
-	if session.Values["user"] == cr.Author.Name {
+	if session.Values["username"] == cr.Author.UserName {
 		return true
 	}
 	return false

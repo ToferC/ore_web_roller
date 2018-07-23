@@ -1,6 +1,13 @@
+{{ define "title"}}
+
+<title>ORE Add Character</title>
+
+{{ end }}
+
 {{define "content"}}
 
-{{ $character := .Character}}
+{{ $characterModel := .CharacterModel }}
+{{ $character := .CharacterModel.Character}}
 {{ $statistics := $character.Statistics }}
 {{ $skills := $character.Skills }}
 {{ $intrinsics := .Intrinsics }}

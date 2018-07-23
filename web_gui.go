@@ -6,14 +6,17 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/toferc/onegc/model"
 	"github.com/toferc/oneroll"
+	"github.com/toferc/ore_web_roller/models"
 )
 
 // WebView is a container for Web_gui data
 type WebView struct {
+	User        model.User
 	Rolls       []oneroll.Roll
 	Matches     []oneroll.Match
-	Actor       []*oneroll.Character
+	Actor       []*models.CharacterModel
 	Normal      []int
 	Hard        []int
 	Wiggle      []int
@@ -31,20 +34,24 @@ type WebLoc struct {
 
 // WebChar is a framework to send objects & data to a Web view
 type WebChar struct {
-	Character   *oneroll.Character
-	Power       *oneroll.Power
-	Statistic   *oneroll.Statistic
-	Skill       *oneroll.Skill
-	Shock       map[string][]int
-	Kill        map[string][]int
-	Modifiers   map[string]oneroll.Modifier
-	Sources     map[string]oneroll.Source
-	Permissions map[string]oneroll.Permission
-	Intrinsics  map[string]oneroll.Intrinsic
-	Advantages  map[string]oneroll.Advantage
-	Capacities  map[string]float32
-	Powers      map[string]oneroll.Power
-	Counter     []int
+	User           model.User
+	Character      *oneroll.Character
+	CharacterModel *models.CharacterModel
+	IsAuthor       bool
+	SessionUser    string
+	Power          *oneroll.Power
+	Statistic      *oneroll.Statistic
+	Skill          *oneroll.Skill
+	Shock          map[string][]int
+	Kill           map[string][]int
+	Modifiers      map[string]oneroll.Modifier
+	Sources        map[string]oneroll.Source
+	Permissions    map[string]oneroll.Permission
+	Intrinsics     map[string]oneroll.Intrinsic
+	Advantages     map[string]oneroll.Advantage
+	Capacities     map[string]float32
+	Powers         map[string]oneroll.Power
+	Counter        []int
 }
 
 // SplitLines transfomrs results text string into slice
@@ -53,7 +60,7 @@ func SplitLines(s string) []string {
 	return sli
 }
 
-func skillRoll(c *oneroll.Character, sk *oneroll.Skill, st *oneroll.Statistic, ac int) string {
+func skillRoll(id int64, sk *oneroll.Skill, st *oneroll.Statistic, ac int) string {
 
 	skill := oneroll.ReturnDice(sk)
 	stat := oneroll.ReturnDice(st)
@@ -66,7 +73,7 @@ func skillRoll(c *oneroll.Character, sk *oneroll.Skill, st *oneroll.Statistic, a
 	spray := oneroll.Max(stat.Spray, skill.Spray)
 
 	url := fmt.Sprintf("/roll/%d?ac=%d&gf=%d&hd=%d&nd=%d&nr=%d&sp=%d&wd=%d&ed=%d",
-		c.ID,
+		id,
 		ac,
 		goFirst,
 		hard,
@@ -79,7 +86,7 @@ func skillRoll(c *oneroll.Character, sk *oneroll.Skill, st *oneroll.Statistic, a
 	return url
 }
 
-func statRoll(c *oneroll.Character, s *oneroll.Statistic, ac int) string {
+func statRoll(id int64, s *oneroll.Statistic, ac int) string {
 
 	td := oneroll.ReturnDice(s)
 
@@ -90,7 +97,7 @@ func statRoll(c *oneroll.Character, s *oneroll.Statistic, ac int) string {
 	spray := td.Spray
 
 	url := fmt.Sprintf("/roll/%d?ac=%d&gf=%d&hd=%d&nd=%d&nr=%d&sp=%d&wd=%d",
-		c.ID,
+		id,
 		ac,
 		goFirst,
 		hard,
@@ -102,7 +109,7 @@ func statRoll(c *oneroll.Character, s *oneroll.Statistic, ac int) string {
 	return url
 }
 
-func qualityRoll(c *oneroll.Character, p *oneroll.Power, q *oneroll.Quality, ac int) string {
+func qualityRoll(id int64, p *oneroll.Power, q *oneroll.Quality, ac int) string {
 
 	for _, m := range q.Modifiers {
 		if m.Name == "Spray" {
@@ -115,7 +122,7 @@ func qualityRoll(c *oneroll.Character, p *oneroll.Power, q *oneroll.Quality, ac 
 	}
 
 	url := fmt.Sprintf("/roll/%d?ac=%d&gf=%d&hd=%d&nd=%d&nr=%d&sp=%d&wd=%d",
-		c.ID,
+		id,
 		ac,
 		q.Dice.GoFirst, // Update roll mechanism to use Modifiers GF
 		p.Dice.Hard,
