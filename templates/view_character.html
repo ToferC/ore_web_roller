@@ -11,6 +11,7 @@
 
 {{ $character := .CharacterModel.Character }}
 {{ $ID := .CharacterModel.ID }}
+{{ $IsAuthor := .IsAuthor }}
 {{ $author := .CharacterModel.Author }}
 {{ $shock := .Shock }}
 {{ $kill := .Kill }}
@@ -67,9 +68,11 @@
               </div>
             {{ end }}
             <hr>
-            <button class="btn btn-primary" type="submit" value="Save Wound State">Update Character State</button>
+            {{ if $IsAuthor }}
+            <button class="btn btn-primary" type="submit" value="Update Character State">Update Character State</button>
+            {{ end }}
             <hr>
-            {{ if .IsAuthor }}
+            {{ if $IsAuthor }}
               <a class="btn btn-primary" href="/modify/{{ $ID }}">Modify</a>
               <a class="btn btn-danger" href="/delete/{{ $ID }}">Delete</a></h4>
             {{ end }}
@@ -86,16 +89,20 @@
         {{ range $stat := $statistics }}
         <p>{{ . }}
           <a href={{ statRoll $ID $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
-          [<a href="/add_skill/{{ $ID }}/{{ $stat.Name }}"><span title="Add Skill" style="color:grey" class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
-          {{ if not $stat.HyperStat }}
-          <a href="/add_hyperstat/{{ $ID }}/{{ $stat.Name }}"><span title="Add Hyper-Stat" style="color:grey" class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>{{ end }}]</p>
+          {{ if $IsAuthor }}
+            [<a href="/add_skill/{{ $ID }}/{{ $stat.Name }}"><span title="Add Skill" style="color:grey" class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+            {{ if not $stat.HyperStat }}
+            <a href="/add_hyperstat/{{ $ID }}/{{ $stat.Name }}"><span title="Add Hyper-Stat" style="color:grey" class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>{{ end }}]</p>
+          {{ end }}
         {{ range $skill := $skills }}
         {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
         {{ if eq $skill.LinkStat.Name $stat.Name}}
           <ul><p>{{ . }}
             <a href={{ skillRoll $ID $skill $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
             {{ if not $skill.HyperSkill }}
+              {{ if $IsAuthor }}
             [<a href="/add_hyperskill/{{ $ID }}/{{ $skill.Name }}"><span title="Add Hyper-Skill" style="color:grey" class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>]
+              {{ end }}
           {{ end }}</p>
           </ul>
           {{ end }}
@@ -120,8 +127,10 @@
         {{ range $power := $character.Powers }}
         <div class="card-body">
           <strong>{{ $power }}</strong>
-          <a href="/modify_power/{{ $ID}}/{{ $power.Slug}}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
-          <a href="/delete_power/{{ $ID}}/{{ $power.Slug }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+          {{ if $IsAuthor }}
+            <a href="/modify_power/{{ $ID}}/{{ $power.Slug}}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+            <a href="/delete_power/{{ $ID}}/{{ $power.Slug }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+          {{ end }}
           {{ range $quality := $power.Qualities }}
           <p>{{ $quality }} <a href={{ qualityRoll $ID $power $quality 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
           {{ end }}
@@ -134,8 +143,11 @@
         {{ range $stat := $statistics }}
           {{ if $stat.HyperStat }}
           <div class="card-body">
-            <strong>{{ $stat.HyperStat }}</strong><a href="/modify_hyperstat/{{ $ID }}/{{ $stat.Name }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
-          <a href="/delete_hyperstat/{{ $ID}}/{{ $stat.Name }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></p>
+            <strong>{{ $stat.HyperStat }}</strong>
+            {{ if $IsAuthor }}
+              <a href="/modify_hyperstat/{{ $ID }}/{{ $stat.Name }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+              <a href="/delete_hyperstat/{{ $ID}}/{{ $stat.Name }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></p>
+            {{ end }}
             {{ range $quality := $stat.HyperStat.Qualities }}
               <p>{{ $quality }}</p>
           {{ end }}
@@ -150,7 +162,9 @@
         {{ if $skill.HyperSkill }}
         <div class="card-body">
           <strong>{{ $skill.HyperSkill }}</strong> <a href="/modify_hyperskill/{{ $ID }}/{{ $skill.Name }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
-          <a href="/delete_hyperskill/{{ $ID}}/{{ $skill.Name }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></p>
+          {{ if $IsAuthor }}
+            <a href="/delete_hyperskill/{{ $ID}}/{{ $skill.Name }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></p>
+          {{ end }}
           {{ range $quality := $skill.HyperSkill.Qualities }}
           <p>{{ $quality }}</p>
           {{ end }}
@@ -161,11 +175,13 @@
         {{ end }}
         {{ end }}
 
+        {{ if $IsAuthor }}
         {{ if eq $character.Setting "RE" }}
         <a class="btn btn-primary" href="/add_advantages/{{ $ID }}">Add Advantages</a></p>
         {{ else }}
         <a class="btn btn-primary" href="/add_power/{{$ID }}">Add Power</a></p>
         <a class="btn btn-primary" href="/add_power_from_list/{{ $ID }}">Add Power from List</a></p>
+        {{ end }}
         {{ end }}
       </div>
 
