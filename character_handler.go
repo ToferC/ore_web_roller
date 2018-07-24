@@ -55,8 +55,6 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if err != nil {
 		log.Println("error identifying session")
-		Render(w, "templates/login.html", nil)
-		return
 		// in case of error
 	}
 
@@ -75,9 +73,14 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
+		fmt.Println("Unable to load CharacterModel")
 	}
 
+	fmt.Println(cm)
+
 	c := cm.Character
+
+	fmt.Println(c)
 
 	// Prep for user authentication
 	username := ""

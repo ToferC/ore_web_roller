@@ -27,6 +27,7 @@ func LogoutFunc(w http.ResponseWriter, req *http.Request) {
 	if err == nil {
 		if session.Values["loggedin"] != false {
 			session.Values["loggedin"] = "false"
+			session.Values["username"] = ""
 			session.Save(req, w)
 			fmt.Println("Logged Out")
 		}
@@ -47,9 +48,26 @@ func LoginFunc(w http.ResponseWriter, req *http.Request) {
 		// in case of error
 	}
 
+	// Prep for user authentication
+	username := ""
+
+	// Get session User
+	u := session.Values["username"]
+
+	// Type assertation
+	if user, ok := u.(string); !ok {
+	} else {
+		fmt.Println(user)
+		username = user
+	}
+
+	wc := WebChar{
+		SessionUser: username,
+	}
+
 	switch req.Method {
 	case "GET":
-		Render(w, "templates/login.html", nil)
+		Render(w, "templates/login.html", wc)
 	case "POST":
 		log.Print("Inside POST")
 		req.ParseForm()
@@ -81,6 +99,23 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 		// in case of error
 	}
 
+	// Prep for user authentication
+	username := ""
+
+	// Get session User
+	u := session.Values["username"]
+
+	// Type assertation
+	if user, ok := u.(string); !ok {
+	} else {
+		fmt.Println(user)
+		username = user
+	}
+
+	wc := WebChar{
+		SessionUser: username,
+	}
+
 	if req.Method == "POST" {
 		req.ParseForm()
 
@@ -109,6 +144,6 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 			http.Redirect(w, req, "/", 302)
 		}
 	} else if req.Method == "GET" {
-		Render(w, "templates/signup.html", nil)
+		Render(w, "templates/signup.html", wc)
 	}
 }
