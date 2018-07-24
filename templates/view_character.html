@@ -88,20 +88,20 @@
         <h3>Skills</h3>
         {{ range $stat := $statistics }}
         <p>{{ . }}
-          <a href={{ statRoll $ID $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+          <a href={{ statRoll $ID $stat 1 }}>Roll</a>
           {{ if $IsAuthor }}
-            [<a href="/add_skill/{{ $ID }}/{{ $stat.Name }}"><span title="Add Skill" style="color:grey" class="glyphicon glyphicon-plus" aria-hidden="true"></span></a>
+            [<a href="/add_skill/{{ $ID }}/{{ $stat.Name }}">+Skill</a>
             {{ if not $stat.HyperStat }}
-            <a href="/add_hyperstat/{{ $ID }}/{{ $stat.Name }}"><span title="Add Hyper-Stat" style="color:grey" class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>{{ end }}]</p>
+            <a href="/add_hyperstat/{{ $ID }}/{{ $stat.Name }}">+Hyper</a>{{ end }}]</p>
           {{ end }}
         {{ range $skill := $skills }}
         {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
         {{ if eq $skill.LinkStat.Name $stat.Name}}
           <ul><p>{{ . }}
-            <a href={{ skillRoll $ID $skill $stat 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a>
+            <a href={{ skillRoll $ID $skill $stat 1 }}>Roll</a>
             {{ if not $skill.HyperSkill }}
               {{ if $IsAuthor }}
-            [<a href="/add_hyperskill/{{ $ID }}/{{ $skill.Name }}"><span title="Add Hyper-Skill" style="color:grey" class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>]
+            [<a href="/add_hyperskill/{{ $ID }}/{{ $skill.Name }}">+Hyper</a>]
               {{ end }}
           {{ end }}</p>
           </ul>
@@ -128,11 +128,11 @@
         <div class="card-body">
           <strong>{{ $power }}</strong>
           {{ if $IsAuthor }}
-            <a href="/modify_power/{{ $ID}}/{{ $power.Slug}}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
-            <a href="/delete_power/{{ $ID}}/{{ $power.Slug }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a>
+            <a href="/modify_power/{{ $ID}}/{{ $power.Slug}}">Modify</a>
+            <a href="/delete_power/{{ $ID}}/{{ $power.Slug }}">Delete</a>
           {{ end }}
           {{ range $quality := $power.Qualities }}
-          <p>{{ $quality }} <a href={{ qualityRoll $ID $power $quality 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
+          <p>{{ $quality }} <a href={{ qualityRoll $ID $power $quality 1 }}>Roll</p>
           {{ end }}
           {{ if $power.Effect }}
           <i>Effect: {{ $power.Effect }}</i>
@@ -145,8 +145,8 @@
           <div class="card-body">
             <strong>{{ $stat.HyperStat }}</strong>
             {{ if $IsAuthor }}
-              <a href="/modify_hyperstat/{{ $ID }}/{{ $stat.Name }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
-              <a href="/delete_hyperstat/{{ $ID}}/{{ $stat.Name }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></p>
+              <a href="/modify_hyperstat/{{ $ID }}/{{ $stat.Name }}">Modify</a>
+              <a href="/delete_hyperstat/{{ $ID}}/{{ $stat.Name }}">Delete</a></p>
             {{ end }}
             {{ range $quality := $stat.HyperStat.Qualities }}
               <p>{{ $quality }}</p>
@@ -161,9 +161,9 @@
         {{ range $skill := $character.Skills }}
         {{ if $skill.HyperSkill }}
         <div class="card-body">
-          <strong>{{ $skill.HyperSkill }}</strong> <a href="/modify_hyperskill/{{ $ID }}/{{ $skill.Name }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a>
+          <strong>{{ $skill.HyperSkill }}</strong> <a href="/modify_hyperskill/{{ $ID }}/{{ $skill.Name }}">Modify</a>
           {{ if $IsAuthor }}
-            <a href="/delete_hyperskill/{{ $ID}}/{{ $skill.Name }}"><span title="Delete" class="glyphicon glyphicon-trash" aria-hidden="true"></span></a></p>
+            <a href="/delete_hyperskill/{{ $ID}}/{{ $skill.Name }}">Delete</p>
           {{ end }}
           {{ range $quality := $skill.HyperSkill.Qualities }}
           <p>{{ $quality }}</p>

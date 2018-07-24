@@ -59,6 +59,7 @@ func PKLoadCharacterModel(db *pg.DB, pk int64) (*models.CharacterModel, error) {
 	err := db.Select(cm)
 
 	if err != nil {
+		fmt.Println(err)
 		return &models.CharacterModel{}, err
 	}
 

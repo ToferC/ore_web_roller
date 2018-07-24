@@ -205,43 +205,39 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		a := c.Archetype
 
 		// Assign additional empty Sources to populate form
-		if len(a.Sources) < 4 {
-			for i := len(a.Sources); i < 4; i++ {
-				tempS := oneroll.Source{
-					Type: "",
-				}
-				a.Sources = append(a.Sources, &tempS)
+
+		for i := 0; i < 4; i++ {
+			tempS := oneroll.Source{
+				Type: "",
 			}
+			a.Sources = append(a.Sources, &tempS)
 		}
 
 		// Assign additional empty Permissions to populate form
-		if len(a.Permissions) < 4 {
-			for i := len(a.Permissions); i < 4; i++ {
-				tempP := oneroll.Permission{
-					Type: "",
-				}
-				a.Permissions = append(a.Permissions, &tempP)
+
+		for i := 0; i < 4; i++ {
+			tempP := oneroll.Permission{
+				Type: "",
 			}
+			a.Permissions = append(a.Permissions, &tempP)
 		}
 
 		// Assign additional empty Sources to populate form
-		if len(a.Intrinsics) < 5 {
-			for i := len(a.Intrinsics); i < 5; i++ {
-				tempI := oneroll.Intrinsic{
-					Name: "",
-				}
-				a.Intrinsics = append(a.Intrinsics, &tempI)
+
+		for i := 0; i < 5; i++ {
+			tempI := oneroll.Intrinsic{
+				Name: "",
 			}
+			a.Intrinsics = append(a.Intrinsics, &tempI)
 		}
 
 		// Assign additional empty HitLocations to populate form
-		if len(c.HitLocations) < 10 {
-			for i := len(c.HitLocations); i < 10; i++ {
-				t := oneroll.Location{
-					Name: "",
-				}
-				c.HitLocations["z"+string(i)] = &t
+
+		for i := 0; i < 10; i++ {
+			t := oneroll.Location{
+				Name: "",
 			}
+			c.HitLocations["z"+string(i)] = &t
 		}
 
 	}
