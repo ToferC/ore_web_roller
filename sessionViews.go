@@ -28,6 +28,7 @@ func LogoutFunc(w http.ResponseWriter, req *http.Request) {
 		if session.Values["loggedin"] != false {
 			session.Values["loggedin"] = "false"
 			session.Save(req, w)
+			fmt.Println("Logged Out")
 		}
 	}
 	http.Redirect(w, req, "/", 302)

@@ -13,6 +13,28 @@
     <!-- Optional theme -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 
+<style type="text/css">
+div.ui-menu li {
+    list-style:none;
+    background-image:none;
+    background-repeat:none;
+    background-position:0;
+}
+ul
+{
+    list-style-type:none;
+    padding:0px;
+    margin:0px;
+}
+li
+{
+    background-image:url(sqpurple.gif);
+    background-repeat:no-repeat;
+    background-position:0px 5px;
+    padding-left:14px;
+}
+</style>
+
 <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js'></script>
 
   {{template "title" .}}
@@ -20,17 +42,56 @@
   </head>
 
   <body>
-    <div class="container">
-      <h1>ORE Die Roller</h1>
-      <a class="btn btn-primary" href="/roll/0" role="button">Roll</a>
-      <a class="btn btn-primary" href="/opposed/" role="button">Opposed Roll</a>
-      <a class="btn btn-primary" href="/" role="button">Roster</a>
-      <a class="btn btn-primary" href="/index_powers/" role="button">Powers</a>
-      <a class="btn btn-primary" href="/add_standalone_power/" role="button">Add Power</a>
-      <a class="btn btn-primary" href="/new/SR">New SR</a>
-      <a class="btn btn-primary" href="/new/WT">New WT</a>
-      <a class="btn btn-primary" href="/new/RE">New Reign</a>
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">ORE Engine</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Roster <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/roll/0">Roll</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Characters
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/new/SR">New SR</a>
+          <a class="dropdown-item" href="/new/WT">New WT</a>
+          <a class="dropdown-item" href="/new/RE">New Reign</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Powers
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/index_powers/" role="button">Powers</a>
+          <a class="dropdown-item" href="/add_standalone_power/" role="button">Add Power</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          User
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/login/" role="button">Login</a>
+          <a class="dropdown-item" href="/signup/" role="button">Sign Up</a>
+          <a class="dropdown-item" href="/logout/" role="button">Log Out</a>
+        </div>
+      </li>
+    </ul>
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
 
     <div class="container">
       {{template "content" .}}

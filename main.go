@@ -77,6 +77,7 @@ func main() {
 
 		r.HandleFunc("/signup/", SignUpFunc)
 		r.HandleFunc("/login/", LoginFunc)
+		r.HandleFunc("/logout/", LogoutFunc)
 		r.HandleFunc("/users/", UserIndexHandler)
 
 		r.Path("/roll/{id}").HandlerFunc(RollHandler)

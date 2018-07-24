@@ -24,14 +24,15 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 		id = 9999
 	}
 
-	c := new(oneroll.Character)
-
 	cm, err := database.PKLoadCharacterModel(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
-		c = oneroll.NewWTCharacter("Player1")
-	} else {
-		c = cm.Character
+		cm = new(models.CharacterModel)
+	}
+
+	if cm.Character == nil {
+		c := oneroll.NewWTCharacter("Player1")
+		cm.Character = c
 	}
 
 	var dieString string
@@ -52,7 +53,7 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	roll := oneroll.Roll{
-		Actor:  c,
+		Actor:  cm.Character,
 		Action: "Act",
 	}
 
