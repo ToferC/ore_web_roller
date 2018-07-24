@@ -13,7 +13,7 @@ import (
 
 // WebView is a container for Web_gui data
 type WebView struct {
-	User        model.User
+	SessionUser string
 	Rolls       []oneroll.Roll
 	Matches     []oneroll.Match
 	Actor       []*models.CharacterModel
@@ -34,26 +34,27 @@ type WebLoc struct {
 
 // WebChar is a framework to send objects & data to a Web view
 type WebChar struct {
-	User           model.User
-	Character      *oneroll.Character
-	CharacterModel *models.CharacterModel
-	PowerModel     *models.PowerModel
-	IsAuthor       bool
-	SessionUser    string
-	Power          *oneroll.Power
-	Statistic      *oneroll.Statistic
-	Skill          *oneroll.Skill
-	Shock          map[string][]int
-	Kill           map[string][]int
-	Modifiers      map[string]oneroll.Modifier
-	Sources        map[string]oneroll.Source
-	Permissions    map[string]oneroll.Permission
-	Intrinsics     map[string]oneroll.Intrinsic
-	Advantages     map[string]oneroll.Advantage
-	Capacities     map[string]float32
-	Powers         map[string]oneroll.Power
-	PowerModels    map[string]models.PowerModel
-	Counter        []int
+	User            model.User
+	Character       *oneroll.Character
+	CharacterModel  *models.CharacterModel
+	PowerModel      *models.PowerModel
+	IsAuthor        bool
+	SessionUser     string
+	Power           *oneroll.Power
+	Statistic       *oneroll.Statistic
+	Skill           *oneroll.Skill
+	Shock           map[string][]int
+	Kill            map[string][]int
+	Modifiers       map[string]oneroll.Modifier
+	Sources         map[string]oneroll.Source
+	Permissions     map[string]oneroll.Permission
+	Intrinsics      map[string]oneroll.Intrinsic
+	Advantages      map[string]oneroll.Advantage
+	Capacities      map[string]float32
+	Powers          map[string]oneroll.Power
+	PowerModels     map[string]models.PowerModel
+	CharacterModels []*models.CharacterModel
+	Counter         []int
 }
 
 // SplitLines transfomrs results text string into slice

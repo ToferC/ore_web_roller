@@ -137,6 +137,7 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Statistic:      stat,
 		Modifiers:      oneroll.Modifiers,
 		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8},
@@ -368,6 +369,7 @@ func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Statistic:      stat,
 		Modifiers:      oneroll.Modifiers,
 		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8},
@@ -564,6 +566,7 @@ func DeleteHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Statistic:      targetStat,
 	}
 

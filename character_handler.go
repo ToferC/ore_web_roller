@@ -15,12 +15,37 @@ import (
 
 func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	username := ""
+
+	u := session.Values["username"]
+
+	if user, ok := u.(string); !ok {
+	} else {
+		fmt.Println(user)
+		username = user
+	}
+
 	characters, err := database.ListCharacterModels(db)
 	if err != nil {
 		panic(err)
 	}
 
-	Render(w, "templates/index_characters.html", characters)
+	wc := WebChar{
+		SessionUser:     username,
+		CharacterModels: characters,
+	}
+
+	Render(w, "templates/roster.html", wc)
 }
 
 // CharacterHandler renders a character in a Web page

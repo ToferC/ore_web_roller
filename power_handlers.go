@@ -15,12 +15,37 @@ import (
 
 func PowerIndexHandler(w http.ResponseWriter, req *http.Request) {
 
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		// in case of error
+	}
+
+	// Prep for user authentication
+	username := ""
+
+	// Get session User
+	u := session.Values["username"]
+
+	// Type assertation
+	if user, ok := u.(string); !ok {
+	} else {
+		fmt.Println(user)
+		username = user
+	}
+
 	pows, err := database.ListPowerModels(db)
 	if err != nil {
 		panic(err)
 	}
 
-	Render(w, "templates/index_powers.html", pows)
+	wc := WebChar{
+		SessionUser: username,
+		PowerModels: pows,
+	}
+
+	Render(w, "templates/index_powers.html", wc)
 }
 
 // PowerHandler renders a character in a Web page
@@ -74,8 +99,9 @@ func PowerHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		PowerModel: pm,
-		IsAuthor:   IsAuthor,
+		PowerModel:  pm,
+		IsAuthor:    IsAuthor,
+		SessionUser: username,
 	}
 
 	if req.Method == "GET" {
@@ -170,6 +196,7 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Modifiers:      oneroll.Modifiers,
 		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8},
 		Capacities: map[string]float32{
@@ -393,6 +420,7 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Modifiers:      oneroll.Modifiers,
 		Counter:        []int{1, 2, 3, 4, 5},
 		Capacities: map[string]float32{
@@ -583,6 +611,7 @@ func DeletePowerHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Power:          p,
 	}
 

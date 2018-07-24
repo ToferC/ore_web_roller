@@ -1,4 +1,7 @@
 {{define "base"}}
+
+{{ $user := .SessionUser }}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -84,6 +87,11 @@ li
           <a class="dropdown-item" href="/signup/" role="button">Sign Up</a>
           <a class="dropdown-item" href="/logout/" role="button">Log Out</a>
         </div>
+      </li>
+      <li>
+        {{ if ne $user ""}}
+          <p>{{$user}}</p>
+        {{ end }}
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">

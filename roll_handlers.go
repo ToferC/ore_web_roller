@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/oneroll"
 	"github.com/toferc/ore_web_roller/database"
 	"github.com/toferc/ore_web_roller/models"
@@ -16,6 +18,25 @@ const blankDieString string = "ac+d+hd+wd+gf+sp+nr+ed"
 
 // RollHandler generates a Web user interface
 func RollHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		// in case of error
+	}
+
+	// Prep for user authentication
+	username := ""
+
+	u := session.Values["username"]
+
+	if user, ok := u.(string); !ok {
+		username = ""
+	} else {
+		fmt.Println(user)
+		username = user
+	}
 
 	pk := mux.Vars(req)["id"]
 
@@ -61,6 +82,7 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 
 	wv := WebView{
 		Actor:       []*models.CharacterModel{cm},
+		SessionUser: username,
 		Rolls:       []oneroll.Roll{},
 		Matches:     []oneroll.Match{},
 		Normal:      []int{nd},
@@ -121,6 +143,25 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 
 // OpposeHandler generates a Web user interface
 func OpposeHandler(w http.ResponseWriter, req *http.Request) {
+
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		// in case of error
+	}
+
+	// Prep for user authentication
+	username := ""
+
+	u := session.Values["username"]
+
+	if user, ok := u.(string); !ok {
+		username = ""
+	} else {
+		fmt.Println(user)
+		username = user
+	}
 
 	var nd, hd, wd, gf, sp, ac, ed, action string
 	var nd2, hd2, wd2, gf2, sp2, ac2, ed2, action2 string
@@ -204,18 +245,19 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		nd2, hd2, wd2, ed2, gf2, sp2, ac2, nr2, _ := roll.ParseString(dieString2)
 
 		wv := WebView{
-			Actor:     []*models.CharacterModel{&cm, &dm},
-			Rolls:     []oneroll.Roll{},
-			Matches:   []oneroll.Match{},
-			Normal:    []int{nd, nd2},
-			Hard:      []int{hd, hd2},
-			Wiggle:    []int{wd, wd2},
-			Expert:    []int{ed, ed2},
-			GoFirst:   []int{gf, gf2},
-			Spray:     []int{sp, sp2},
-			Actions:   []int{ac, ac2},
-			NumRolls:  []int{nr, nr2},
-			DieString: []string{dieString, dieString2},
+			Actor:       []*models.CharacterModel{&cm, &dm},
+			SessionUser: username,
+			Rolls:       []oneroll.Roll{},
+			Matches:     []oneroll.Match{},
+			Normal:      []int{nd, nd2},
+			Hard:        []int{hd, hd2},
+			Wiggle:      []int{wd, wd2},
+			Expert:      []int{ed, ed2},
+			GoFirst:     []int{gf, gf2},
+			Spray:       []int{sp, sp2},
+			Actions:     []int{ac, ac2},
+			NumRolls:    []int{nr, nr2},
+			DieString:   []string{dieString, dieString2},
 		}
 
 		roll.Resolve(dieString)

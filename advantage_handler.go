@@ -87,6 +87,7 @@ func ModifyAdvantageHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Advantages:     oneroll.Advantages,
 	}
 

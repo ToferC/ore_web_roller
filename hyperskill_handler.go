@@ -130,6 +130,7 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Skill:          skill,
 		Modifiers:      oneroll.Modifiers,
 		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8},
@@ -357,6 +358,7 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Skill:          skill,
 		Modifiers:      oneroll.Modifiers,
 		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8},
@@ -555,6 +557,7 @@ func DeleteHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Skill:          targetSkill,
 	}
 

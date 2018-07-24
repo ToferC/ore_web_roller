@@ -77,6 +77,7 @@ func PowerListHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		PowerModels:    pows,
 	}
 
@@ -182,10 +183,11 @@ func AddStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		PowerModel: &pm,
-		IsAuthor:   true,
-		Modifiers:  oneroll.Modifiers,
-		Counter:    []int{1, 2, 3, 4, 5, 6, 7, 8},
+		PowerModel:  &pm,
+		IsAuthor:    true,
+		SessionUser: username,
+		Modifiers:   oneroll.Modifiers,
+		Counter:     []int{1, 2, 3, 4, 5, 6, 7, 8},
 		Capacities: map[string]float32{
 			"Mass":  25.0,
 			"Range": 10.0,
@@ -386,10 +388,11 @@ func ModifyStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		PowerModel: pm,
-		IsAuthor:   IsAuthor,
-		Modifiers:  oneroll.Modifiers,
-		Counter:    []int{1, 2, 3, 4, 5},
+		PowerModel:  pm,
+		IsAuthor:    IsAuthor,
+		SessionUser: username,
+		Modifiers:   oneroll.Modifiers,
+		Counter:     []int{1, 2, 3, 4, 5},
 		Capacities: map[string]float32{
 			"Mass":  25.0,
 			"Range": 10.0,
@@ -554,8 +557,9 @@ func DeleteStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	wc := WebChar{
-		PowerModel: pm,
-		IsAuthor:   IsAuthor,
+		PowerModel:  pm,
+		IsAuthor:    IsAuthor,
+		SessionUser: username,
 	}
 
 	if req.Method == "GET" {

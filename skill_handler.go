@@ -89,6 +89,7 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		SessionUser:    username,
 		Skill:          skill,
 	}
 
