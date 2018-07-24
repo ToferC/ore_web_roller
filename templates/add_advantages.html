@@ -1,6 +1,6 @@
 {{ define "title"}}
 
-{{ $character := .Character }}
+{{ $character := .CharacterModel.Character }}
 
 <title>Add Advantages - {{ $character.Name }}</title>
 
@@ -9,7 +9,7 @@
 
 {{define "content"}}
 
-{{ $character := .Character }}
+{{ $character := .CharacterModel.Character }}
 {{ $skill := .Skill }}
 {{ $advantages := .Advantages }}
 

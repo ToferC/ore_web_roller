@@ -37,6 +37,7 @@ type WebChar struct {
 	User           model.User
 	Character      *oneroll.Character
 	CharacterModel *models.CharacterModel
+	PowerModel     *models.PowerModel
 	IsAuthor       bool
 	SessionUser    string
 	Power          *oneroll.Power
@@ -51,6 +52,7 @@ type WebChar struct {
 	Advantages     map[string]oneroll.Advantage
 	Capacities     map[string]float32
 	Powers         map[string]oneroll.Power
+	PowerModels    map[string]models.PowerModel
 	Counter        []int
 }
 

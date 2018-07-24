@@ -10,20 +10,44 @@ import (
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/oneroll"
 	"github.com/toferc/ore_web_roller/database"
+	"github.com/toferc/ore_web_roller/models"
 )
 
 func PowerIndexHandler(w http.ResponseWriter, req *http.Request) {
 
-	powers, err := database.ListPowers(db)
+	pows, err := database.ListPowerModels(db)
 	if err != nil {
 		panic(err)
 	}
 
-	Render(w, "templates/index_powers.html", powers)
+	Render(w, "templates/index_powers.html", pows)
 }
 
 // PowerHandler renders a character in a Web page
 func PowerHandler(w http.ResponseWriter, req *http.Request) {
+
+	// Get session values or redirect to Login
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		http.Redirect(w, req, "/login/", 302)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	username := ""
+
+	// Get session User
+	u := session.Values["username"]
+
+	// Type assertation
+	if user, ok := u.(string); !ok {
+	} else {
+		fmt.Println(user)
+		username = user
+	}
 
 	vars := mux.Vars(req)
 	pk := vars["id"]
@@ -37,13 +61,21 @@ func PowerHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", http.StatusSeeOther)
 	}
 
-	p, err := database.PKLoadPower(db, int64(id))
+	pm, err := database.PKLoadPowerModel(db, int64(id))
 	if err != nil {
 		fmt.Println(err)
 	}
 
+	// Validate that User == Author
+	IsAuthor := false
+
+	if username == pm.Author.UserName {
+		IsAuthor = true
+	}
+
 	wc := WebChar{
-		Power: p,
+		PowerModel: pm,
+		IsAuthor:   IsAuthor,
 	}
 
 	if req.Method == "GET" {
@@ -242,7 +274,11 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 			p.DeterminePowerCapacities()
 			p.CalculateCost()
 
-			database.SavePower(db, &p)
+			pm := models.PowerModel{
+				Power:  &p,
+				Author: cm.Author,
+			}
+			database.SavePowerModel(db, &pm)
 		}
 
 		fmt.Println(c)
@@ -484,167 +520,6 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// ModifyStandalonePowerHandler renders an editable Power in a Web page
-func ModifyStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
-
-	vars := mux.Vars(req)
-	pk := vars["id"]
-
-	id, err := strconv.Atoi(pk)
-	if err != nil {
-		http.Redirect(w, req, "/", http.StatusSeeOther)
-	}
-
-	p, err := database.PKLoadPower(db, int64(id))
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	// Assign additional empty Qualities to populate form
-	if len(p.Qualities) < 4 {
-		for i := len(p.Qualities); i < 4; i++ {
-			tempQ := oneroll.NewQuality("")
-			p.Qualities = append(p.Qualities, tempQ)
-		}
-	} else {
-		// Always create at least 2 Qualities
-		for i := 0; i < 2; i++ {
-			tempQ := oneroll.NewQuality("")
-			p.Qualities = append(p.Qualities, tempQ)
-		}
-	}
-
-	// Assign additional empty Capacities to populate form
-	for _, q := range p.Qualities {
-		if len(q.Capacities) < 3 {
-			for i := len(q.Capacities); i < 3; i++ {
-				tempC := oneroll.Capacity{
-					Type: "",
-				}
-				q.Capacities = append(q.Capacities, &tempC)
-			}
-		}
-		if len(q.Modifiers) < 8 {
-			for i := len(q.Modifiers); i < 8; i++ {
-				tempM := oneroll.NewModifier("")
-				q.Modifiers = append(q.Modifiers, tempM)
-			}
-		}
-	}
-
-	wc := WebChar{
-		Modifiers: oneroll.Modifiers,
-		Counter:   []int{1, 2, 3, 4, 5},
-		Capacities: map[string]float32{
-			"Mass":  25.0,
-			"Range": 10.0,
-			"Speed": 2.5,
-			"Self":  0.0,
-		},
-		Power: p,
-	}
-
-	if req.Method == "GET" {
-
-		// Render page
-		Render(w, "templates/modify_standalone_power.html", wc)
-
-	}
-
-	if req.Method == "POST" { // POST
-
-		err := req.ParseForm()
-		if err != nil {
-			panic(err)
-		}
-
-		pName := req.FormValue("Name")
-
-		nd, _ := strconv.Atoi(req.FormValue("Normal"))
-		hd, _ := strconv.Atoi(req.FormValue("Hard"))
-		wd, _ := strconv.Atoi(req.FormValue("Wiggle"))
-
-		p.Name = pName
-		p.Dice.Normal = nd
-		p.Dice.Hard = hd
-		p.Dice.Wiggle = wd
-		p.Effect = req.FormValue("Effect")
-		p.Qualities = []*oneroll.Quality{}
-		p.Slug = oneroll.ToSnakeCase(pName)
-
-		for _, qLoop := range wc.Counter[:4] { // Quality Loop
-
-			qType := req.FormValue(fmt.Sprintf("Q%d-Type", qLoop))
-
-			if qType != "" {
-				l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-Level", qLoop)))
-				if err != nil {
-					l = 0
-				}
-				q := &oneroll.Quality{
-					Type:  req.FormValue(fmt.Sprintf("Q%d-Type", qLoop)),
-					Level: l,
-					Name:  req.FormValue(fmt.Sprintf("Q%d-Name", qLoop)),
-				}
-
-				for _, cLoop := range wc.Counter[:3] {
-					cType := req.FormValue(fmt.Sprintf("Q%d-C%d-Type", qLoop, cLoop))
-					if cType != "" {
-						cap := &oneroll.Capacity{
-							Type: cType,
-						}
-						q.Capacities = append(q.Capacities, cap)
-					}
-				}
-
-				m := new(oneroll.Modifier)
-
-				for _, mLoop := range wc.Counter { // Modifier Loop
-					mName := req.FormValue(fmt.Sprintf("Q%d-M%d-Name", qLoop, mLoop))
-					if mName != "" {
-
-						// Take base modifier struct from Modifiers
-						tM := oneroll.Modifiers[mName]
-
-						m = &tM
-
-						if m.RequiresLevel {
-							// Ensure level is a number or set to 1
-							l, err := strconv.Atoi(req.FormValue(fmt.Sprintf("Q%d-M%d-Level", qLoop, mLoop)))
-							if err != nil {
-								l = 1
-							}
-							m.Level = l
-						}
-
-						if m.RequiresInfo {
-							m.Info = req.FormValue(fmt.Sprintf("Q%d-M%d-Info", qLoop, mLoop))
-						}
-						// Append new modifier to Quality Modifiers
-						q.Modifiers = append(q.Modifiers, m)
-
-					}
-				}
-				// Append Quality to Power Qualities
-				p.Qualities = append(p.Qualities, q)
-			}
-		}
-
-		err = database.UpdatePower(db, p)
-		if err != nil {
-			panic(err)
-		} else {
-			fmt.Println("Saved")
-		}
-
-		fmt.Println(p)
-
-		url := fmt.Sprintf("/view_power/%d", p.ID)
-
-		http.Redirect(w, req, url, http.StatusSeeOther)
-	}
-}
-
 // DeletePowerHandler renders a character in a Web page
 func DeletePowerHandler(w http.ResponseWriter, req *http.Request) {
 
@@ -734,48 +609,6 @@ func DeletePowerHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(c)
 
 		url := fmt.Sprintf("/view_character/%d", cm.ID)
-
-		http.Redirect(w, req, url, http.StatusSeeOther)
-	}
-}
-
-// DeleteStandalonePowerHandler renders a character in a Web page
-func DeleteStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
-
-	vars := mux.Vars(req)
-	pk := vars["id"]
-
-	id, err := strconv.Atoi(pk)
-	if err != nil {
-		http.Redirect(w, req, "/", http.StatusSeeOther)
-	}
-
-	p, err := database.PKLoadPower(db, int64(id))
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	wc := WebChar{
-		Power: p,
-	}
-
-	if req.Method == "GET" {
-
-		// Render page
-		Render(w, "templates/delete_standalone_power.html", wc)
-
-	}
-
-	if req.Method == "POST" {
-
-		err := database.DeletePower(db, p.ID)
-		if err != nil {
-			panic(err)
-		} else {
-			fmt.Println("Deleted Power")
-		}
-
-		url := fmt.Sprint("/index_powers/")
 
 		http.Redirect(w, req, url, http.StatusSeeOther)
 	}

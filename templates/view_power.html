@@ -1,5 +1,5 @@
 {{ define "title"}}
-{{ $power := .Power }}
+{{ $power := .PowerModel.Power }}
 
 <title>ORE Power {{ $power.Name }}</title>
 
@@ -7,7 +7,8 @@
 
 {{ define "content" }}
 
-{{ $power := .Power }}
+{{ $power := .PowerModel.Power }}
+{{ $ID := .PowerModel.ID }}
 
 <div class="container">
 <div class="row">
@@ -21,8 +22,8 @@
   {{ if $power.Effect }}
   <i>Effect: {{ $power.Effect }}</i>
   {{end}}<hr>
-  <a class="btn btn-primary" href="/modify_standalone_power/{{ $power.ID }}">Modify</a>
-  <a class="btn btn-danger" href="/delete_standalone_power/{{ $power.ID }}">Delete</a>
+  <a class="btn btn-primary" href="/modify_standalone_power/{{ $ID }}">Modify</a>
+  <a class="btn btn-danger" href="/delete_standalone_power/{{ $ID }}">Delete</a>
 </div>
 
 </div>

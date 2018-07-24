@@ -9,7 +9,9 @@
 {{define "content"}}
 
 {{ $character := .CharacterModel.Character }}
-{{ $powers := .Powers }}
+{{ $ID := .CharacterModel.ID }}
+{{ $powers := $character.Powers }}
+{{ $powermodels := .PowerModels }}
 
       <div class="container">
         <hr>
@@ -21,7 +23,7 @@
               <div class="card-body">
                 <strong>{{ $power }}</strong></p>
                 {{ range $quality := $power.Qualities }}
-                  <p>{{ $quality }} <a href={{ qualityRoll $character $power $quality 1 }}><span title="Roll" class="glyphicon glyphicon-play" aria-hidden="true"></span></a></p>
+                  <p>{{ $quality }}</a></p>
               {{ end }}
               <i>Effect: {{ $power.Effect }}</i>
                 <hr>
@@ -36,8 +38,8 @@
               <label for="Power">Power</label>
               <select type="text" class="form-control" id="Name" name="Name">
                 <option></option>
-                {{ range $powers }}
-                <option value={{.Name}}>{{ .Name }} ({{ .CostPerDie }}pts)</option>
+                {{ range $k, $v := $powermodels }}
+                <option value={{ $v.Power.Name}}>{{ $v.Power.Name }} ({{ $v.Power.CostPerDie }}pts)</option>
                 {{ end }}
               </select>
 
@@ -55,7 +57,7 @@
               </div>
                 <button class="btn btn-primary" type="submit" value="Save">Save</button>
               </form>
-              <a href="/view_character/{{ $character.ID }}" class="btn btn-primary">Return to Character</a>
+              <a href="/view_character/{{ $ID }}" class="btn btn-primary">Return to Character</a>
 
             </div> <!-- END outer column 6 -->
           </div> <!-- END outer ROW -->

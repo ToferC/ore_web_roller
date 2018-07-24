@@ -6,8 +6,8 @@
 
 {{define "content"}}
 
-{{ $power := .Power }}
-{{ $qualities := .Power.Qualities }}
+{{ $power := .PowerModel.Power }}
+{{ $qualities := $power.Qualities }}
 {{ $dice := $power.Dice }}
 
 {{ $modifiers := .Modifiers }}

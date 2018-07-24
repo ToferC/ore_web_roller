@@ -12,9 +12,9 @@
       <div class="col-sm-6 col-md-6 col-lg-6">
         <h3>Powers</h3>
         <ul>
-          {{ range . }}
-            <li><a href="/view_power/{{ .ID }}">{{ . }}</a>
-              <a href="/modify_standalone_power/{{ .ID }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a></li>
+          {{ range $k, $v := . }}
+            <li><a href="/view_power/{{ $v.ID }}">{{ $v.Power }}</a>
+              <a href="/modify_standalone_power/{{ $v.ID }}"><span title="Modify" class="glyphicon glyphicon-cog" aria-hidden="true"></span></a></li>
           {{ end }}
         </ul>
       </div>
