@@ -132,7 +132,7 @@
             <a href="/delete_power/{{ $ID}}/{{ $power.Slug }}">Delete</a>
           {{ end }}
           {{ range $quality := $power.Qualities }}
-          <p>{{ $quality }} <a href={{ qualityRoll $ID $power $quality 1 }}>Roll</p>
+          <p>{{ $quality }} <a href={{ qualityRoll $ID $power $quality 1 }}>Roll</a>
           {{ end }}
           {{ if $power.Effect }}
           <i>Effect: {{ $power.Effect }}</i>
