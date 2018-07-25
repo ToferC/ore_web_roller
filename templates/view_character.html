@@ -24,7 +24,7 @@
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
             <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
-            <h4>Author: {{ $author.UserName }}</h4>
+            <h5>Author: {{ $author.UserName }}</h5>
             <hr>
 
             {{ if $character.Archetype }}
@@ -92,27 +92,29 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Skills</h3>
         {{ range $stat := $statistics }}
-        <p>{{ . }}
+        {{ . }}
           <a href={{ statRoll $ID $stat 1 }}>Roll</a>
           {{ if $IsAuthor }}
             [<a href="/add_skill/{{ $ID }}/{{ $stat.Name }}">+Skill</a>
             {{ if not $stat.HyperStat }}
-            <a href="/add_hyperstat/{{ $ID }}/{{ $stat.Name }}">+Hyper</a>{{ end }}]</p>
+            <a href="/add_hyperstat/{{ $ID }}/{{ $stat.Name }}">+Hyper</a>{{ end }}]
           {{ end }}
+          <ul>
         {{ range $skill := $skills }}
         {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
         {{ if eq $skill.LinkStat.Name $stat.Name}}
-          <ul><p>{{ . }}
+          <li>{{ . }}
             <a href={{ skillRoll $ID $skill $stat 1 }}>Roll</a>
             {{ if not $skill.HyperSkill }}
               {{ if $IsAuthor }}
             [<a href="/add_hyperskill/{{ $ID }}/{{ $skill.Name }}">+Hyper</a>]
               {{ end }}
-          {{ end }}</p>
-          </ul>
+          {{ end }}
+        </li>
           {{ end }}
         {{ end }}
         {{end}}
+      </ul>
       {{ end }}
       </div>
 

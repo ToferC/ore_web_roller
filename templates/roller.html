@@ -55,6 +55,7 @@
             <input type="text" class="form-control" aria-describedby="nr-addon" name="numrolls" value="{{ index .NumRolls 0}}">
             <span class="input-group-addon" id="nr-addon">Rolls</span>
           </div>
+          <hr>
         <input class="btn btn-primary" type="submit" value="Roll Dice">
       </form>
       <br>
@@ -90,15 +91,17 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
         {{ range $stat := $statistics }}
-        <p>{{ . }} <a href={{ statRoll $cm.ID $stat 1 }}>Roll</a></p>
+        {{ . }} <a href={{ statRoll $cm.ID $stat 1 }}>Roll</a>
+        <ul>
         {{ range $skill := $skills }}
         {{ if or $skill.Dice.Normal $skill.Dice.Hard $skill.Dice.Wiggle }}
         {{ if eq $skill.LinkStat.Name $stat.Name}}
-          <ul>{{ . }} <a href={{ skillRoll $cm.ID $skill $stat 1 }}>Roll</a></h4>
-          </ul>
+          <li>{{ . }} <a href={{ skillRoll $cm.ID $skill $stat 1 }}>Roll</a>
+          </li>
           {{ end }}
         {{ end }}
         {{end}}
+      </ul>
       {{ end }}
       </div>
 

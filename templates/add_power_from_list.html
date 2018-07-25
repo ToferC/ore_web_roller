@@ -39,7 +39,7 @@
               <select type="text" class="form-control" id="Name" name="Name">
                 <option></option>
                 {{ range $k, $v := $powermodels }}
-                <option value={{ $v.Power.Name}}>{{ $v.Power.Name }} ({{ $v.Power.CostPerDie }}pts)</option>
+                <option value={{ $v.Power.Name}}>{{ $v.Power.Name }} ({{ $v.Power.CostPerDie }}/die)</option>
                 {{ end }}
               </select>
 
