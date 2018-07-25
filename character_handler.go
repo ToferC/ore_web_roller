@@ -379,6 +379,8 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Insert power into App archive if user authorizes
 		if req.FormValue("Archive") != "" {
 			cm.Open = true
+		} else {
+			cm.Open = false
 		}
 
 		err = database.SaveCharacterModel(db, &cm)
@@ -637,6 +639,8 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		// Set Open to true if user authorizes
 		if req.FormValue("Archive") != "" {
 			cm.Open = true
+		} else {
+			cm.Open = false
 		}
 
 		err = database.UpdateCharacterModel(db, cm)

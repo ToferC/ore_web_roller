@@ -19,15 +19,6 @@ func init() {
 	os.Setenv("DBUser", "chris")
 	os.Setenv("DBPass", "12345")
 	os.Setenv("DBName", "ore_engine")
-
-	chars, _ := database.ListCharacters(db)
-
-	if len(chars) > 0 {
-		err := convertToModels(db)
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
 }
 
 func main() {

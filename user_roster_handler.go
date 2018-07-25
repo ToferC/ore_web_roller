@@ -44,7 +44,7 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 		CharacterModels: characters,
 	}
 
-	Render(w, "templates/roster.html", wc)
+	Render(w, "templates/user_roster.html", wc)
 }
 
 func AddToUserRosterHandler(w http.ResponseWriter, req *http.Request) {

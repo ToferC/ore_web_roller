@@ -39,7 +39,7 @@ func UpdateCharacterModel(db *pg.DB, cm *models.CharacterModel) error {
 func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	var cms []*models.CharacterModel
 
-	_, err := db.Query(&cms, `SELECT * FROM character_models`)
+	_, err := db.Query(&cms, `SELECT * FROM character_models WHERE open = true`)
 
 	if err != nil {
 		panic(err)

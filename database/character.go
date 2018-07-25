@@ -41,7 +41,7 @@ func ListCharacters(db *pg.DB) ([]*oneroll.Character, error) {
 	_, err := db.Query(&chars, `SELECT * FROM characters`)
 
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 
 	// Print names and PK

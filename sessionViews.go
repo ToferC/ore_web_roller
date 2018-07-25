@@ -83,7 +83,7 @@ func LoginFunc(w http.ResponseWriter, req *http.Request) {
 			http.Redirect(w, req, "/", 302)
 		} else {
 			log.Print("Invalid user " + username)
-			Render(w, "templates/login.html", nil)
+			Render(w, "templates/login.html", wc)
 		}
 	}
 }
