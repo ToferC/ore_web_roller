@@ -74,10 +74,13 @@ func main() {
 
 		fmt.Println("Starting Webserver at port " + port)
 		r.HandleFunc("/", CharacterIndexHandler)
+		r.HandleFunc("/user_roster/", UserCharacterRosterHandler)
+		r.HandleFunc("/add_to_user_roster/{id}", AddToUserRosterHandler)
 
 		r.HandleFunc("/signup/", SignUpFunc)
 		r.HandleFunc("/login/", LoginFunc)
 		r.HandleFunc("/logout/", LogoutFunc)
+
 		r.HandleFunc("/users/", UserIndexHandler)
 
 		r.Path("/roll/{id}").HandlerFunc(RollHandler)

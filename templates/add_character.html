@@ -37,6 +37,8 @@
                 <label for="Description">Description</label>
                 <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value ="{{ $character.Description }}">{{ $character.Description }}</textarea>
               </div>
+              <br>
+              <strong>Add to Open Roster?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" checked>
               <hr>
               <button class="brn btn-primary" type="submit" value="Save">Save</button>
 

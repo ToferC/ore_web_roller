@@ -60,7 +60,7 @@ func ValidUser(db *pg.DB, username, password string) bool {
 		return false
 	}
 
-	if password == user.Password {
+	if CheckPasswordHash(password, user.Password) {
 		return true
 	}
 	return false

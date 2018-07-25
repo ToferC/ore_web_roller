@@ -376,6 +376,11 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		cm.Character = c
 
+		// Insert power into App archive if user authorizes
+		if req.FormValue("Archive") != "" {
+			cm.Open = true
+		}
+
 		err = database.SaveCharacterModel(db, &cm)
 		if err != nil {
 			panic(err)
@@ -628,6 +633,11 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 		fmt.Println(newHL)
 		c.HitLocations = newHL
+
+		// Set Open to true if user authorizes
+		if req.FormValue("Archive") != "" {
+			cm.Open = true
+		}
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {

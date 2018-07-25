@@ -120,8 +120,13 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 		req.ParseForm()
 
 		username := req.Form.Get("username")
-		password := req.Form.Get("password")
+		rawpassword := req.Form.Get("password")
 		email := req.Form.Get("email")
+
+		password, err := database.HashPassword(rawpassword)
+		if err != nil {
+			fmt.Println(err)
+		}
 
 		log.Println(username, password, email)
 
@@ -131,7 +136,7 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 			Email:    email,
 		}
 
-		err := database.SaveUser(db, &u)
+		err = database.SaveUser(db, &u)
 		if err != nil {
 			http.Error(w, "Unable to sign user up", http.StatusInternalServerError)
 		} else {

@@ -10,6 +10,7 @@
 {{define "content"}}
 
 {{ $character := .CharacterModel.Character }}
+{{ $open := .CharacterModel.Open }}
 {{ $ID := .CharacterModel.ID }}
 {{ $IsAuthor := .IsAuthor }}
 {{ $author := .CharacterModel.Author }}
@@ -75,6 +76,10 @@
             {{ if $IsAuthor }}
               <a class="btn btn-primary" href="/modify/{{ $ID }}">Modify</a>
               <a class="btn btn-danger" href="/delete/{{ $ID }}">Delete</a></h4>
+              {{ else }}
+              {{ if $open }}
+              <a class="btn btn-primary" href="/add_to_user_roster/{{ $ID }}">Add to Personal Roster</a>
+              {{ end }}
             {{ end }}
             <hr>
             <h4>Detailed Costs</h4>

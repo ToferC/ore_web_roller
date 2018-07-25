@@ -52,6 +52,30 @@ func ListCharacterModels(db *pg.DB) ([]*models.CharacterModel, error) {
 	return cms, nil
 }
 
+// ListUserCharacterModels queries Character names and add to slice
+func ListUserCharacterModels(db *pg.DB, username string) ([]*models.CharacterModel, error) {
+	var temp []*models.CharacterModel
+	var cms []*models.CharacterModel
+
+	_, err := db.Query(&temp, `SELECT * FROM character_models`)
+
+	if err != nil {
+		panic(err)
+	}
+
+	for _, t := range temp {
+		if t.Author.UserName == username {
+			cms = append(cms, t)
+		}
+	}
+
+	// Print names and PK
+	for i, n := range cms {
+		fmt.Println(i, n.Character.Name)
+	}
+	return cms, nil
+}
+
 // PKLoadCharacterModel loads a single character from the DB by pk
 func PKLoadCharacterModel(db *pg.DB, pk int64) (*models.CharacterModel, error) {
 	// Select user by Primary Key
