@@ -28,18 +28,23 @@
             <hr>
 
             {{ if $character.Archetype }}
-            <h4>Archetype: {{ $character.Archetype.Type }} ({{ $character.Archetype.Cost }}pts)</h4>
-            <h4>Sources</h4>
+            <h5>Archetype: {{ $character.Archetype.Type }} ({{ $character.Archetype.Cost }}pts)</h5>
+            <h5>Sources</h5>
+            <ul>
             {{ range $source := $character.Archetype.Sources }}
-              <ul><p>{{ $source }}</p></ul>
+              <li>{{ $source }}</li>
             {{ end }}
+            </ul>
 
-            <h4>Permissions</h4>
+            <h5>Permissions</h5>
+            <ul>
             {{ range $permission := $character.Archetype.Permissions }}
-              <ul><p>{{ $permission }}</p></ul>
+              <li>{{ $permission }}</li>
             {{ end }}
+            </ul>
 
-            <h4>Intrinsics</h4>
+            {{ if $character.Archetype.Intrinsics }}
+            <h5>Intrinsics</h5>
             {{ range $intrinsic := $character.Archetype.Intrinsics }}
               <ul><p>{{ $intrinsic.Name }}
                 {{ if $intrinsic.RequiresInfo }}
@@ -52,17 +57,18 @@
                 {{ end }}
             </p></ul>
             {{ end }}
+            {{ end }}
 
             <hr>
             {{ end }} <!-- End Archetype IF -->
 
             <form action="" method="POST">
-            <h4>Description</h4>
+            <h5>Description</h5>
             {{ $character.Description }}
             <hr>
 
             {{ if ne $character.Setting "RE" }}
-              <h4>Base Will: {{ $character.BaseWill }}</h4>
+              <h5>Base Will: {{ $character.BaseWill }}</h5>
               <div class="input-group">
                 <span class="input-group-addon" id="Willpower">Willpower</span>
                 <input type="number" class="form-control" aria-describedby="Willpower" name="Willpower" value ="{{ $character.Willpower }}">
@@ -92,7 +98,7 @@
       <div class="col-sm-3 col-md-3 col-lg-3">
         <h3>Skills</h3>
         {{ range $stat := $statistics }}
-        {{ . }}
+        <strong>{{ . }}</strong>
           <a href={{ statRoll $ID $stat 1 }}>Roll</a>
           {{ if $IsAuthor }}
             [<a href="/add_skill/{{ $ID }}/{{ $stat.Name }}">+Skill</a>
@@ -120,7 +126,7 @@
 
       <div class="col-sm-3 col-md-3 col-lg-3">
         {{ if eq $character.Setting "RE" }}
-        <h3>Advantages</h3>
+        <h4>Advantages</h4>
         <ul>
         {{ range $advantage := $character.Advantages }}
         <li><strong>{{ $advantage }}</strong></li>
@@ -128,7 +134,7 @@
       </ul>
       <hr>
         {{ else }}
-        <h3>Powers</h3>
+        <h4>Powers</h4>
         {{ end }}
 
         {{ range $power := $character.Powers }}
@@ -193,7 +199,7 @@
       </div>
 
       <div class="col-sm-3 col-md-3 col-lg-3">
-        <h3>Hit Locations</h3>
+        <h4>Hit Locations</h4>
         {{ range $loc := $character.HitLocations }}
             <p>{{ $loc }}
               <br>Shock: {{ range $i, $v := .Shock }}  <input type="checkbox" name="{{ $loc.Name }}-Shock-{{ $i }}" value="true" id="checkbox" {{if eq $v true }} checked {{ end }}>{{ end }}
