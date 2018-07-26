@@ -12,11 +12,11 @@
       <div class="col-sm-6 col-md-6 col-lg-6">
 
         <h3>Open Character Roster</h3>
+        <ul>
           {{ range .CharacterModels }}
-          <ul>
             <li><a href="/view_character/{{ .ID }}">{{ .Character.Name }} ({{ .Character.PointCost }}) - {{ .Author.UserName }}</a></li>
-          </ul>
           {{ end }}
+        </ul>
       </div>
     </div>
 
