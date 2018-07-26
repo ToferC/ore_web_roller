@@ -5,16 +5,13 @@
 {{ end }}
 
 {{define "content"}}
+<h3>Open Character Roster</h3>
 
       <div class="container">
         <div class="row">
-
-      <div class="col-sm-6 col-md-6 col-lg-6">
-
-        <h3>Open Character Roster</h3>
         <ul>
           {{ range .CharacterModels }}
-            <li><a href="/view_character/{{ .ID }}">{{ .Character.Name }} ({{ .Character.PointCost }}) - {{ .Author.UserName }}</a></li>
+            <li><a href="/view_character/{{ .ID }}">{{ .Character.Name }} ({{ .Character.PointCost }}pts) - by {{ .Author.UserName }}</a></li>
           {{ end }}
         </ul>
       </div>
