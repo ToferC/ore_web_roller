@@ -12,16 +12,17 @@
 
 <div class="container">
 <div class="row">
-  <div class="col-sm-6 col-md-6 col-lg-6">
+  <div class="col-sm-12 col-md-12 col-lg-12">
 <br>
 <div class="card-body">
-  <strong>{{ $power }}</strong>
+  <strong>{{ $power }}</strong> (Author: {{ .PowerModel.Author.UserName }})
   {{ range $quality := $power.Qualities }}
   <p>{{ $quality }}</p>
   {{ end }}
   {{ if $power.Effect }}
   <i>Effect: {{ $power.Effect }}</i>
-  {{end}}<hr>
+  {{end}}
+  <hr>
   <a class="btn btn-primary" href="/modify_standalone_power/{{ $ID }}">Modify</a>
   <a class="btn btn-danger" href="/delete_standalone_power/{{ $ID }}">Delete</a>
 </div>
