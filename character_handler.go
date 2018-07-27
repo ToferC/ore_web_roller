@@ -661,6 +661,27 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 // DeleteCharacterHandler renders a character in a Web page
 func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		Render(w, "templates/login.html", nil)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	username := ""
+
+	u := session.Values["username"]
+
+	if user, ok := u.(string); !ok {
+		username = ""
+	} else {
+		fmt.Println(user)
+		username = user
+	}
+
 	vars := mux.Vars(req)
 	pk := vars["id"]
 
@@ -678,10 +699,25 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		fmt.Println(err)
 	}
 
+	// Validate that User == Author
+	IsAuthor := false
+
+	if username == cm.Author.UserName {
+		IsAuthor = true
+	} else {
+		http.Redirect(w, req, "/", 302)
+	}
+
+	wc := WebChar{
+		CharacterModel: cm,
+		SessionUser:    username,
+		IsAuthor:       IsAuthor,
+	}
+
 	if req.Method == "GET" {
 
 		// Render page
-		Render(w, "templates/delete_character.html", cm)
+		Render(w, "templates/delete_character.html", wc)
 
 	}
 
