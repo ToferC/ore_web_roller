@@ -116,6 +116,12 @@ func main() {
 		r.HandleFunc("/modify/{id}", ModifyCharacterHandler)
 		r.HandleFunc("/delete/{id}", DeleteCharacterHandler)
 
+		r.HandleFunc("/beta_index_powers/", BetaPowerIndexHandler)
+		r.HandleFunc("/convert_to_powermodel/{id}", ConvertToOpenPowerArchive)
+
+		r.HandleFunc("/beta_roster/", BetaCharacterIndexHandler)
+		r.HandleFunc("/convert_to_charactermodel/{id}", ConvertToCharacterModel)
+
 		r.HandleFunc("/index_powers/", PowerIndexHandler)
 		r.HandleFunc("/view_power/{id}", PowerHandler)
 

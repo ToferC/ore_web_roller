@@ -53,6 +53,7 @@ type WebChar struct {
 	Capacities      map[string]float32
 	Powers          map[string]oneroll.Power
 	PowerModels     map[string]models.PowerModel
+	Characters      []*oneroll.Character
 	CharacterModels []*models.CharacterModel
 	Counter         []int
 }

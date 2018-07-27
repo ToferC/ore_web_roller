@@ -176,7 +176,7 @@
         <div class="card-body">
           <strong>{{ $skill.HyperSkill }}</strong> <a href="/modify_hyperskill/{{ $ID }}/{{ $skill.Name }}">Modify</a>
           {{ if $IsAuthor }}
-            <a href="/delete_hyperskill/{{ $ID}}/{{ $skill.Name }}">Delete</p>
+            <a href="/delete_hyperskill/{{ $ID}}/{{ $skill.Name }}">Delete</a>
           {{ end }}
           {{ range $quality := $skill.HyperSkill.Qualities }}
           <p>{{ $quality }}</p>

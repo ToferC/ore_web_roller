@@ -1,0 +1,23 @@
+{{ define "title"}}
+
+<title>ORE Open Roster</title>
+
+{{ end }}
+
+{{define "content"}}
+<h3>Open Character Roster</h3>
+
+      <div class="container">
+        <div class="row">
+        <ul>
+          {{ range $character := .Characters }}
+            <li>{{ $character.Name }} - {{ $character.PointCost }}
+            <a href="/convert_to_charactermodel/{{ $character.ID }}">Convert</a></li>
+          {{ end }}
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+{{end}}

@@ -13,6 +13,7 @@ import (
 	"github.com/toferc/ore_web_roller/models"
 )
 
+//PowerIndexHandler displays a list of PowerModels in a WebCharacter View
 func PowerIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
