@@ -29,8 +29,10 @@ func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
 
-	if isAdmin == "false" {
-		http.Redirect(w, req, "/login/", 302)
+	fmt.Println(session)
+
+	if isAdmin != "true" {
+		http.Redirect(w, req, "/", 302)
 		return
 	}
 
@@ -102,6 +104,14 @@ func LoginFunc(w http.ResponseWriter, req *http.Request) {
 		if (username != "" && password != "") && database.ValidUser(db, username, password) {
 			session.Values["loggedin"] = "true"
 			session.Values["username"] = username
+
+			user := database.LoadUser(db, username)
+			if user.IsAdmin {
+				session.Values["isAdmin"] = "true"
+			} else {
+				session.Values["isAdmin"] = "false"
+			}
+
 			session.Save(req, w)
 			log.Print("user ", username, " is authenticated")
 			fmt.Println(session.Values)

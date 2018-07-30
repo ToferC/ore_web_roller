@@ -30,7 +30,7 @@ func getUserSessionValues(s *sessions.Session) map[string]string {
 
 	u := s.Values["username"]
 	l := s.Values["loggedin"]
-	a := s.Values["admin"]
+	a := s.Values["isAdmin"]
 
 	// Type assertation
 	if user, ok := u.(string); !ok {
