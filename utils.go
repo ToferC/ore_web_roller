@@ -1,10 +1,9 @@
 package main
 
 import (
-	"github.com/go-pg/pg"
-	"github.com/toferc/oneroll"
-	"github.com/toferc/ore_web_roller/database"
-	"github.com/toferc/ore_web_roller/models"
+	"fmt"
+
+	"github.com/gorilla/sessions"
 )
 
 type Element interface {
@@ -19,38 +18,39 @@ func ChooseDice(e Element) error {
 	return nil
 }
 
-func convertToModels(*pg.DB) error {
+func getUserSessionValues(s *sessions.Session) map[string]string {
 
-	//Add Checks before running
-
-	var chars []*oneroll.Character
-	var pows map[string]oneroll.Power
-
-	author, err := database.PKLoadUser(db, int64(1))
-	if err == nil {
-		chars, _ = database.ListCharacters(db)
-		pows, _ = database.ListPowers(db)
-
-		for _, c := range chars {
-			tCM := models.CharacterModel{
-				Author:    author,
-				Character: c,
-				Open:      true,
-			}
-			database.SaveCharacterModel(db, &tCM)
-			database.DeleteCharacter(db, c.ID)
-		}
-
-		for _, v := range pows {
-			tPM := models.PowerModel{
-				Author: author,
-				Power:  &v,
-				Open:   true,
-			}
-			database.SavePowerModel(db, &tPM)
-			database.DeletePower(db, v.ID)
-		}
-		return nil
+	sessionMap := map[string]string{
+		"username": "",
+		"loggedin": "false",
+		"isAdmin":  "false",
 	}
-	return err
+
+	// Prep for user authentication
+
+	u := s.Values["username"]
+	l := s.Values["loggedin"]
+	a := s.Values["admin"]
+
+	// Type assertation
+	if user, ok := u.(string); !ok {
+	} else {
+		fmt.Println(user)
+		sessionMap["username"] = user
+	}
+
+	// Type assertation
+	if loggin, ok := l.(string); !ok {
+	} else {
+		fmt.Println(loggin)
+		sessionMap["loggedin"] = loggin
+	}
+
+	// Type assertation
+	if admin, ok := a.(string); !ok {
+	} else {
+		fmt.Println(admin)
+		sessionMap["isAdmin"] = admin
+	}
+	return sessionMap
 }

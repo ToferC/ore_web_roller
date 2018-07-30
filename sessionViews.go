@@ -12,12 +12,41 @@ import (
 
 func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 
+	// Get session values or redirect to Login
+	session, err := sessions.Store.Get(req, "session")
+
+	if err != nil {
+		log.Println("error identifying session")
+		http.Redirect(w, req, "/login/", 302)
+		return
+		// in case of error
+	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
+
+	if isAdmin == "false" {
+		http.Redirect(w, req, "/login/", 302)
+		return
+	}
+
 	users, err := database.ListUsers(db)
 	if err != nil {
 		panic(err)
 	}
 
-	Render(w, "templates/index_users.html", users)
+	wu := WebUser{
+		SessionUser: username,
+		IsLoggedIn:  loggedIn,
+		IsAdmin:     isAdmin,
+		Users:       users,
+	}
+
+	Render(w, "templates/index_users.html", wu)
 }
 
 //LogoutFunc Implements the logout functionality
@@ -49,20 +78,16 @@ func LoginFunc(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	wc := WebChar{
 		SessionUser: username,
+		IsLoggedIn:  loggedIn,
+		IsAdmin:     isAdmin,
 	}
 
 	switch req.Method {
@@ -100,20 +125,16 @@ func SignUpFunc(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	wc := WebChar{
 		SessionUser: username,
+		IsLoggedIn:  loggedIn,
+		IsAdmin:     isAdmin,
 	}
 
 	if req.Method == "POST" {

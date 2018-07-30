@@ -59,15 +59,9 @@ func AddToUserRosterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	u := session.Values["username"]
-
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
 
 	author := database.LoadUser(db, username)
 

@@ -25,15 +25,12 @@ func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
 
-	u := session.Values["username"]
-
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	characters, err := database.ListCharacterModels(db)
 	if err != nil {
@@ -42,6 +39,8 @@ func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	wc := WebChar{
 		SessionUser:     username,
+		IsLoggedIn:      loggedIn,
+		IsAdmin:         isAdmin,
 		CharacterModels: characters,
 	}
 
@@ -57,6 +56,13 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 		log.Println("error identifying session")
 		// in case of error
 	}
+
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
+
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	vars := mux.Vars(req)
 	pk := vars["id"]
@@ -78,31 +84,22 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Println(cm)
 
-	c := cm.Character
-
-	fmt.Println(c)
-
-	// Prep for user authentication
-	username := ""
-
-	u := session.Values["username"]
-
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
-
 	IsAuthor := false
 
 	if username == cm.Author.UserName {
 		IsAuthor = true
 	}
 
+	c := cm.Character
+
+	fmt.Println(c)
+
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		IsLoggedIn:     loggedIn,
 		SessionUser:    username,
+		IsAdmin:        isAdmin,
 		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 	}
 
@@ -174,16 +171,11 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	u := session.Values["username"]
-
-	if user, ok := u.(string); !ok {
-		username = ""
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	cm := models.CharacterModel{}
 
@@ -253,6 +245,8 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: &cm,
 		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
 		Modifiers:      oneroll.Modifiers,
 		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		Sources:        oneroll.Sources,
@@ -412,17 +406,11 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	// Get variables from URL
 	vars := mux.Vars(req)
@@ -503,6 +491,8 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		CharacterModel: cm,
 		SessionUser:    username,
 		IsAuthor:       IsAuthor,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
 		Modifiers:      oneroll.Modifiers,
 		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		Sources:        oneroll.Sources,
@@ -671,16 +661,11 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	u := session.Values["username"]
-
-	if user, ok := u.(string); !ok {
-		username = ""
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	vars := mux.Vars(req)
 	pk := vars["id"]
@@ -712,6 +697,8 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		CharacterModel: cm,
 		SessionUser:    username,
 		IsAuthor:       IsAuthor,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
 	}
 
 	if req.Method == "GET" {

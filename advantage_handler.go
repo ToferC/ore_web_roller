@@ -10,7 +10,6 @@ import (
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/oneroll"
 	"github.com/toferc/ore_web_roller/database"
-	"github.com/toferc/ore_web_roller/models"
 )
 
 // ModifyAdvantageHandler renders a character in a Web page
@@ -27,21 +26,12 @@ func ModifyAdvantageHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	um := &models.User{}
-	username := ""
+	// Prep for user authentication
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-		um.UserName = ""
-	} else {
-		fmt.Println(user)
-		username = user
-	}
-
-	fmt.Println(um)
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	// Get variables from URL
 	vars := mux.Vars(req)
@@ -87,6 +77,8 @@ func ModifyAdvantageHandler(w http.ResponseWriter, req *http.Request) {
 	wc := WebChar{
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
 		SessionUser:    username,
 		Advantages:     oneroll.Advantages,
 	}

@@ -26,17 +26,11 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	// Get variables from URL
 	vars := mux.Vars(req)
@@ -131,6 +125,8 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
 		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
 		Skill:          skill,
 		Modifiers:      oneroll.Modifiers,
 		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8},
@@ -281,17 +277,11 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	// Get variables from URL
 	vars := mux.Vars(req)
@@ -359,6 +349,8 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
 		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
 		Skill:          skill,
 		Modifiers:      oneroll.Modifiers,
 		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8},
@@ -509,17 +501,11 @@ func DeleteHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	// Get variables from URL
 	vars := mux.Vars(req)
@@ -558,6 +544,8 @@ func DeleteHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
 		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
 		Skill:          targetSkill,
 	}
 

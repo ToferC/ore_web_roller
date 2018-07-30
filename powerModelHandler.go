@@ -27,17 +27,11 @@ func PowerListHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	// Get variables from URL
 	vars := mux.Vars(req)
@@ -78,6 +72,8 @@ func PowerListHandler(w http.ResponseWriter, req *http.Request) {
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
 		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
 		PowerModels:    pows,
 	}
 
@@ -151,18 +147,11 @@ func AddStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-		http.Redirect(w, req, "/login/", 302)
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	// Create default Power to populate page
 	defaultPower := &oneroll.Power{
@@ -186,6 +175,8 @@ func AddStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
 		PowerModel:  &pm,
 		IsAuthor:    true,
 		SessionUser: username,
+		IsLoggedIn:  loggedIn,
+		IsAdmin:     isAdmin,
 		Modifiers:   oneroll.Modifiers,
 		Counter:     []int{1, 2, 3, 4, 5, 6, 7, 8},
 		Capacities: map[string]float32{
@@ -313,17 +304,11 @@ func ModifyStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	vars := mux.Vars(req)
 	pk := vars["id"]
@@ -391,6 +376,8 @@ func ModifyStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
 		PowerModel:  pm,
 		IsAuthor:    IsAuthor,
 		SessionUser: username,
+		IsLoggedIn:  loggedIn,
+		IsAdmin:     isAdmin,
 		Modifiers:   oneroll.Modifiers,
 		Counter:     []int{1, 2, 3, 4, 5},
 		Capacities: map[string]float32{
@@ -522,17 +509,11 @@ func DeleteStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	vars := mux.Vars(req)
 	pk := vars["id"]
@@ -560,6 +541,8 @@ func DeleteStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
 		PowerModel:  pm,
 		IsAuthor:    IsAuthor,
 		SessionUser: username,
+		IsLoggedIn:  loggedIn,
+		IsAdmin:     isAdmin,
 	}
 
 	if req.Method == "GET" {

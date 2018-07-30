@@ -26,17 +26,11 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	// Get session User
-	u := session.Values["username"]
-
-	// Type assertation
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	// Get variables from URL
 	vars := mux.Vars(req)
@@ -90,6 +84,8 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 		CharacterModel: cm,
 		IsAuthor:       IsAuthor,
 		SessionUser:    username,
+		IsLoggedIn:     loggedIn,
+		IsAdmin:        isAdmin,
 		Skill:          skill,
 	}
 

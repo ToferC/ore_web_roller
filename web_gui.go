@@ -29,7 +29,12 @@ type WebView struct {
 	ErrorString []error
 }
 
-type WebLoc struct {
+type WebUser struct {
+	IsAuthor    bool
+	SessionUser string
+	IsLoggedIn  string
+	IsAdmin     string
+	Users       []*models.User
 }
 
 // WebChar is a framework to send objects & data to a Web view
@@ -40,6 +45,8 @@ type WebChar struct {
 	PowerModel      *models.PowerModel
 	IsAuthor        bool
 	SessionUser     string
+	IsLoggedIn      string
+	IsAdmin         string
 	Power           *oneroll.Power
 	Statistic       *oneroll.Statistic
 	Skill           *oneroll.Skill

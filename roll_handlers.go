@@ -27,16 +27,9 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	u := session.Values["username"]
-
-	if user, ok := u.(string); !ok {
-		username = ""
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
 
 	pk := mux.Vars(req)["id"]
 
@@ -152,16 +145,9 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	u := session.Values["username"]
-
-	if user, ok := u.(string); !ok {
-		username = ""
-	} else {
-		fmt.Println(user)
-		username = user
-	}
+	username := sessionMap["username"]
 
 	var nd, hd, wd, gf, sp, ac, ed, action string
 	var nd2, hd2, wd2, gf2, sp2, ac2, ed2, action2 string
