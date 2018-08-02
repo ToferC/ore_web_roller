@@ -382,6 +382,8 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	qCount := len(p.Qualities)
+
 	// Assign additional empty Capacities to populate form
 	for _, q := range p.Qualities {
 		if len(q.Capacities) < 3 {
@@ -407,7 +409,7 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 		IsLoggedIn:     loggedIn,
 		IsAdmin:        isAdmin,
 		Modifiers:      oneroll.Modifiers,
-		Counter:        []int{1, 2, 3, 4, 5},
+		Counter:        []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10},
 		Capacities: map[string]float32{
 			"Mass":  25.0,
 			"Range": 10.0,
@@ -449,7 +451,7 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 			Slug:      oneroll.ToSnakeCase(pName),
 		}
 
-		for _, qLoop := range wc.Counter[:4] { // Quality Loop
+		for _, qLoop := range wc.Counter[:qCount] { // Quality Loop
 
 			qType := req.FormValue(fmt.Sprintf("Q%d-Type", qLoop))
 
