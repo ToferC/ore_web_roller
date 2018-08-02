@@ -177,6 +177,15 @@ func (s *Skill) CalculateCost() {
 	// Modifier Cost
 	mc := 0
 
+	// Add cost for HyperSkill levels applied to Stat
+	if s.HyperSkill != nil {
+		for _, q := range s.HyperSkill.Qualities {
+			if q.Level > 0 {
+				b += q.Level
+			}
+		}
+	}
+
 	// Add costs for modifiers
 	for _, m := range s.Modifiers {
 		m.CalculateCost(0)

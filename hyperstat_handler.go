@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
@@ -67,6 +68,7 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 	stat := c.Statistics[s]
 
 	stat.HyperStat = &oneroll.HyperStat{
+		Name: fmt.Sprintf("Hyper-%s", stat.Name),
 		Dice: &oneroll.DiePool{
 			Normal: 0,
 			Hard:   0,
@@ -248,7 +250,15 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 					stat.Modifiers = append(stat.Modifiers, m)
 				}
 			}
-			hs.Effect += "\n++Added modifiers to base stat"
+			oneroll.UpdateCost(stat)
+			totalStatCost := stat.Cost
+			baseStatCost := stat.Dice.Normal * 5
+
+			baseEffectText := strings.Split(hs.Effect, "++")
+
+			newModText := fmt.Sprintf("\n++Added modifiers to base stat (%dpts)",
+				totalStatCost-baseStatCost)
+			hs.Effect = baseEffectText[0] + newModText
 		}
 
 		fmt.Println(c)
@@ -469,6 +479,7 @@ func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		if apply == "Yes" {
 			// Apply Modifiers to Base
 			hs.Apply = true
+			stat.Modifiers = nil
 
 			for _, q := range hs.Qualities {
 				for _, m := range q.Modifiers {
@@ -476,7 +487,16 @@ func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 					stat.Modifiers = append(stat.Modifiers, m)
 				}
 			}
-			hs.Effect += "\n++Added modifiers to base stat"
+
+			oneroll.UpdateCost(stat)
+			totalStatCost := stat.Cost
+			baseStatCost := stat.Dice.Normal * 5
+
+			baseEffectText := strings.Split(hs.Effect, "++")
+
+			newModText := fmt.Sprintf("\n++Added modifiers to base stat (%dpts)",
+				totalStatCost-baseStatCost)
+			hs.Effect = baseEffectText[0] + newModText
 		}
 
 		fmt.Println(c)

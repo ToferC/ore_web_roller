@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
@@ -67,6 +68,7 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 	skill := c.Skills[s]
 
 	skill.HyperSkill = &oneroll.HyperSkill{
+		Name: fmt.Sprintf("Hyper-%s", skill.Name),
 		Dice: &oneroll.DiePool{
 			Normal: 0,
 			Hard:   0,
@@ -243,7 +245,15 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 					skill.Modifiers = append(skill.Modifiers, m)
 				}
 			}
-			hs.Effect += "\n++Added modifiers to base skill"
+			oneroll.UpdateCost(skill)
+			totalSkillCost := skill.Cost
+			baseSkillCost := skill.Dice.Normal * 5
+
+			baseEffectText := strings.Split(hs.Effect, "++")
+
+			newModText := fmt.Sprintf("\n++Added modifiers to base stat (%dpts)",
+				totalSkillCost-baseSkillCost)
+			hs.Effect = baseEffectText[0] + newModText
 		}
 
 		fmt.Println(c)
@@ -467,7 +477,15 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 					skill.Modifiers = append(skill.Modifiers, m)
 				}
 			}
-			hs.Effect += "\n++Added modifiers to base skill"
+			oneroll.UpdateCost(skill)
+			totalSkillCost := skill.Cost
+			baseSkillCost := skill.Dice.Normal * 5
+
+			baseEffectText := strings.Split(hs.Effect, "++")
+
+			newModText := fmt.Sprintf("\n++Added modifiers to base stat (%dpts)",
+				totalSkillCost-baseSkillCost)
+			hs.Effect = baseEffectText[0] + newModText
 		}
 
 		fmt.Println(c)

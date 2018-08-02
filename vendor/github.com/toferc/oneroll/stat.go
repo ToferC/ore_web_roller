@@ -124,6 +124,14 @@ func (s *Statistic) CalculateCost() {
 		}
 	}
 
+	if s.HyperStat != nil {
+		for _, q := range s.HyperStat.Qualities {
+			if q.Level > 0 {
+				b += q.Level
+			}
+		}
+	}
+
 	if len(s.Modifiers) > 0 && mc < 1 {
 		// There are mods, but flaws reduce cost below 1
 		mc = 1

@@ -128,6 +128,10 @@ func NewReignCharacter(name string) *Character {
 		},
 	}
 
+	for _, v := range c.HitLocations {
+		v.FillWounds()
+	}
+
 	c.Skills = map[string]*Skill{
 		// Body Skills
 		"Athletics": &Skill{

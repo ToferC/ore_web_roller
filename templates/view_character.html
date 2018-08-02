@@ -162,7 +162,9 @@
               <a href="/delete_hyperstat/{{ $ID}}/{{ $stat.Name }}">Delete</a></p>
             {{ end }}
             {{ range $quality := $stat.HyperStat.Qualities }}
+            {{ if or (ne $quality.Name "") ($quality.Modifiers) }}
               <p>{{ $quality }}</p>
+            {{ end }}
           {{ end }}
           {{ if $stat.HyperStat.Effect }}
           <i>Effect: {{ $stat.HyperStat.Effect }}</i>

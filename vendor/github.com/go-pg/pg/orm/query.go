@@ -168,8 +168,8 @@ func (q *Query) TableExpr(expr string, params ...interface{}) *Query {
 	return q
 }
 
-// Column adds a column to the Query quoting it according to PostgreSQL rules.
-// ColumnExpr can be used to bypass quoting restriction. Column name can be:
+// Column adds a column to the Query quoting it according to PostgreSQL rules. Does not expand params like ?TableAlias etc.
+// ColumnExpr can be used to bypass quoting restriction or for params expansion. Column name can be:
 //   - column_name,
 //   - table_alias.column_name,
 //   - table_alias.*.
@@ -455,8 +455,8 @@ func (q *Query) Having(having string, params ...interface{}) *Query {
 	return q
 }
 
-// Order adds sort order to the Query quoting column name.
-// OrderExpr can be used to bypass quoting restriction.
+// Order adds sort order to the Query quoting column name. Does not expand params like ?TableAlias etc.
+// OrderExpr can be used to bypass quoting restriction or for params expansion.
 func (q *Query) Order(orders ...string) *Query {
 loop:
 	for _, order := range orders {
@@ -973,6 +973,19 @@ func (q *Query) FormatQuery(b []byte, query string, params ...interface{}) []byt
 		return q.db.FormatQuery(b, query, params...)
 	}
 	return formatter.Append(b, query, params...)
+}
+
+// Exists returns true or false depending if there are any rows matching the query.
+func (q *Query) Exists() (bool, error) {
+	cp := q.Copy() // copy to not change original query
+	cp.columns = []FormatAppender{fieldAppender{"1"}}
+	cp.order = nil
+	cp.limit = 1
+	res, err := q.db.Exec(selectQuery{q: q})
+	if err != nil {
+		return false, err
+	}
+	return res.RowsAffected() > 0, nil
 }
 
 func (q *Query) hasModel() bool {
