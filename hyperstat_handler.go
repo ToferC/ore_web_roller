@@ -243,22 +243,31 @@ func AddHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		if apply == "Yes" {
 			// Apply Modifiers to Base
 			hs.Apply = true
+			// Remove existing Skill Modifiers
+			stat.Modifiers = nil
+			// Get base description text
+			baseEffectText := strings.Split(hs.Effect, "++")
 
+			// Add modifiers to base Skill
 			for _, q := range hs.Qualities {
 				for _, m := range q.Modifiers {
 
 					stat.Modifiers = append(stat.Modifiers, m)
 				}
 			}
+			// Update Skill Cost
 			oneroll.UpdateCost(stat)
-			totalStatCost := stat.Cost
-			baseStatCost := stat.Dice.Normal * 5
+			// Determine the difference from the base skill cost
+			modStatCost := stat.Cost - (stat.Dice.Normal * 5)
 
-			baseEffectText := strings.Split(hs.Effect, "++")
-
-			newModText := fmt.Sprintf("\n++Added modifiers to base stat (%dpts)",
-				totalStatCost-baseStatCost)
-			hs.Effect = baseEffectText[0] + newModText
+			// If difference is positive, add to descriptive text
+			if modStatCost > 0 {
+				newModText := fmt.Sprintf("\n++Added modifiers to base stat (%dpts)",
+					modStatCost)
+				hs.Effect = baseEffectText[0] + newModText
+			} else {
+				hs.Effect = baseEffectText[0]
+			}
 		}
 
 		fmt.Println(c)
@@ -479,24 +488,31 @@ func ModifyHyperStatHandler(w http.ResponseWriter, req *http.Request) {
 		if apply == "Yes" {
 			// Apply Modifiers to Base
 			hs.Apply = true
+			// Remove existing Skill Modifiers
 			stat.Modifiers = nil
+			// Get base description text
+			baseEffectText := strings.Split(hs.Effect, "++")
 
+			// Add modifiers to base Skill
 			for _, q := range hs.Qualities {
 				for _, m := range q.Modifiers {
 
 					stat.Modifiers = append(stat.Modifiers, m)
 				}
 			}
-
+			// Update Skill Cost
 			oneroll.UpdateCost(stat)
-			totalStatCost := stat.Cost
-			baseStatCost := stat.Dice.Normal * 5
+			// Determine the difference from the base skill cost
+			modStatCost := stat.Cost - (stat.Dice.Normal * 5)
 
-			baseEffectText := strings.Split(hs.Effect, "++")
-
-			newModText := fmt.Sprintf("\n++Added modifiers to base stat (%dpts)",
-				totalStatCost-baseStatCost)
-			hs.Effect = baseEffectText[0] + newModText
+			// If difference is positive, add to descriptive text
+			if modStatCost > 0 {
+				newModText := fmt.Sprintf("\n++Added modifiers to base stat (%dpts)",
+					modStatCost)
+				hs.Effect = baseEffectText[0] + newModText
+			} else {
+				hs.Effect = baseEffectText[0]
+			}
 		}
 
 		fmt.Println(c)

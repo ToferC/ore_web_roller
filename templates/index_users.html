@@ -13,7 +13,7 @@
         <h3>User Admin</h3>
         <ul>
           {{ range .Users }}
-            <li>{{ .UserName }} Admin: {{ .IsAdmin }} Email: {{ .Email }}</li>
+            <li>User: {{ .UserName }}, {{if .IsAdmin }}Admin{{end}}, Email: {{ .Email }}, </li>
           {{ end }}
         </ul>
       </div>
