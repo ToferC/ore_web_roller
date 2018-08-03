@@ -66,7 +66,7 @@
   branch = "master"
   name = "github.com/toferc/oneroll"
   packages = ["."]
-  revision = "720c6a5ed17df87ef6339669038273d33614ecf1"
+  revision = "70031881a3e2efa8e164f3ffa3b30ae2fbb29975"
 
 [[projects]]
   branch = "master"

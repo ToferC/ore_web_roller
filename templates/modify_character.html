@@ -42,7 +42,7 @@
                 <input type="number" class="form-control" aria-describedby="willpower-addon" name="Willpower" value ="{{ $character.Willpower }}">
               </div>
               <br>
-              <strong>Character finalized for Play?</strong> <input type="checkbox" name="InPlay" value="true" id="checkbox" {{if .CharacterModel.InPlay }}checked{{ end }}>
+              <strong>Finalize for Play?</strong> <input type="checkbox" name="InPlay" value="true" id="checkbox" {{if $character.InPlay }}checked{{ end }}><br>
               <strong>Add to Open Roster?</strong> <input type="checkbox" name="Archive" value="true" id="checkbox" {{if .CharacterModel.Open }}checked{{ end }}>
 
               <hr>

@@ -145,7 +145,7 @@ func (c *Character) String() string {
 // total costs of all character elements. Call this on each character update
 func (c *Character) CalculateCost() {
 
-	if c.InPlay {
+	if !c.InPlay {
 
 		var statsCost, skillsCost, powerCost int
 		var archetypeCost, baseWillCost, willpowerCost int
