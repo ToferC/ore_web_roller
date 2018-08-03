@@ -21,6 +21,7 @@ type Character struct {
 	HyperSkills  map[string]*HyperSkill
 	Permissions  map[string]*Permission
 	Powers       map[string]*Power
+	Gear         string
 	HitLocations map[string]*Location
 	Passions     []*Passion
 	Advantages   []*Advantage

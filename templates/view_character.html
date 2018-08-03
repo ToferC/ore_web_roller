@@ -23,7 +23,12 @@
         <hr>
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
-            <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
+            <h3>{{ $character.Name }}</h3>
+            <h5> Cost: {{ $character.PointCost }}pts <span title="Detailed Costs
+            {{ range $k, $v := $character.DetailedCost }}
+              {{ $k }}: {{ $v }}
+            {{ end }}
+          ">(details)</span></h5>
             <h5>Author: {{ $author.UserName }}</h5>
             <hr>
 
@@ -76,7 +81,7 @@
             {{ end }}
             <hr>
             {{ if $IsAuthor }}
-            <button class="btn btn-primary" type="submit" value="Update Character State">Update Character State</button>
+            <button class="btn btn-primary" type="submit" value="Update Character State">Update State</button>
             {{ end }}
             <hr>
             {{ if $IsAuthor }}
@@ -207,7 +212,16 @@
               <br>Shock: {{ range $i, $v := .Shock }}  <input type="checkbox" name="{{ $loc.Name }}-Shock-{{ $i }}" value="true" id="checkbox" {{if eq $v true }} checked {{ end }}>{{ end }}
               <br>Kill: {{ range $j, $q := .Kill }}  <input type="checkbox" name="{{ $loc.Name }}-Kill-{{ $j }}" value="true" id="checkbox" {{if eq $q true }} checked {{ end }}>{{ end }}
           {{ end }}
-          <br>
+          <hr>
+          {{ if $IsAuthor }}
+          <div class="form-group">
+            <label for="Gear"><h4>Gear</h4></label>
+            <textarea class="form-control" aria-describedby="gear-addon" name="Gear" rows="10" value ="{{ $character.Gear }}">{{ $character.Gear }}</textarea>
+          </div>
+          {{ else }}
+          <h4>Gear</h4>
+          {{ $character.Gear }}
+          {{ end }}
       </form>
       </div>
     </div>

@@ -25,7 +25,6 @@ func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	// Prep for user authentication
 	sessionMap := getUserSessionValues(session)
 
 	username := sessionMap["username"]
@@ -143,6 +142,8 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 				}
 			}
 		}
+
+		c.Gear = req.FormValue("Gear")
 
 		err = database.UpdateCharacterModel(db, cm)
 		if err != nil {

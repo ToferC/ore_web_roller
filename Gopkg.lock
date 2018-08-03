@@ -66,7 +66,7 @@
   branch = "master"
   name = "github.com/toferc/oneroll"
   packages = ["."]
-  revision = "aa4623a6f0e79ee07d76f17c844d6648e5045985"
+  revision = "38ccc27625db543fd9a92682903fef728cbc5796"
 
 [[projects]]
   branch = "master"
@@ -75,7 +75,7 @@
     "bcrypt",
     "blowfish"
   ]
-  revision = "c126467f60eb25f8f27e5a981f32a87e3965053f"
+  revision = "56440b844dfe139a8ac053f4ecac0b20b79058f4"
 
 [solve-meta]
   analyzer-name = "dep"
