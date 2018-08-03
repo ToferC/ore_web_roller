@@ -125,9 +125,6 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 			c.Willpower = wp
 		}
 
-		// Set up character for actual play
-		c.InPlay = true
-
 		for k, v := range c.HitLocations {
 			for i := range v.Shock {
 				v.Shock[i] = false
@@ -376,6 +373,13 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			cm.Open = true
 		} else {
 			cm.Open = false
+		}
+
+		// Finalize base Character Cost for play
+		if req.FormValue("InPlay") != "" {
+			c.InPlay = true
+		} else {
+			c.InPlay = false
 		}
 
 		err = database.SaveCharacterModel(db, &cm)
@@ -632,6 +636,13 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			cm.Open = true
 		} else {
 			cm.Open = false
+		}
+
+		// Finalize base Character Cost for play
+		if req.FormValue("InPlay") != "" {
+			c.InPlay = true
+		} else {
+			c.InPlay = false
 		}
 
 		err = database.UpdateCharacterModel(db, cm)

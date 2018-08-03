@@ -145,86 +145,89 @@ func (c *Character) String() string {
 // total costs of all character elements. Call this on each character update
 func (c *Character) CalculateCost() {
 
-	var statsCost, skillsCost, powerCost int
-	var archetypeCost, baseWillCost, willpowerCost int
-	var advantageCost int
+	if c.InPlay {
 
-	if c.Setting != "RE" {
-		if len(c.Archetype.Sources) > 0 {
-			UpdateCost(c.Archetype)
-			archetypeCost += c.Archetype.Cost
-		}
-	}
+		var statsCost, skillsCost, powerCost int
+		var archetypeCost, baseWillCost, willpowerCost int
+		var advantageCost int
 
-	for _, stat := range c.Statistics {
-		UpdateCost(stat)
-		statsCost += stat.Cost
-
-		if stat.HyperStat != nil {
-			UpdateCost(stat.HyperStat)
-			powerCost += stat.HyperStat.Cost
-		}
-	}
-
-	for _, skill := range c.Skills {
-		UpdateCost(skill)
-		skillsCost += skill.Cost
-
-		if skill.HyperSkill != nil {
-			UpdateCost(skill.HyperSkill)
-			powerCost += skill.HyperSkill.Cost
-		}
-	}
-
-	for _, power := range c.Powers {
-		// Determine power capacities
-		power.DeterminePowerCapacities()
-		UpdateCost(power)
-		powerCost += power.Cost
-	}
-
-	for _, advantage := range c.Advantages {
-		if advantage.RequiresLevel {
-			advantageCost += advantage.Cost * advantage.Level
-		} else {
-			advantageCost += advantage.Cost
-		}
-	}
-
-	// Update BaseWill automaticallly if Character isn't in play
-
-	calcBaseWill := 0
-
-	if c.Setting != "RE" {
-		for _, stat := range c.Statistics {
-			if stat.EffectsWill {
-				calcBaseWill += SumDice(stat.Dice)
-				if stat.HyperStat != nil {
-					calcBaseWill += SumDice(stat.HyperStat.Dice)
-				}
+		if c.Setting != "RE" {
+			if len(c.Archetype.Sources) > 0 {
+				UpdateCost(c.Archetype)
+				archetypeCost += c.Archetype.Cost
 			}
 		}
 
-		if c.BaseWill == 0 {
-			// Auto-calculate base costs and levels for base character
-			c.BaseWill = calcBaseWill
-			c.Willpower = c.BaseWill
+		for _, stat := range c.Statistics {
+			UpdateCost(stat)
+			statsCost += stat.Cost
+
+			if stat.HyperStat != nil {
+				UpdateCost(stat.HyperStat)
+				powerCost += stat.HyperStat.Cost
+			}
 		}
 
-		if !c.InPlay {
+		for _, skill := range c.Skills {
+			UpdateCost(skill)
+			skillsCost += skill.Cost
+
+			if skill.HyperSkill != nil {
+				UpdateCost(skill.HyperSkill)
+				powerCost += skill.HyperSkill.Cost
+			}
+		}
+
+		for _, power := range c.Powers {
+			// Determine power capacities
+			power.DeterminePowerCapacities()
+			UpdateCost(power)
+			powerCost += power.Cost
+		}
+
+		for _, advantage := range c.Advantages {
+			if advantage.RequiresLevel {
+				advantageCost += advantage.Cost * advantage.Level
+			} else {
+				advantageCost += advantage.Cost
+			}
+		}
+
+		// Update BaseWill automaticallly if Character isn't in play
+
+		calcBaseWill := 0
+
+		if c.Setting != "RE" {
+			for _, stat := range c.Statistics {
+				if stat.EffectsWill {
+					calcBaseWill += SumDice(stat.Dice)
+					if stat.HyperStat != nil {
+						calcBaseWill += SumDice(stat.HyperStat.Dice)
+					}
+				}
+			}
+
+			if c.BaseWill == 0 {
+				// Auto-calculate base costs and levels for base character
+				c.BaseWill = calcBaseWill
+				c.Willpower = c.BaseWill
+			}
+
 			baseWillCost += 3 * (c.BaseWill - calcBaseWill)
 			willpowerCost += c.Willpower - c.BaseWill
+
+		}
+		c.PointCost = archetypeCost + statsCost + skillsCost + powerCost + advantageCost + willpowerCost + baseWillCost
+
+		c.DetailedCost = map[string]int{
+			"archetype":  archetypeCost,
+			"stats":      statsCost,
+			"skills":     skillsCost,
+			"powers":     powerCost,
+			"advantages": advantageCost,
+			"willpower":  willpowerCost,
+			"basewill":   baseWillCost,
 		}
 	}
-
-	c.DetailedCost = map[string]int{
-		"archetype":  archetypeCost,
-		"stats":      statsCost,
-		"skills":     skillsCost,
-		"powers":     powerCost,
-		"advantages": advantageCost,
-		"willpower":  willpowerCost,
-		"basewill":   baseWillCost,
-	}
-	c.PointCost = archetypeCost + statsCost + skillsCost + powerCost + advantageCost + willpowerCost + baseWillCost
+	//What happens when Character is in play
 }
