@@ -253,7 +253,7 @@ func AddHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 			// Update Skill Cost
 			oneroll.UpdateCost(skill)
 			// Determine the difference from the base skill cost
-			modSkillCost := skill.Cost - (skill.Dice.Normal * 2)
+			modSkillCost := skill.Cost - (skill.Dice.Normal * skill.CostPerDie)
 
 			// If difference is positive, add to descriptive text
 			if modSkillCost > 0 {
@@ -494,7 +494,7 @@ func ModifyHyperSkillHandler(w http.ResponseWriter, req *http.Request) {
 			// Update Skill Cost
 			oneroll.UpdateCost(skill)
 			// Determine the difference from the base skill cost
-			modSkillCost := skill.Cost - (skill.Dice.Normal * 2)
+			modSkillCost := skill.Cost - (skill.Dice.Normal * skill.CostPerDie)
 
 			// If difference is positive, add to descriptive text
 			if modSkillCost > 0 {

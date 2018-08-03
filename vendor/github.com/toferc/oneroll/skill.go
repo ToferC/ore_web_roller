@@ -11,11 +11,15 @@ type Skill struct {
 	Quality        *Quality
 	LinkStat       *Statistic
 	Dice           *DiePool
+	Broad          bool
+	Flexible       bool
+	Influence      bool
 	ReqSpec        bool
 	Specialization string
 	HyperSkill     *HyperSkill
 	Modifiers      []*Modifier
 	Free           bool
+	CostPerDie     int
 	Cost           int
 }
 
@@ -44,6 +48,20 @@ func (s Skill) String() string {
 
 	if s.ReqSpec {
 		text += fmt.Sprintf("[%s] ", s.Specialization)
+	}
+
+	if s.Broad || s.Flexible || s.Influence {
+		text += "("
+		if s.Broad {
+			text += "B"
+		}
+		if s.Flexible {
+			text += "F"
+		}
+		if s.Influence {
+			text += "I"
+		}
+		text += ") "
 	}
 
 	text += fmt.Sprintf("%s", td)
@@ -169,10 +187,26 @@ func (s *Skill) CalculateCost() {
 
 	var b int
 
-	// Base Cost
-	if !s.Free {
-		b = 2
+	switch {
+	case s.Free:
+		b = 0
+	default:
+		b = 1
 	}
+
+	if s.Broad {
+		b++
+	}
+
+	if s.Flexible {
+		b++
+	}
+
+	if s.Influence {
+		b++
+	}
+
+	s.CostPerDie = b
 
 	// Modifier Cost
 	mc := 0

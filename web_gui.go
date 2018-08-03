@@ -14,6 +14,8 @@ import (
 // WebView is a container for Web_gui data
 type WebView struct {
 	SessionUser string
+	IsLoggedIn  string
+	IsAdmin     string
 	Rolls       []oneroll.Roll
 	Matches     []oneroll.Match
 	Actor       []*models.CharacterModel

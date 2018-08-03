@@ -49,10 +49,15 @@
                 <span class="input-group-addon" id="specialization-addon">Specialization</span>
                 <input type="text" class="form-control" aria-describedby="specialization-addon" name="Specialization" value ="{{ $skill.Specialization }}">
               </div>
+              <hr>
+              <h4>Skill Options</h4>
+              <strong>Free?</strong> <input type="checkbox" name="Free" value="true" id="checkbox">
+              <br><strong>Broad?</strong> <input type="checkbox" name="Broad" value="true" id="checkbox">
+              <br><strong>Flexible?</strong> <input type="checkbox" name="Flexible" value="true" id="checkbox">
+              <br><strong>Influence?</strong> <input type="checkbox" name="Influence" value="true" id="checkbox">
+              <hr>
 
-              <br><strong>Free Skill?</strong> <input type="checkbox" name="Free" value="true" id="checkbox">
-
-              <br><button class="brn btn-primary" type="submit" value="Save">Save</button>
+              <button class="brn btn-primary" type="submit" value="Save">Save</button>
             </form>
           </div>
 

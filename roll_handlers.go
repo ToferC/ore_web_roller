@@ -30,6 +30,8 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 	sessionMap := getUserSessionValues(session)
 
 	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	pk := mux.Vars(req)["id"]
 
@@ -76,6 +78,8 @@ func RollHandler(w http.ResponseWriter, req *http.Request) {
 	wv := WebView{
 		Actor:       []*models.CharacterModel{cm},
 		SessionUser: username,
+		IsLoggedIn:  loggedIn,
+		IsAdmin:     isAdmin,
 		Rolls:       []oneroll.Roll{},
 		Matches:     []oneroll.Match{},
 		Normal:      []int{nd},
@@ -148,6 +152,8 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 	sessionMap := getUserSessionValues(session)
 
 	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
 	var nd, hd, wd, gf, sp, ac, ed, action string
 	var nd2, hd2, wd2, gf2, sp2, ac2, ed2, action2 string
@@ -233,6 +239,8 @@ func OpposeHandler(w http.ResponseWriter, req *http.Request) {
 		wv := WebView{
 			Actor:       []*models.CharacterModel{&cm, &dm},
 			SessionUser: username,
+			IsLoggedIn:  loggedIn,
+			IsAdmin:     isAdmin,
 			Rolls:       []oneroll.Roll{},
 			Matches:     []oneroll.Match{},
 			Normal:      []int{nd, nd2},
