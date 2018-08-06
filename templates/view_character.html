@@ -32,6 +32,7 @@
             <h5>Author: {{ $author.UserName }}</h5>
             <hr>
 
+            {{ if $character.Archetype }}
             {{ if $character.Archetype.Sources }}
             <h5>Archetype: {{ $character.Archetype.Type }} ({{ $character.Archetype.Cost }}pts)</h5>
             <h5>Sources</h5>
@@ -63,8 +64,9 @@
             </p></ul>
             {{ end }}
             {{ end }}
-
             <hr>
+            {{ end }}
+
             {{ end }} <!-- End Archetype IF -->
 
             <form action="" method="POST">
@@ -78,8 +80,8 @@
                 <span class="input-group-addon" id="Willpower">Willpower: </span>
                 <input type="number" class="form-control" aria-describedby="Willpower" name="Willpower" value ="{{ $character.Willpower }}">
               </div>
+              <hr>
             {{ end }}
-            <hr>
             {{ if $IsAuthor }}
             <button class="btn btn-primary" type="submit" value="Update Character State">Update State</button>
             {{ end }}
