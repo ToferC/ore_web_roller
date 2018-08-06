@@ -32,7 +32,7 @@
             <h5>Author: {{ $author.UserName }}</h5>
             <hr>
 
-            {{ if $character.Archetype }}
+            {{ if $character.Archetype.Sources }}
             <h5>Archetype: {{ $character.Archetype.Type }} ({{ $character.Archetype.Cost }}pts)</h5>
             <h5>Sources</h5>
             <ul>
@@ -73,9 +73,9 @@
             <hr>
 
             {{ if ne $character.Setting "RE" }}
-              <h5>Base Will: {{ $character.BaseWill }}</h5>
+              <p>Base Will: {{ $character.BaseWill }}</p>
               <div class="input-group">
-                <span class="input-group-addon" id="Willpower">Willpower</span>
+                <span class="input-group-addon" id="Willpower">Willpower: </span>
                 <input type="number" class="form-control" aria-describedby="Willpower" name="Willpower" value ="{{ $character.Willpower }}">
               </div>
             {{ end }}
