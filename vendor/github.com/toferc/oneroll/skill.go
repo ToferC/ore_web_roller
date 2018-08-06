@@ -11,7 +11,7 @@ type Skill struct {
 	Quality        *Quality
 	LinkStat       *Statistic
 	Dice           *DiePool
-	Broad          bool
+	Narrow         bool
 	Flexible       bool
 	Influence      bool
 	ReqSpec        bool
@@ -50,10 +50,10 @@ func (s Skill) String() string {
 		text += fmt.Sprintf("[%s] ", s.Specialization)
 	}
 
-	if s.Broad || s.Flexible || s.Influence {
+	if s.Narrow || s.Flexible || s.Influence {
 		text += "("
-		if s.Broad {
-			text += "B"
+		if s.Narrow {
+			text += "N"
 		}
 		if s.Flexible {
 			text += "F"
@@ -191,11 +191,11 @@ func (s *Skill) CalculateCost() {
 	case s.Free:
 		b = 0
 	default:
-		b = 1
+		b = 2
 	}
 
-	if s.Broad {
-		b++
+	if s.Narrow {
+		b--
 	}
 
 	if s.Flexible {

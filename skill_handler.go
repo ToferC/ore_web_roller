@@ -76,7 +76,7 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 			Hard:   0,
 			Wiggle: 0,
 		},
-		Broad:          false,
+		Narrow:         false,
 		Flexible:       false,
 		Influence:      false,
 		ReqSpec:        false,
@@ -130,8 +130,8 @@ func AddSkillHandler(w http.ResponseWriter, req *http.Request) {
 			skill.Free = true
 		}
 
-		if req.FormValue("Broad") != "" {
-			skill.Broad = true
+		if req.FormValue("Narrow") != "" {
+			skill.Narrow = true
 		}
 
 		if req.FormValue("Flexible") != "" {

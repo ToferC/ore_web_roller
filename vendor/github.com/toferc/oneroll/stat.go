@@ -124,6 +124,7 @@ func (s *Statistic) CalculateCost() {
 		}
 	}
 
+	// Add cost for HyperStat levels applied to Stat
 	if s.HyperStat != nil {
 		for _, q := range s.HyperStat.Qualities {
 			if q.Level > 0 {
