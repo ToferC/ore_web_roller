@@ -6,20 +6,41 @@
 
 {{define "content"}}
 
+{{ $user := .SessionUser }}
+
+<h3>{{ $user }}'s Character Roster</h3>
+
       <div class="container">
         <div class="row">
-
-      <div class="col-sm-12 col-md-12 col-lg-12">
-
-        <h3>{{ .SessionUser }}'s Character Roster</h3>
-        <ul>
           {{ range .CharacterModels }}
-          <li><a href="/view_character/{{ .ID }}">{{ .Character.Name }} ({{ .Character.PointCost }}pts) - by {{ .Author.UserName }}</a></li>
+          <div class="col-md-4">
+            <div class="card mb-4 box-shadow">
+              <!--
+              <img class ="card-img-top" data-src="" alt="Thumbnail"
+              style="height: 225px; width: 100%; display: block;" src=""
+              data-holder-rendered="true">
+            -->
+              <div class="card-body">
+                <h5 class="card-title">{{ .Character.Name }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{ .Character.PointCost }}pts | {{ .Author.UserName }}</h6>
+                <p class="card-text">
+                  {{ sliceString .Character.Description 77 }}
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="btn-group">
+                    <a type="button" class="btn btn-sm btn-primary"
+                    href="/view_character/{{ .ID }}">View</a>
+                    {{ if eq $user .Author.UserName }}
+                    <a type="button" class="btn btn-sm btn-secondary"
+                    href="/modify/{{ .ID }}">Modify</a>
+                    {{ end }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           {{ end }}
-        </ul>
       </div>
     </div>
-
-  </div>
 
 {{end}}

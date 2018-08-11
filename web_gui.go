@@ -73,6 +73,16 @@ func SplitLines(s string) []string {
 	return sli
 }
 
+func sliceString(s string, i int) string {
+
+	l := len(s)
+
+	if l > i {
+		return s[:i] + "..."
+	}
+	return s[:l]
+}
+
 func skillRoll(id int64, sk *oneroll.Skill, st *oneroll.Statistic, ac int) string {
 
 	skill := oneroll.ReturnDice(sk)
@@ -181,6 +191,7 @@ func Render(w http.ResponseWriter, filename string, data interface{}) {
 		"add":         add,
 		"multiply":    multiply,
 		"isIn":        isIn,
+		"sliceString": sliceString,
 	}
 
 	baseTemplate := "templates/layout.html"
