@@ -175,6 +175,10 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
 
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
+	}
+
 	cm := models.CharacterModel{}
 
 	c := &oneroll.Character{Setting: "WT"}

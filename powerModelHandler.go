@@ -153,6 +153,11 @@ func AddStandalonePowerHandler(w http.ResponseWriter, req *http.Request) {
 	loggedIn := sessionMap["loggedin"]
 	isAdmin := sessionMap["isAdmin"]
 
+	if username == "" {
+		// Add user message
+		http.Redirect(w, req, "/", 302)
+	}
+
 	// Create default Power to populate page
 	defaultPower := &oneroll.Power{
 		Name: "",
