@@ -24,6 +24,7 @@ func init() {
 func main() {
 
 	if os.Getenv("ENVIRONMENT") == "production" {
+		// Production system
 		url, ok := os.LookupEnv("DATABASE_URL")
 
 		if !ok {
@@ -38,11 +39,13 @@ func main() {
 
 		db = pg.Connect(options)
 	} else {
+		// Not production
 		db = pg.Connect(&pg.Options{
 			User:     os.Getenv("DBUser"),
 			Password: os.Getenv("DBPass"),
 			Database: os.Getenv("DBName"),
 		})
+		os.Setenv("CookieSecret", "kimchee-typhoon")
 	}
 
 	defer db.Close()
