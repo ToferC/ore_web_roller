@@ -18,7 +18,7 @@
         <hr>
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
-            <form action="" method="POST">
+            <form action="" method="POST" enctype="multipart/form-data">
 
               <div class="input-group">
                 <span class="input-group-addon" id="name-addon">Name</span>
@@ -29,6 +29,17 @@
               <div class="form-group">
                 <label for="Description">Description</label>
                 <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value ="{{ $character.Description }}">{{ $character.Description }}</textarea>
+              </div>
+              <hr>
+              <img class ="card-img-top" data-src="" alt="Thumbnail"
+              style="width: 100%; display: block;" src="https://s3.amazonaws.com/oreengine{{ .CharacterModel.Image.Path }}"
+              data-holder-rendered="true">
+              <br>
+              <div class="input-group">
+                <div class="custom-file">
+                  <input type="file" name="image" class="custom-file-input" id="inputGroupFile" aria-describedby="inputGroupFileAddon">
+                  <label class="custom-file-label" for="inputGroupFile">Choose file</label>
+                </div>
               </div>
               <hr>
 

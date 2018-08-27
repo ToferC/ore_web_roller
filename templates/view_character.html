@@ -29,6 +29,11 @@
               {{ $k }}: {{ $v }}
             {{ end }}
           ">(details)</span></h5>
+
+          <img class ="card-img-top" data-src="" alt="Thumbnail"
+          style="width: 100%; display: block;" src="https://s3.amazonaws.com/oreengine{{ .CharacterModel.Image.Path }}"
+          data-holder-rendered="true">
+
             <h5>Author: {{ $author.UserName }}</h5>
             <hr>
 

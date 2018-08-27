@@ -39,6 +39,13 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 		panic(err)
 	}
 
+	for _, cm := range characters {
+		if cm.Image == nil {
+			cm.Image = new(models.Image)
+			cm.Image.Path = DefaultCharacterPortrait
+		}
+	}
+
 	wc := WebChar{
 		SessionUser:     username,
 		CharacterModels: characters,

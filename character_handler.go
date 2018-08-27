@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
 	"github.com/thewhitetulip/Tasks/sessions"
 	"github.com/toferc/oneroll"
@@ -34,6 +37,13 @@ func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 	characters, err := database.ListCharacterModels(db)
 	if err != nil {
 		panic(err)
+	}
+
+	for _, cm := range characters {
+		if cm.Image == nil {
+			cm.Image = new(models.Image)
+			cm.Image.Path = DefaultCharacterPortrait
+		}
 	}
 
 	wc := WebChar{
@@ -92,6 +102,11 @@ func CharacterHandler(w http.ResponseWriter, req *http.Request) {
 	c := cm.Character
 
 	fmt.Println(c)
+
+	if cm.Image == nil {
+		cm.Image = new(models.Image)
+		cm.Image.Path = DefaultCharacterPortrait
+	}
 
 	wc := WebChar{
 		CharacterModel: cm,
@@ -266,7 +281,7 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if req.Method == "POST" {
 
-		err := req.ParseForm()
+		err := req.ParseMultipartForm(MaxMemory)
 		if err != nil {
 			panic(err)
 		}
@@ -379,6 +394,44 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			cm.Open = false
 		}
 
+		// Upload image to s3
+		file, h, err := req.FormFile("image")
+		switch err {
+		case nil:
+			// Process image
+			defer file.Close()
+			// example path media/Major/TestImage/Jason_White.jpg
+			path := fmt.Sprintf("/media/%s/%s/%s",
+				cm.Author.UserName,
+				oneroll.ToSnakeCase(c.Name),
+				h.Filename,
+			)
+
+			_, err = uploader.Upload(&s3manager.UploadInput{
+				Bucket: aws.String(os.Getenv("BUCKET")),
+				Key:    aws.String(path),
+				Body:   file,
+			})
+			if err != nil {
+				log.Panic(err)
+				fmt.Println("Error uploading file ", err)
+			}
+			fmt.Printf("successfully uploaded %q to %q\n",
+				h.Filename, os.Getenv("BUCKET"))
+
+			cm.Image = new(models.Image)
+			cm.Image.Path = path
+
+			fmt.Println(path)
+
+		case http.ErrMissingFile:
+			log.Println("no file")
+
+		default:
+			log.Panic(err)
+			fmt.Println("Error getting file ", err)
+		}
+
 		// Finalize base Character Cost for play
 		if req.FormValue("InPlay") != "" {
 			c.InPlay = true
@@ -386,14 +439,14 @@ func NewCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			c.InPlay = false
 		}
 
+		fmt.Println(c)
+
 		err = database.SaveCharacterModel(db, &cm)
 		if err != nil {
-			panic(err)
+			log.Panic(err)
 		} else {
 			fmt.Println("Saved")
 		}
-
-		fmt.Println(c)
 
 		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
@@ -519,7 +572,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	if req.Method == "POST" {
 
-		err := req.ParseForm()
+		err := req.ParseMultipartForm(MaxMemory)
 		if err != nil {
 			panic(err)
 		}
@@ -647,6 +700,46 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 			c.InPlay = true
 		} else {
 			c.InPlay = false
+		}
+
+		// Upload image to s3
+		file, h, err := req.FormFile("image")
+		switch err {
+		case nil:
+			// Process image
+			defer file.Close()
+			// example path media/Major/TestImage/Jason_White.jpg
+			path := fmt.Sprintf("/media/%s/%s/%s",
+				cm.Author.UserName,
+				oneroll.ToSnakeCase(c.Name),
+				h.Filename,
+			)
+
+			_, err = uploader.Upload(&s3manager.UploadInput{
+				Bucket: aws.String(os.Getenv("BUCKET")),
+				Key:    aws.String(path),
+				Body:   file,
+			})
+			if err != nil {
+				log.Panic(err)
+				fmt.Println("Error uploading file ", err)
+			}
+			fmt.Printf("successfully uploaded %q to %q\n",
+				h.Filename, os.Getenv("BUCKET"))
+
+			if cm.Image == nil {
+				cm.Image = new(models.Image)
+			}
+			cm.Image.Path = path
+
+			fmt.Println(path)
+
+		case http.ErrMissingFile:
+			log.Println("no file")
+
+		default:
+			log.Panic(err)
+			fmt.Println("Error getting file ", err)
 		}
 
 		err = database.UpdateCharacterModel(db, cm)

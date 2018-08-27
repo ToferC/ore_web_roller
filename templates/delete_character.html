@@ -17,7 +17,10 @@
         <div class="row">
           <div class="col-sm-3 col-md-3 col-lg-3">
             <h3>{{ $character.Name }} ({{ $character.PointCost }}pts)</h3>
-            <h4>Image</h4>
+            <img class ="card-img-top" data-src="" alt="Thumbnail"
+            style="width: 100%; display: block;" src="https://s3.amazonaws.com/oreengine{{ .CharacterModel.Image.Path }}"
+            data-holder-rendered="true">
+            <hr>
             <h4>{{ $character.Archetype }}</h4>
             <h4>Description</h4>
               <h4>Base Will: {{ $character.BaseWill }}</h4>

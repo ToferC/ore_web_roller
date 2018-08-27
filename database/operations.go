@@ -22,6 +22,7 @@ func createSchema(db *pg.DB) error {
 		(*oneroll.Power)(nil),
 
 		(*models.CharacterModel)(nil),
+		(*models.Image)(nil),
 		(*models.PowerModel)(nil),
 		(*models.User)(nil)} {
 		err := db.CreateTable(model, &orm.CreateTableOptions{

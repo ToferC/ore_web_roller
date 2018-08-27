@@ -7,13 +7,27 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 	"github.com/gorilla/mux"
 
 	"github.com/go-pg/pg"
 	"github.com/toferc/ore_web_roller/database"
 )
 
-var db *pg.DB
+var (
+	db       *pg.DB
+	svc      *s3.S3
+	uploader *s3manager.Uploader
+)
+
+// MaxMemory is the max upload size for images
+const MaxMemory = 2 * 1024 * 1024
+
+// DefaultCharacterPortrait is a base image used as a default
+const DefaultCharacterPortrait = "/media/shadow.jpeg"
 
 func init() {
 	os.Setenv("DBUser", "chris")
@@ -38,6 +52,7 @@ func main() {
 		}
 
 		db = pg.Connect(options)
+
 	} else {
 		// Not production
 		db = pg.Connect(&pg.Options{
@@ -46,6 +61,8 @@ func main() {
 			Database: os.Getenv("DBName"),
 		})
 		os.Setenv("CookieSecret", "kimchee-typhoon")
+		os.Setenv("BUCKET", "oreengine")
+		os.Setenv("AWS_REGION", "us-east-1")
 	}
 
 	defer db.Close()
@@ -56,6 +73,24 @@ func main() {
 	}
 
 	fmt.Println(db)
+
+	// Create AWS session using local default config
+	// or Env Variables if on Heroku
+	sess, err := session.NewSession(&aws.Config{
+		Region: aws.String(os.Getenv("AWS_REGION")),
+	})
+	if err != nil {
+		log.Fatal(err)
+		fmt.Println("Error creating session", err)
+		os.Exit(1)
+	}
+
+	fmt.Println("Session created ", sess)
+	svc := s3.New(sess)
+
+	fmt.Println(svc)
+
+	uploader = s3manager.NewUploader(sess)
 
 	// Check for terminal flag
 	t := flag.Bool("t", false, "Activate the local terminal")
