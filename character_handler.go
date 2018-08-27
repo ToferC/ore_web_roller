@@ -549,6 +549,11 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 
 	}
 
+	if cm.Image == nil {
+		cm.Image = new(models.Image)
+		cm.Image.Path = DefaultCharacterPortrait
+	}
+
 	wc := WebChar{
 		CharacterModel: cm,
 		SessionUser:    username,
