@@ -20,7 +20,7 @@
               data-holder-rendered="true">
               <div class="card-body">
                 <h5 class="card-title">{{ .Character.Name }}</h5>
-                <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Setting }} | {{ .Character.PointCost }}pts | {{ .Author.UserName }}</h6>
+                <h6 class="card-subtitle mb-2 text-muted">{{ .Character.Setting }}{{ .Character.Setting }} | {{ .Character.PointCost }}pts | {{ .Author.UserName }}</h6>
                 <p class="card-text">
                   {{ sliceString .Character.Description 77 }}
                 </p>

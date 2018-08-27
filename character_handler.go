@@ -711,40 +711,46 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		file, h, err := req.FormFile("image")
 		switch err {
 		case nil:
-			// Process image
-			defer file.Close()
-			// example path media/Major/TestImage/Jason_White.jpg
-			path := fmt.Sprintf("/media/%s/%s/%s",
-				cm.Author.UserName,
-				oneroll.ToSnakeCase(c.Name),
-				h.Filename,
-			)
+			if h.Filename != "" {
+				// Process image
+				defer file.Close()
+				// example path media/Major/TestImage/Jason_White.jpg
+				path := fmt.Sprintf("/media/%s/%s/%s",
+					cm.Author.UserName,
+					oneroll.ToSnakeCase(c.Name),
+					h.Filename,
+				)
 
-			_, err = uploader.Upload(&s3manager.UploadInput{
-				Bucket: aws.String(os.Getenv("BUCKET")),
-				Key:    aws.String(path),
-				Body:   file,
-			})
-			if err != nil {
-				log.Panic(err)
-				fmt.Println("Error uploading file ", err)
+				_, err = uploader.Upload(&s3manager.UploadInput{
+					Bucket: aws.String(os.Getenv("BUCKET")),
+					Key:    aws.String(path),
+					Body:   file,
+				})
+				if err != nil {
+					log.Panic(err)
+					fmt.Println("Error uploading file ", err)
+				}
+				fmt.Printf("successfully uploaded %q to %q\n",
+					h.Filename, os.Getenv("BUCKET"))
+
+				if cm.Image == nil {
+					cm.Image = new(models.Image)
+				}
+				cm.Image.Path = path
+
+				fmt.Println(path)
+			} else {
+				fmt.Println("No file provided.")
 			}
-			fmt.Printf("successfully uploaded %q to %q\n",
-				h.Filename, os.Getenv("BUCKET"))
-
-			if cm.Image == nil {
-				cm.Image = new(models.Image)
-			}
-			cm.Image.Path = path
-
-			fmt.Println(path)
 
 		case http.ErrMissingFile:
 			log.Println("no file")
+			fmt.Println("Path: ", cm.Image.Path)
 
 		default:
 			log.Panic(err)
 			fmt.Println("Error getting file ", err)
+			cm.Image.Path = DefaultCharacterPortrait
 		}
 
 		err = database.UpdateCharacterModel(db, cm)
@@ -753,8 +759,6 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		} else {
 			fmt.Println("Saved")
 		}
-
-		fmt.Println(c)
 
 		url := fmt.Sprintf("/view_character/%d", cm.ID)
 
