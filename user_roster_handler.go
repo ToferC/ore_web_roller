@@ -25,14 +25,14 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Prep for user authentication
-	username := ""
+	sessionMap := getUserSessionValues(session)
 
-	u := session.Values["username"]
+	username := sessionMap["username"]
+	loggedIn := sessionMap["loggedin"]
+	isAdmin := sessionMap["isAdmin"]
 
-	if user, ok := u.(string); !ok {
-	} else {
-		fmt.Println(user)
-		username = user
+	if username == "" {
+		http.Redirect(w, req, "/", 302)
 	}
 
 	characters, err := database.ListUserCharacterModels(db, username)
@@ -49,6 +49,8 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 
 	wc := WebChar{
 		SessionUser:     username,
+		IsLoggedIn:      loggedIn,
+		IsAdmin:         isAdmin,
 		CharacterModels: characters,
 	}
 
