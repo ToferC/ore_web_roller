@@ -6,18 +6,6 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-type Element interface {
-	ChooseDiePool() error
-}
-
-func ChooseDice(e Element) error {
-	err := e.ChooseDiePool()
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
 func getUserSessionValues(s *sessions.Session) map[string]string {
 
 	sessionMap := map[string]string{

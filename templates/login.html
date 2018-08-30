@@ -7,15 +7,28 @@
 {{define "content"}}
 
 <div class="container">
+  <h1>Login</h1><br>
   <div class="row">
-<h1>Login</h1><br>
+            <div class="col-sm-6 col-md-6 col-lg-6">
 <form method="POST" action="">
-    <label for="usernname">User name</label>
-    <input type="text" id="username" name="username">
-    <label for="password">Password</label>
+  <br>
+    <div class="input-group">
+      <div class="input-group-prepend">
+        <span class="input-group-text" for="usernname">User name</span>
+      </div>
+      <input type="text" id="username" name="username">
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+    <span class="input-group-text" for="password">Password</span>
+    </div>
     <input type="password" id="password" name="password">
-    <button type="submit">Login</button>
+    </div>
+    <br><br>
+    <button class="btn btn-primary" type="submit">Login</button>
 </form>
+</div>
 </div>
 </div>
 

@@ -17,44 +17,72 @@
           <div class="col-sm-3 col-md-3 col-lg-3">
             <p>Build your die pool below and then click "Roll Dice".</p>
         <form action="" method="POST">
+
           <div class="input-group">
             <input type="text" class="form-control" aria-describedby="name-addon" name="name" value ="{{ $character.Name }}">
-            <span class="input-group-addon" id="name-addon">Name</span>
+          <div class="input-group-append">
+            <span class="input-group-text" id="name-addon">Name</span>
           </div>
+          </div>
+
         <div class="input-group">
           <input type="text" class="form-control" aria-describedby="nd-addon" name="nd" value="{{ index .Normal 0}}">
-          <span class="input-group-addon" id="nd-addon">Normal Dice</span>
+          <div class="input-group-append">
+          <label class="input-group-text" id="nd-addon">Normal</label>
         </div>
+      </div>
+
         <div class="input-group">
           <input type="text" class="form-control" aria-describedby="ed-addon" name="ed" value="{{ index .Expert 0}}">
-          <span class="input-group-addon" id="ed-addon">Expert Dice Setting</span>
+          <div class="input-group-append">
+            <span class="input-group-text" id="ed-addon">Expert set to</span>
         </div>
+        </div>
+
         <div class="input-group">
           <input type="text" class="form-control" aria-describedby="hd-addon" name="hd" value="{{ index .Hard 0}}">
-          <span class="input-group-addon" id="hd-addon">Hard Dice</span>
+          <div class="input-group-append">
+            <span class="input-group-text" id="hd-addon">Hard</span>
         </div>
+        </div>
+
         <div class="input-group">
           <input type="text" class="form-control" aria-describedby="wd-addon" name="wd" value="{{ index .Wiggle 0}}">
-          <span class="input-group-addon" id="wd-addon">Wiggle Dice</span>
+          <div class="input-group-append">
+            <span class="input-group-text" id="wd-addon">Wiggle</span>
         </div>
+        </div>
+
           <hr>
           <div class="input-group">
             <input type="text" class="form-control" aria-describedby="gf-addon" name="gofirst" value="{{ index .GoFirst 0}}">
-            <span class="input-group-addon" id="gf-addon">Go First</span>
+            <div class="input-group-append">
+              <span class="input-group-text" id="gf-addon">Go First</span>
           </div>
+          </div>
+
           <div class="input-group">
             <input type="text" class="form-control" aria-describedby="sp-addon" name="spray" value="{{ index .Spray 0}}">
-            <span class="input-group-addon" id="sp-addon">Spray</span>
+            <div class="input-group-append">
+              <span class="input-group-text" id="sp-addon">Spray</span>
           </div>
+          </div>
+
           <div class="input-group">
             <input type="text" class="form-control" aria-describedby="ac-addon" name="actions" value="{{ index .Actions 0}}">
-            <span class="input-group-addon" id="ac-addon">Actions</span>
+            <div class="input-group-append">
+              <span class="input-group-text" id="ac-addon">Actions</span>
           </div>
+          </div>
+
           <hr>
           <div class="input-group">
             <input type="text" class="form-control" aria-describedby="nr-addon" name="numrolls" value="{{ index .NumRolls 0}}">
-            <span class="input-group-addon" id="nr-addon">Rolls</span>
+            <div class="input-group-append">
+              <span class="input-group-text" id="nr-addon">Rolls</span>
           </div>
+          </div>
+
           <hr>
         <input class="btn btn-primary" type="submit" value="Roll Dice">
       </form>

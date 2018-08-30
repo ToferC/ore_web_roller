@@ -16,6 +16,7 @@ import (
 	"github.com/toferc/ore_web_roller/models"
 )
 
+// CharacterIndexHandler renders the basic character roster page
 func CharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
@@ -496,7 +497,7 @@ func ModifyCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	// Validate that User == Author
 	IsAuthor := false
 
-	if username == cm.Author.UserName {
+	if username == cm.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)
@@ -805,7 +806,7 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 	// Validate that User == Author
 	IsAuthor := false
 
-	if username == cm.Author.UserName {
+	if username == cm.Author.UserName || isAdmin == "true" {
 		IsAuthor = true
 	} else {
 		http.Redirect(w, req, "/", 302)

@@ -34,11 +34,15 @@
                   {{ end }}
                 </select>
                 <div class="input-group">
-                  <span class="input-group-addon" id="Advantage-{{add $i 1}}-Level">Level</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Advantage-{{add $i 1}}-Level">Level</span>
+                  </div>
                   <input type="number" class="form-control" aria-describedby="Advantage-{{add $i 1}}-Level-addon" name="Advantage-{{add $i 1}}-Level" value ="{{ $a.Level }}">
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="Advantage-{{add $i 1}}-Info-addon">Info</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Advantage-{{add $i 1}}-Info-addon">Info</span>
+                  </div>
                   <input type="text" class="form-control" aria-describedby="Advantage-{{add $i 1}}-Info-addon" name="Advantage-{{add $i 1}}-Info" value ="{{ $a.Info }}">
                 </div>
                 <hr>

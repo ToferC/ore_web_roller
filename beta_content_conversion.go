@@ -48,6 +48,7 @@ func BetaPowerIndexHandler(w http.ResponseWriter, req *http.Request) {
 	Render(w, "templates/beta_index_powers.html", wc)
 }
 
+// ConvertToOpenPowerArchive converts beta powers to PowerModels
 func ConvertToOpenPowerArchive(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
@@ -110,6 +111,7 @@ func ConvertToOpenPowerArchive(w http.ResponseWriter, req *http.Request) {
 	http.Redirect(w, req, url, 302)
 }
 
+// BetaCharacterIndexHandler handles the old character index
 func BetaCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
@@ -145,6 +147,7 @@ func BetaCharacterIndexHandler(w http.ResponseWriter, req *http.Request) {
 	Render(w, "templates/beta_roster.html", wc)
 }
 
+// ConvertToCharacterModel converts beta version characters to CharacterModels
 func ConvertToCharacterModel(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")

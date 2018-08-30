@@ -28,24 +28,32 @@
             <form action="" method="POST">
               <h3>Hyper-{{ $stat.Name }}</h3>
               <div class="input-group">
-                <span class="input-group-addon" id="name-addon">Name</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="name-addon">Name</span>
+                </div>
                 <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $hyperstat.Name }}">
               </div>
 
               <div class="input-group">
-                <span class="input-group-addon" id="normal-addon">Normal Dice</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="normal-addon">Normal Dice</span>
+                </div>
                 <input type="text" class="form-control" aria-describedby="normal-addon" name="Normal" value ="{{ $dice.Normal }}">
               </div>
               <div class="input-group">
-                <span class="input-group-addon" id="hard-addon">Hard Dice</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="hard-addon">Hard Dice</span>
+                </div>
                 <input type="text" class="form-control" aria-describedby="hard-addon" name="Hard" value ="{{ $dice.Hard }}">
               </div>
               <div class="input-group">
-                <span class="input-group-addon" id="wiggle-addon">Wiggle Dice</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="wiggle-addon">Wiggle Dice</span>
+                </div>
                 <input type="text" class="form-control" aria-describedby="wiggle-addon" name="Wiggle" value ="{{ $dice.Wiggle }}">
               </div>
               <div class="input-group">
-                <label for="Effect">Effect</label>
+                <span class="input-group-text" for="Effect">Effect</span>
                 <textarea class="form-control" aria-describedby="effect-addon" name="Effect" rows="4" value ="{{ $hyperstat.Effect }}"></textarea>
               </div>
               <h4>Cost Per Die: {{ $hyperstat.CostPerDie }}</h4>
@@ -68,7 +76,9 @@
                     <h3>{{ $q.Type }} Quality</h3>
                 <div class="input-group">
                   {{ if eq $q.Type ""}}
-                  <label for="Q{{$q}}-Type">Quality {{add $i 1}} Type</label>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" for="Q{{$q}}-Type">Quality {{add $i 1}} Type</span>
+                  </div>
                   <select type="text" class="form-control" id="Q{{add $i 1}}-Type" name="Q{{add $i 1}}-Type">
                     <option></option>
                     <option {{if eq $q.Type "Attack"}} selected {{ end }}>Attack</option>
@@ -76,16 +86,22 @@
                     <option {{if eq $q.Type "Useful"}} selected {{ end }}>Useful</option>
                   </select>
                   {{ else }}
-                  <span class="input-group-addon" id="Q{{add $i 1}}-Name-addon">Type</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Q{{add $i 1}}-Name-addon">Type</span>
+                  </div>
                   <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-Type-addon" name="Q{{add $i 1}}-Type" value ="{{ $q.Type }}" readonly>
                   {{ end }}
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="Q{{add $i 1}}-Name-addon">Description</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Q{{add $i 1}}-Name-addon">Description</span>
+                  </div>
                   <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-Name-addon" name="Q{{add $i 1}}-Name" value ="{{ $q.Name }}">
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="Q{{add $i 1}}-Level-addon">Additional Levels</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Q{{add $i 1}}-Level-addon">Additional Levels</span>
+                  </div>
                   <input type="number" class="form-control" aria-describedby="Q{{add $i 1}}-Level-addon" name="Q{{add $i 1}}-Level" value ="{{ $q.Level }}">
                 </div>
                 <hr>
@@ -104,7 +120,9 @@
                 </select>
                 {{ else }}
                 <div class="input-group">
-                  <span class="input-group-addon" id="Q{{add $i 1}}-C{{add $c 1}}-Type">Capacity 1</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Q{{add $i 1}}-C{{add $c 1}}-Type">Capacity 1</span>
+                  </div>
                   <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-C{{add $c 1}}-Type-addon" name="Q{{add $i 1}}-C{{add $c 1}}-Type" value ="{{ $v.Type }}" readonly>
                 </div>
                 {{ end }} <!-- End alternate form -->
@@ -136,11 +154,15 @@
                     {{ end }}
                   </select>
                   <div class="input-group">
-                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon">Level</span>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon">Level</span>
+                    </div>
                     <input type="number" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Level" value ="{{ $v.Level }}">
                   </div>
                   <div class="input-group">
-                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon">Info</span>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon">Info</span>
+                    </div>
                     <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Info" value ="{{ $v.Info }}">
                   </div>
                   <hr>
@@ -170,11 +192,15 @@
                     {{ end }}
                   </select>
                   <div class="input-group">
-                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon">Level</span>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon">Level</span>
+                    </div>
                     <input type="number" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Level-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Level" value ="{{ $v.Level }}">
                   </div>
                   <div class="input-group">
-                    <span class="input-group-addon" id="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon">Info</span>
+                    <div class="input-group-prepend">
+                      <span class="input-group-text" id="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon">Info</span>
+                    </div>
                     <input type="text" class="form-control" aria-describedby="Q{{add $i 1}}-M{{ add $m 1 }}-Info-addon" name="Q{{add $i 1}}-M{{ add $m 1 }}-Info" value ="{{ $v.Info }}">
                   </div>
                   <hr>

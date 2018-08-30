@@ -21,13 +21,17 @@
             <form action="" method="POST" enctype="multipart/form-data">
 
               <div class="input-group">
-                <span class="input-group-addon" id="name-addon">Name</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="name-addon">Name</span>
+                </div>
                 <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $character.Name }}">
               </div>
               <h4>Setting: {{ $character.Setting }}</h4>
               <hr>
-              <div class="form-group">
-                <label for="Description">Description</label>
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" for="Description">Description</span>
+                </div>
                 <textarea class="form-control" aria-describedby="description-addon" name="Description" rows="10" value ="{{ $character.Description }}">{{ $character.Description }}</textarea>
               </div>
               <hr>
@@ -45,12 +49,16 @@
               <hr>
 
               <div class="input-group">
-                <span class="input-group-addon" id="basewill-addon">Base Will</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basewill-addon">Base Will</span>
+                </div>
                 <input type="number" class="form-control" aria-describedby="basewill-addon" name="BaseWill" value ="{{ $character.BaseWill }}">
               </div>
 
               <div class="input-group">
-                <span class="input-group-addon" id="willpower-addon">Willpower</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="willpower-addon">Willpower</span>
+                </div>
                 <input type="number" class="form-control" aria-describedby="willpower-addon" name="Willpower" value ="{{ $character.Willpower }}">
               </div>
               <br>
@@ -67,7 +75,9 @@
                 {{ if $character.Archetype }}
                 <h3>Archetype</h3>
                 <div class="input-group">
-                  <span class="input-group-addon" id="archetype-addon">Archetype</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="archetype-addon">Archetype</span>
+                  </div>
                   <input type="text" class="form-control" aria-describedby="archetype-addon" name="Archetype" value ="{{ $character.Archetype.Type }}">
                 </div>
 
@@ -106,11 +116,15 @@
                   {{ end }}
                 </select>
                 <div class="input-group">
-                  <span class="input-group-addon" id="Intrinsic-{{add $i 1}}-Level">Level</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Intrinsic-{{add $i 1}}-Level">Level</span>
+                  </div>
                   <input type="number" class="form-control" aria-describedby="Intrinsic-{{add $i 1}}-Level-addon" name="Intrinsic-{{add $i 1}}-Level" value ="{{ $v.Level }}">
                 </div>
                 <div class="input-group">
-                  <span class="input-group-addon" id="Intrinsic-{{add $i 1}}-Info-addon">Info</span>
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="Intrinsic-{{add $i 1}}-Info-addon">Info</span>
+                  </div>
                   <input type="text" class="form-control" aria-describedby="Intrinsic-{{add $i 1}}-Info-addon" name="Intrinsic-{{add $i 1}}-Info" value ="{{ $v.Info }}">
                 </div>
                 <hr>
@@ -125,7 +139,9 @@
               {{ range $stat := $statistics }}
 
               <div class="input-group">
-                <span class="input-group-addon" id="{{ $stat.Name }}-addon">{{ $stat.Name }}</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="{{ $stat.Name }}-addon">{{ $stat.Name }}</span>
+                </div>
                 <input type="number" class="form-control" aria-describedby="{{ $stat.Name }}-addon" name="{{ $stat.Name }}" value ="{{ $stat.Dice.Normal }}">
               </div>
               <br>
@@ -133,12 +149,16 @@
               {{ if eq $skill.LinkStat.Name $stat.Name}}
               <ul>
               <div class="input-group">
-                <span class="input-group-addon" id="{{ $skill.Name }}-addon">{{ $skill.Name }}</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="{{ $skill.Name }}-addon">{{ $skill.Name }}</span>
+                </div>
                 <input type="number" class="form-control" aria-describedby="{{ $skill.Name }}-addon" name="{{ $skill.Name }}" value ="{{ $skill.Dice.Normal }}">
               </div>
               {{ if $skill.ReqSpec }}
               <div class="input-group">
-                <span class="input-group-addon" id="{{ $skill.Name }}-Spec-addon">--Specialization</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="{{ $skill.Name }}-Spec-addon">--Specialization</span>
+                </div>
                 <input type="text" class="form-control" aria-describedby="{{ $skill.Name }}-Spec-addon" name="{{ $skill.Name }}-Spec" value ="{{ $skill.Specialization }}">
               </div>
               {{ end }}
@@ -154,25 +174,33 @@
           {{ range $i, $loc := $character.HitLocations }}
 
           <div class="input-group">
-            <span class="input-group-addon" id="{{ $i }}-name-addon">Name</span>
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="{{ $i }}-name-addon">Name</span>
+            </div>
             <input type="text" class="form-control" aria-describedby="{{ $i }}-name-addon" name="{{ $i }}-Name" value ="{{ $loc.Name }}">
           </div>
           <br>
 
           <div class="input-group">
-            <span class="input-group-addon" id="{{ $i }}-boxes-addon">Wound Boxes</span>
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="{{ $i }}-boxes-addon">Wound Boxes</span>
+            </div>
             <input type="number" class="form-control" aria-describedby="{{ $i }}-boxes-addon" name="{{ $i }}-Boxes" value ="{{ $loc.Boxes }}">
           </div>
           <br>
 
           <div class="input-group">
-            <span class="input-group-addon" id="{{ $i }}-lar-addon">LAR</span>
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="{{ $i }}-lar-addon">LAR</span>
+            </div>
             <input type="number" class="form-control" aria-describedby="{{ $i }}-lar-addon" name="{{ $i }}-LAR" value ="{{ $loc.LAR }}">
           </div>
           <br>
 
           <div class="input-group">
-            <span class="input-group-addon" id="{{ $i }}-har-addon">HAR</span>
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="{{ $i }}-har-addon">HAR</span>
+            </div>
             <input type="number" class="form-control" aria-describedby="{{ $i }}-har-addon" name="{{ $i }}-HAR" value ="{{ $loc.HAR }}">
           </div>
           <br>

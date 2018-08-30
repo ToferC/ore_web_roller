@@ -23,19 +23,27 @@
             <form action="" method="POST">
               <h3>New Skill</h3>
               <div class="input-group">
-                <span class="input-group-addon" id="name-addon">Name</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="name-addon">Name</span>
+                </div>
                 <input type="text" class="form-control" aria-describedby="name-addon" name="Name" value ="{{ $skill.Name }}">
               </div>
 
-              <label for="Quality">Choose a Quality</label>
-              <select type="text" class="form-control" id="Quality" name="Quality">
-                <option>Useful</option>
-                <option>Attack</option>
-                <option>Defend</option>
-              </select>
+              <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" for="Quality">Quality</span class="input-group-text">
+                  </div>
+                <select type="text" class="form-control" id="Quality" name="Quality">
+                  <option>Useful</option>
+                  <option>Attack</option>
+                  <option>Defend</option>
+                </select>
+              </div>
 
               <div class="input-group">
-                <span class="input-group-addon" id="normal-addon">Normal Dice</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="normal-addon">Normal Dice</span>
+                </div>
                 <input type="text" class="form-control" aria-describedby="normal-addon" name="Normal" value ="{{ $dice.Normal }}">
               </div>
 
@@ -46,7 +54,9 @@
               </select>
 
               <div class="input-group">
-                <span class="input-group-addon" id="specialization-addon">Specialization</span>
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="specialization-addon">Specialization</span>
+                </div>
                 <input type="text" class="form-control" aria-describedby="specialization-addon" name="Specialization" value ="{{ $skill.Specialization }}">
               </div>
               <hr>

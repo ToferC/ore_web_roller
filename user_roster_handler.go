@@ -12,6 +12,7 @@ import (
 	"github.com/toferc/ore_web_roller/models"
 )
 
+// UserCharacterRosterHandler handles user-specific rosters
 func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")
@@ -54,6 +55,7 @@ func UserCharacterRosterHandler(w http.ResponseWriter, req *http.Request) {
 	Render(w, "templates/user_roster.html", wc)
 }
 
+// AddToUserRosterHandler adds an open charactermodel to the individual user roster
 func AddToUserRosterHandler(w http.ResponseWriter, req *http.Request) {
 
 	session, err := sessions.Store.Get(req, "session")

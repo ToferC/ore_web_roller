@@ -13,6 +13,7 @@
 {{ $open := .CharacterModel.Open }}
 {{ $ID := .CharacterModel.ID }}
 {{ $IsAuthor := .IsAuthor }}
+{{ $IsAdmin := .IsAdmin }}
 {{ $author := .CharacterModel.Author }}
 {{ $shock := .Shock }}
 {{ $kill := .Kill }}
@@ -81,17 +82,21 @@
 
             {{ if ne $character.Setting "RE" }}
               <p>Base Will: {{ $character.BaseWill }}</p>
+            {{ if $IsAuthor }}
               <div class="input-group">
                 <span class="input-group-addon" id="Willpower">Willpower: </span>
                 <input type="number" class="form-control" aria-describedby="Willpower" name="Willpower" value ="{{ $character.Willpower }}">
               </div>
+            {{ else }}
+            <p>Willpower: {{ $character.Willpower }}</p>
+            {{ end }}
               <hr>
             {{ end }}
             {{ if $IsAuthor }}
             <button class="btn btn-primary" type="submit" value="Update Character State">Update State</button>
             {{ end }}
             <hr>
-            {{ if $IsAuthor }}
+            {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
               <a class="btn btn-primary" href="/modify/{{ $ID }}">Edit</a>
               <a class="btn btn-danger" href="/delete/{{ $ID }}">Delete</a></h4>
               {{ else }}
@@ -112,7 +117,7 @@
         {{ range $stat := $statistics }}
         <strong>{{ . }}</strong>
           <a href={{ statRoll $ID $stat 1 }}>Roll</a>
-          {{ if $IsAuthor }}
+          {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
             [<a href="/add_skill/{{ $ID }}/{{ $stat.Name }}">+Skill</a>
             {{ if not $stat.HyperStat }}
             <a href="/add_hyperstat/{{ $ID }}/{{ $stat.Name }}">+Hyper</a>{{ end }}]
@@ -124,7 +129,7 @@
           <li>{{ . }}
             <a href={{ skillRoll $ID $skill $stat 1 }}>Roll</a>
             {{ if not $skill.HyperSkill }}
-              {{ if $IsAuthor }}
+              {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
             [<a href="/add_hyperskill/{{ $ID }}/{{ $skill.Name }}">+Hyper</a>]
               {{ end }}
           {{ end }}
@@ -152,7 +157,7 @@
         {{ range $power := $character.Powers }}
         <div>
           <strong>{{ $power }}</strong>
-          {{ if $IsAuthor }}
+          {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
             <a href="/modify_power/{{ $ID}}/{{ $power.Slug}}">Modify</a>
             <a href="/delete_power/{{ $ID}}/{{ $power.Slug }}">Delete</a>
           {{ end }}
@@ -169,7 +174,7 @@
           {{ if $stat.HyperStat }}
           <div>
             <strong>{{ $stat.HyperStat }}</strong>
-            {{ if $IsAuthor }}
+            {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
               <a href="/modify_hyperstat/{{ $ID }}/{{ $stat.Name }}">Modify</a>
               <a href="/delete_hyperstat/{{ $ID}}/{{ $stat.Name }}">Delete</a></p>
             {{ end }}
@@ -189,7 +194,7 @@
         {{ if $skill.HyperSkill }}
         <div>
           <strong>{{ $skill.HyperSkill }}</strong> <a href="/modify_hyperskill/{{ $ID }}/{{ $skill.Name }}">Modify</a>
-          {{ if $IsAuthor }}
+          {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
             <a href="/delete_hyperskill/{{ $ID}}/{{ $skill.Name }}">Delete</a>
           {{ end }}
           {{ range $quality := $skill.HyperSkill.Qualities }}
@@ -202,7 +207,7 @@
         {{ end }}
         {{ end }}
 
-        {{ if $IsAuthor }}
+        {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
         {{ if eq $character.Setting "RE" }}
         <a class="btn btn-primary" href="/add_advantages/{{ $ID }}">Add Advantages</a></p>
         {{ else }}
@@ -220,7 +225,7 @@
               <br>Kill: {{ range $j, $q := .Kill }}  <input type="checkbox" name="{{ $loc.Name }}-Kill-{{ $j }}" value="true" id="checkbox" {{if eq $q true }} checked {{ end }}>{{ end }}
           {{ end }}
           <hr>
-          {{ if $IsAuthor }}
+          {{ if (or $IsAuthor (eq $IsAdmin "true")) }}
           <div class="form-group">
             <label for="Gear"><h4>Gear</h4></label>
             <textarea class="form-control" aria-describedby="gear-addon" name="Gear" rows="10" value ="{{ $character.Gear }}">{{ $character.Gear }}</textarea>

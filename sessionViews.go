@@ -10,6 +10,7 @@ import (
 	"github.com/toferc/ore_web_roller/models"
 )
 
+// UserIndexHandler handles the basic roster rendering for the app
 func UserIndexHandler(w http.ResponseWriter, req *http.Request) {
 
 	// Get session values or redirect to Login

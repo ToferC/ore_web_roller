@@ -31,6 +31,7 @@ type WebView struct {
 	ErrorString []error
 }
 
+// WebUser represents a generic user struct
 type WebUser struct {
 	IsAuthor    bool
 	SessionUser string
@@ -178,6 +179,7 @@ func isIn(s []int, t int) bool {
 	return false
 }
 
+// Render combines templates, funcs and renders all Web pages in the app
 func Render(w http.ResponseWriter, filename string, data interface{}) {
 
 	tmpl := make(map[string]*template.Template)
