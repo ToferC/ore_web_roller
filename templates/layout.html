@@ -22,7 +22,11 @@
 
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/user_roster/">ORE Engine</a>
+      {{ if ne $user ""}}
+        <a class="navbar-brand" href="/">ORE Engine</a>
+      {{ else }}
+        <a class="navbar-brand" href="/user_roster/">ORE Engine</a>
+      {{ end }}
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -32,9 +36,11 @@
       <li class="nav-item active">
         <a class="nav-link" href="/">Open Roster <span class="sr-only">(current)</span></a>
       </li>
+      {{ if ne $user "" }}
       <li class="nav-item active">
         <a class="nav-link" href="/user_roster/">Personal Roster<span class="sr-only"></span></a>
       </li>
+      {{ end }}
       <li class="nav-item active">
         <a class="nav-link" href="/index_powers/">Power Archive <span class="sr-only"></span></a>
       </li>
