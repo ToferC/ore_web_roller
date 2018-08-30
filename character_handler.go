@@ -812,6 +812,11 @@ func DeleteCharacterHandler(w http.ResponseWriter, req *http.Request) {
 		http.Redirect(w, req, "/", 302)
 	}
 
+	if cm.Image == nil {
+		cm.Image = new(models.Image)
+		cm.Image.Path = DefaultCharacterPortrait
+	}
+
 	wc := WebChar{
 		CharacterModel: cm,
 		SessionUser:    username,
