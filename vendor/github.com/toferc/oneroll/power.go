@@ -51,26 +51,7 @@ func (p *Power) CalculateCost() {
 		}
 
 		// Add Power Capacity Modifier if needed
-		if len(q.Capacities) > 1 {
-
-			reqMod := true
-
-			// See if Power Capacity Mod already present
-			for _, m := range q.Modifiers {
-				// Update m.Level
-				if m.Name == "Power Capacity" {
-					m.Level = len(q.Capacities) - 1
-					reqMod = false
-				}
-			}
-
-			if reqMod {
-				// Append a new Modifier and set Level
-				tm := Modifiers["Power Capacity"]
-				tm.Level = len(q.Capacities) - 1
-				q.Modifiers = append(q.Modifiers, &tm)
-			}
-		}
+		// Depreciated - must now be done manually
 
 		for _, m := range q.Modifiers {
 			m.CalculateCost(0)
