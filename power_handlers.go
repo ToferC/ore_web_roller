@@ -193,6 +193,7 @@ func AddPowerHandler(w http.ResponseWriter, req *http.Request) {
 			"Range": 10.0,
 			"Speed": 2.5,
 			"Self":  0.0,
+			"Touch": 0.0,
 		},
 		Power: c.Powers["default"],
 	}
@@ -415,6 +416,7 @@ func ModifyPowerHandler(w http.ResponseWriter, req *http.Request) {
 			"Range": 10.0,
 			"Speed": 2.5,
 			"Self":  0.0,
+			"Touch": 0.0,
 		},
 		Power: p,
 	}

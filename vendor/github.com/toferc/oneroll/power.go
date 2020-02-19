@@ -1,6 +1,9 @@
 package oneroll
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 // Power is a non-standard ability or miracle
 type Power struct {
@@ -100,6 +103,7 @@ func (p *Power) DeterminePowerCapacities() {
 		"Range": 10.0,
 		"Speed": 2.50,
 		"Self":  0.0,
+		"Touch": 0.0,
 	}
 
 	measuresMap := map[string]string{
@@ -107,6 +111,7 @@ func (p *Power) DeterminePowerCapacities() {
 		"Range": "m",
 		"Speed": "m",
 		"Self":  "",
+		"Touch": "",
 	}
 
 	var measure string
@@ -129,32 +134,34 @@ func (p *Power) DeterminePowerCapacities() {
 			// Apply booster
 			for _, m := range q.Modifiers {
 				if m.Name == "Booster" {
-					boosterVal = float64(m.Level) * 10.0
+					boosterVal = math.Pow10(m.Level) * 10
 				}
 			}
 			// Get final value
 			finalVal := float64(modVal) * boosterVal
 
-			if finalVal > 1000.0 {
+			if finalVal > 1000 {
 				switch {
 				case c.Type == "Range":
-					finalVal = finalVal / 1000.0
+					finalVal = finalVal / 1000
 					measure = "km"
-					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
+					c.Value = fmt.Sprintf("%.0f%s", finalVal, measure)
 				case c.Type == "Mass":
-					finalVal = finalVal / 1000.0
+					finalVal = finalVal / 1000
 					measure = "tons"
-					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
+					c.Value = fmt.Sprintf("%.0f%s", finalVal, measure)
 				case c.Type == "Speed":
-					finalVal = finalVal / 1000.0
+					finalVal = finalVal / 1000
 					measure = "km"
 					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
 				case c.Type == "Self":
 					c.Value = "Self"
+				case c.Type == "Touch":
+					c.Value = "Touch"
 				}
 			} else {
 				measure = measuresMap[c.Type]
-				c.Value = fmt.Sprintf("%.0f%s", finalVal, measure)
+				c.Value = fmt.Sprintf("%.0f %s", finalVal, measure)
 			}
 		} // End Capacities
 	} // End Qualities

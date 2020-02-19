@@ -26,6 +26,10 @@ var powerCapacities = []byte(`{
 	"self": {
 		"base": 0,
 		"measure": nil,
+	},
+	"touch": {
+		"base": 0,
+		"measure": nil,
 	}
 }`)
 
@@ -33,7 +37,7 @@ func (c Capacity) String() string {
 
 	var text string
 
-	if c.Type == "Self" {
+	if c.Type == "Self" || c.Type == "Touch" {
 		text = fmt.Sprintf("%s", c.Type)
 	} else {
 		text = fmt.Sprintf("%s (%s)",
