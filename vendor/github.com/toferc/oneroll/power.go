@@ -126,15 +126,15 @@ func (p *Power) DeterminePowerCapacities() {
 				case c.Type == "Range":
 					finalVal = finalVal / 1000
 					measure = "km"
-					c.Value = fmt.Sprintf("%.0f%s", finalVal, measure)
+					c.Value = fmt.Sprintf("%.0f %s", finalVal, measure)
 				case c.Type == "Mass":
 					finalVal = finalVal / 1000
 					measure = "tons"
-					c.Value = fmt.Sprintf("%.0f%s", finalVal, measure)
+					c.Value = fmt.Sprintf("%.0f %s", finalVal, measure)
 				case c.Type == "Speed":
 					finalVal = finalVal / 1000
 					measure = "km"
-					c.Value = fmt.Sprintf("%.2f%s", finalVal, measure)
+					c.Value = fmt.Sprintf("%.2f %s", finalVal, measure)
 				case c.Type == "Self":
 					c.Value = "Self"
 				case c.Type == "Touch":
